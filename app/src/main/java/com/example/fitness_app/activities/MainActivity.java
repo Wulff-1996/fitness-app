@@ -9,36 +9,43 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.constrants.TrackNavigationState;
+import com.example.fitness_app.fragments.Track.TrackCategoriesFragment;
 import com.example.fitness_app.fragments.Track.TrackFragment;
 import com.example.fitness_app.fragments.achievement.AchievementFragment;
 import com.example.fitness_app.fragments.profile.ProfileFragment;
 import com.example.fitness_app.fragments.quests.QuestFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MyNavigationDelegate {
+
+    private Fragment selectedFragment;
+    private TrackNavigationState trackNavigationState = TrackNavigationState.NOT_SELECTED;
+    private MainActivity mInstance;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
 
             switch (item.getItemId()) {
                 case R.id.nav_track:
-                    fragment = new TrackFragment();
-                    loadFragment(fragment);
+                    TrackCategoriesFragment frag = new TrackCategoriesFragment();
+                    frag.setDelegate(mInstance);
+                    selectedFragment = frag;
+                    loadFragment(selectedFragment);
                     return true;
                 case R.id.nav_quests:
-                    fragment = new QuestFragment();
-                    loadFragment(fragment);
+                    selectedFragment = new QuestFragment();
+                    loadFragment(selectedFragment);
                     return true;
                 case R.id.nav_achievements:
-                    fragment = new AchievementFragment();
-                    loadFragment(fragment);
+                    selectedFragment = new AchievementFragment();
+                    loadFragment(selectedFragment);
                     return true;
                 case R.id.nav_profile:
-                    fragment = new ProfileFragment();
-                    loadFragment(fragment);
+                    selectedFragment = new ProfileFragment();
+                    loadFragment(selectedFragment);
                     return true;
             }
             return false;
@@ -50,11 +57,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mInstance = this;
+
         BottomNavigationView navigation = findViewById(R.id.activity_main_bottom_navigation);
-        loadFragment(new TrackFragment());
+        loadFragment(new TrackCategoriesFragment());
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    /**
+     * handle navigation state of track
+     * used to choose witch fragment of the Track use cases that will be shown
+     */
+    private void handleTrackNavigation(){
+        switch (trackNavigationState){
+            case NOT_SELECTED:
+                selectedFragment = new TrackCategoriesFragment();
+                loadFragment(selectedFragment);
+                break;
+            case SELECTED:
+        }
+    }
+
+    /**
+     * load the selected fragment into the fragment canvas
+     * @param fragment the selected fragment
+     */
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -62,4 +89,20 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    public void changeFragmentForSameNavigationPoint(Fragment fragment){
+
+    }
+
+
+    @Override
+    public void changeFragment(Fragment fragment) {
+        loadFragment(fragment);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }
+

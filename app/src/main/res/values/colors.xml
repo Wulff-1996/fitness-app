@@ -11,8 +11,9 @@
     <color name="mutedText">#636A76</color>
     <color name="primaryBlue">#1B1BFC</color>
     <color name="primaryBlueHalfAlpha">#504242FF</color>
-
-
+    <color name="transparent">#00000000</color>
+    <color name="cancel">#FF336C</color>
+    <color name="pureBlack">#000000</color>
 
 
 

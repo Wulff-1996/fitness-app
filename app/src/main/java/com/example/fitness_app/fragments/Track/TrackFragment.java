@@ -24,6 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class TrackFragment extends Fragment {
+    private String category;
+    private String subCategory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,5 +73,13 @@ public class TrackFragment extends Fragment {
         graph.addSeries(lines);
         graph.addSeries(points);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+    }
+
+    void setCategory(String category) {
+        this.category = category;
+    }
+
+    void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 }
