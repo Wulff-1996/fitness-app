@@ -45,7 +45,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     public static BottomSheetDialog newInstance(BottomSheetTitleEntity title, List<BottomSheetActionItemEntity> items) {
-        return new BottomSheetDialog(title, items);;
+        return new BottomSheetDialog(title, items);
     }
 
     @Nullable
