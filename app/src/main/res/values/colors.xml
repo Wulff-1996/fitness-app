@@ -9,6 +9,9 @@
     <color name="secondaryBackground">#141922</color>
     <color name="text">#F0F1F3</color>
     <color name="mutedText">#636A76</color>
+    <color name="primaryBlue">#1B1BFC</color>
+    <color name="primaryBlueHalfAlpha">#504242FF</color>
+
 
 
 
