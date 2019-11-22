@@ -23,6 +23,9 @@ import com.example.fitness_app.R;
 
 import java.util.List;
 
+/**
+ * Class for displaying a modal from the bottom of the screen
+ */
 public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     private BottomSheetTitleEntity title;

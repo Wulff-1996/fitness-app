@@ -26,6 +26,7 @@ public class TrackCategoriesAdapter extends RecyclerView.Adapter<TrackCategories
     }
 
     public List<String> getCategories(){return this.categories;}
+    public void setCategories(List<String> categories){this.categories = categories;}
 
     /**
      * Bind adapter item to a layout file

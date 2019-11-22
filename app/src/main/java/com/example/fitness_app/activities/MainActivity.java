@@ -1,7 +1,9 @@
 package com.example.fitness_app.activities;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements MyNavigationDeleg
     private Fragment selectedFragment;
     private TrackNavigationState trackNavigationState = TrackNavigationState.NOT_SELECTED;
     private MainActivity mInstance;
+    private BottomNavigationView bottomNavigationView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,9 +62,13 @@ public class MainActivity extends AppCompatActivity implements MyNavigationDeleg
 
         mInstance = this;
 
-        BottomNavigationView navigation = findViewById(R.id.activity_main_bottom_navigation);
-        loadFragment(new TrackCategoriesFragment());
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation);
+
+        TrackCategoriesFragment startFragment = new TrackCategoriesFragment();
+        startFragment.setDelegate(mInstance);
+
+        loadFragment(startFragment);
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     /**
@@ -86,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements MyNavigationDeleg
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activity_main_fragment_canvas, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -101,8 +107,6 @@ public class MainActivity extends AppCompatActivity implements MyNavigationDeleg
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
+    public void onPointerCaptureChanged(boolean hasCapture) {}
 }
 
