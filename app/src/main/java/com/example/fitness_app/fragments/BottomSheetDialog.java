@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.example.fitness_app.constrants.SubCategoryType;
 import com.example.fitness_app.entities.BottomSheetActionItemEntity;
 import com.example.fitness_app.entities.BottomSheetTitleEntity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -29,26 +28,26 @@ import java.util.List;
 public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     private BottomSheetTitleEntity title;
-    private List<BottomSheetActionItemEntity> items;
+    private List<String> options;
     private BottomSheetDialogDelegate delegate;
-    private BottomSheetDialog mInstance;
 
-    private BottomSheetDialog(BottomSheetTitleEntity title, List<BottomSheetActionItemEntity> items) {
+    private BottomSheetDialog(BottomSheetTitleEntity title, List<String> options) {
         this.title = title;
-        this.items = items;
-        mInstance = this;
+        this.options = options;
     }
+
+    private BottomSheetDialog getInstance(){return this;}
 
     public void setDelegate(BottomSheetDialogDelegate delegate){
         this.delegate = delegate;
     }
 
-    public List<BottomSheetActionItemEntity> getItems() {
-        return this.items;
+    public List<String> getOptions() {
+        return this.options;
     }
 
-    public static BottomSheetDialog newInstance(BottomSheetTitleEntity title, List<BottomSheetActionItemEntity> items) {
-        return new BottomSheetDialog(title, items);
+    public static BottomSheetDialog newInstance(BottomSheetTitleEntity title, List<String> options) {
+        return new BottomSheetDialog(title, options);
     }
 
     @Nullable
@@ -73,7 +72,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         cancelTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                delegate.onBottomSheetDialogDismissed(mInstance);
+                delegate.onBottomSheetDialogDismissed(getInstance());
                 dismiss();
             }
         });
@@ -83,23 +82,24 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        final Fragment parent = getParentFragment();
-        if (parent != null) {
-            delegate = (BottomSheetDialogDelegate) parent;
-        } else {
-            delegate = (BottomSheetDialogDelegate) context;
+        if (delegate == null){
+            if (context instanceof BottomSheetDialogDelegate){
+                delegate = (BottomSheetDialogDelegate) context;
+            } else {
+                throw new RuntimeException("Context must implement the BottomSheetDialogDelegate interface");
+            }
         }
     }
 
     @Override
     public void onDetach() {
+        delegate.onBottomSheetDialogDismissed(this);
         delegate = null;
         super.onDetach();
     }
 
     public interface BottomSheetDialogDelegate {
-        void onBottomSheetItemClicked(BottomSheetDialog dialogInstance, BottomSheetActionItemEntity actionInstance, int position);
-
+        void onBottomSheetItemClicked(BottomSheetDialog dialogInstance, String option, int position);
         void onBottomSheetDialogDismissed(BottomSheetDialog dialogInstance);
     }
 
@@ -113,7 +113,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (delegate != null) {
-                        delegate.onBottomSheetItemClicked(mInstance, items.get(getAdapterPosition()), getAdapterPosition());
+                        delegate.onBottomSheetItemClicked(getInstance(), options.get(getAdapterPosition()), getAdapterPosition());
                         dismiss();
                     }
                 }
@@ -131,17 +131,13 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.titleView.setText(items.get(position).getTitle());
-            if (items.get(position).getColor() != null) {
-                holder.titleView.setTextColor(items.get(position).getColor());
-            }
+            holder.titleView.setText(options.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return options.size();
         }
 
     }
-
 }

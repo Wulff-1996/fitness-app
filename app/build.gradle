@@ -38,5 +38,15 @@ dependencies {
     implementation 'com.jjoe64:graphview:4.2.2'
 
     // library for have multiple tabs per tab in the bottom navigation view
-    implementation 'com.pandora.bottomnavigator:bottom-navigator:1.4'
+    implementation 'com.ncapdevi:frag-nav:2.4.0'
+
+    // library for bottom bar
+    implementation "com.roughike:bottom-bar:2.3.1"
+
+    // library for saving states
+    implementation 'frankiesardo:icepick:3.2.0'
+    compileOnly 'frankiesardo:icepick-processor:3.2.0'
+    annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc2'
+
 }

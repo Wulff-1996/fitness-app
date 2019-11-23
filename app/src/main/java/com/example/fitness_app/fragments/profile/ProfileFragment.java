@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import com.example.fitness_app.R;
+import com.example.fitness_app.fragments.BaseFragment;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

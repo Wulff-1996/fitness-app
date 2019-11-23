@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        icon="@drawable/ic_home_black_24dp"
+        id="@+id/nav_track"
+        title="@string/title_track" />
+    <tab
+        icon="@drawable/ic_home_black_24dp"
+        id="@+id/nav_quests"
+        title="@string/title_quests" />
+    <tab
+        icon="@drawable/ic_home_black_24dp"
+        id="@+id/nav_achievements"
+        title="@string/title_achievements" />
+    <tab
+        icon="@drawable/ic_home_black_24dp"
+        id="@+id/nav_profile"
+        title="@string/title_profile" />
+</tabs>

@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.fragments.BaseFragment;
 
-public class AchievementFragment extends Fragment {
+public class AchievementFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

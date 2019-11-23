@@ -1,17 +1,18 @@
 package com.example.fitness_app.fragments.Track;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.fragment.app.Fragment;
-
 import com.example.fitness_app.R;
+import com.example.fitness_app.entities.BottomSheetTitleEntity;
+import com.example.fitness_app.fragments.BaseFragment;
+import com.example.fitness_app.fragments.BottomSheetDialog;
+import com.example.fitness_app.views.BackArrowView;
 import com.example.fitness_app.views.SelectorView;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -22,25 +23,18 @@ import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackFragment extends Fragment implements SelectorView.SelectorViewDelegate {
+public class TrackFragment extends BaseFragment implements SelectorView.SelectorViewDelegate, BackArrowView.BackArrowViewDelegate, BottomSheetDialog.BottomSheetDialogDelegate {
     private String selectedCategory;
+    private SelectorView subCategoriesView;
+    private BottomSheetDialog subCategoryBottomSheet;
     private List<String> subCategories = new ArrayList<>();
-    private TrackFragment mInstance;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mInstance = this;
-
-
-
-        //TODO fetch sub categories for specific category
     }
 
     @Override
@@ -49,22 +43,22 @@ public class TrackFragment extends Fragment implements SelectorView.SelectorView
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_track, container, false);
 
-        /*view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyCode == KeyEvent.KEYCODE_BACK){
-                    getActivity().getFragmentManager().popBackStack();
-                    return true;
-                }
-                return false;
-            }
-        });*/
+        setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(
+                android.R.transition.fade
+        ));
 
-        fetchSubCategories();
+        initBackArrow(view);
         initView(view);
         initGraphView(view);
 
+        fetchSubCategories();
+
         return view;
+    }
+
+    private void initBackArrow(View view){
+        BackArrowView backArrowView = view.findViewById(R.id.fragment_track_back_arrow);
+        backArrowView.setDelegate(this);
     }
 
     // TODO fetch sub categories from database
@@ -75,17 +69,14 @@ public class TrackFragment extends Fragment implements SelectorView.SelectorView
         subCategories.add("Five");
         subCategories.add("Ten");
         this.subCategories = subCategories;
+        subCategoriesView.setOptions(this.subCategories);
     }
 
     private void initView(View view){
         TextView categoryHeaderView = view.findViewById(R.id.fragment_track_category_header);
         categoryHeaderView.setText(selectedCategory);
-
-
-        SelectorView subCategoriesView = view.findViewById(R.id.fragment_track_sub_category_selector_view);
-        subCategoriesView.setOptions(subCategories);
+        subCategoriesView = view.findViewById(R.id.fragment_track_sub_category_selector_view);
         subCategoriesView.setDelegate(this);
-
     }
 
     private void initGraphView(View view){
@@ -131,8 +122,35 @@ public class TrackFragment extends Fragment implements SelectorView.SelectorView
 
     @Override
     public void onTitleClicked() {
-
+        if (subCategoryBottomSheet == null){
+            BottomSheetTitleEntity titleEntity =
+                    new BottomSheetTitleEntity(
+                            selectedCategory,
+                            getString(R.string.fragment_track_sub_categories_sub_title)
+                    );
+            subCategoryBottomSheet = BottomSheetDialog.newInstance(titleEntity, subCategories);
+            subCategoryBottomSheet.setDelegate(this);
+            subCategoryBottomSheet.setShowsDialog(true);
+            subCategoryBottomSheet.show(getFragmentManager(), "Sub Categories Bottom Sheet Dialog");
+        } else if (!subCategoryBottomSheet.getShowsDialog()){
+            subCategoryBottomSheet.setDelegate(this);
+            subCategoryBottomSheet.setShowsDialog(true);
+            subCategoryBottomSheet.show(getFragmentManager(), "Sub Categories Bottom Sheet Dialog");
+        }
     }
 
+    @Override
+    public void onBackArrowClicked() {
+        fragmentNavigation.popFragment();
+    }
 
+    @Override
+    public void onBottomSheetItemClicked(BottomSheetDialog dialogInstance, String option, int position) {
+        subCategoriesView.setTitle(option);
+    }
+
+    @Override
+    public void onBottomSheetDialogDismissed(BottomSheetDialog dialogInstance) {
+        subCategoryBottomSheet.setShowsDialog(false);
+    }
 }

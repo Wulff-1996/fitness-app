@@ -1,30 +1,28 @@
 package com.example.fitness_app.fragments.Track;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.activities.MyNavigationDelegate;
 import com.example.fitness_app.adapters.TrackCategoriesAdapter;
+import com.example.fitness_app.fragments.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackCategoriesFragment extends Fragment implements TrackCategoriesAdapter.ItemClickListener {
-
+public class TrackCategoriesFragment extends BaseFragment implements TrackCategoriesAdapter.ItemClickListener {
     private TrackCategoriesAdapter adapter;
-    private MyNavigationDelegate delegate;
-
-    public void setDelegate(MyNavigationDelegate delegate){
-        this.delegate = delegate;
-    }
+    private List<Pair<View, String>> views;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +43,15 @@ public class TrackCategoriesFragment extends Fragment implements TrackCategories
         fetch();
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        views = new ArrayList<Pair<View, String>>();
+
+
     }
 
     private void setupSwipeToRefresh(View view){
@@ -82,12 +89,8 @@ public class TrackCategoriesFragment extends Fragment implements TrackCategories
 
     @Override
     public void onItemClick(View view, int position) {
-        startFragment(adapter.getCategories().get(position));
-    }
-
-    private void startFragment(String category){
         TrackFragment fragment = new TrackFragment();
-        fragment.setCategory(category);
-        delegate.changeFragment(fragment);
+        fragment.setCategory(adapter.getCategories().get(position));
+        fragmentNavigation.pushFragment(fragment, views);
     }
 }
