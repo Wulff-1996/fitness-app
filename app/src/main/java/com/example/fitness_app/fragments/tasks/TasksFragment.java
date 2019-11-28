@@ -84,6 +84,10 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         newTaskBottomSheetDialog.show(getFragmentManager(), "New Task Dialog");
     }
 
+    private void fetchFromApi(){
+
+    }
+
     private void fetch(){
         // TODO mock data
         List<TaskEntry> taskEntries = new ArrayList<>();
