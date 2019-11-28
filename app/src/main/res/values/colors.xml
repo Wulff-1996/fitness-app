@@ -2,15 +2,24 @@
 <resources>
     <color name="primaryBackground">#15161B</color>
     <color name="accent">#CE7727</color>
+    <color name="accent_half_alpha">#50CE7727</color>
     <color name="secondaryBackground">#27282D</color>
+    <color name="secondary_background_half_alpha">#191A1F</color>
+    <color name="dark_background">#141922</color>
     <color name="header_text">#F0F0F0</color>
     <color name="text">#F0F1F3</color>
     <color name="mutedText">#57585D</color>
+    <color name="mutedText_half_alpha">#5057585D</color>
     <color name="primaryBlue">#1B1BFC</color>
     <color name="primaryBlueHalfAlpha">#504242FF</color>
     <color name="transparent">#00000000</color>
     <color name="cancel">#E13343</color>
+    <color name="cancel_half_alpha">#50E13343</color>
     <color name="pureBlack">#000000</color>
     <color name="icon_color">#B2B2B2</color>
     <color name="icon_color_muted">#5A5A5A</color>
+    <color name="icon_color_muted_half_alpha">#505A5A5A</color>
+    <color name="button_default_background">#27282C</color>
+    <color name="text_alternative_light">#E8E9EB</color>
+
 </resources>

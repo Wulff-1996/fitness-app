@@ -1,13 +1,16 @@
 package com.example.fitness_app.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.Map;
 
 public class Account
 {
     private int exp;
     private String userType;
-    private Map<String, Object> benchmarks;
-    private Map<String, Object> quests;
+    private Map<String, Benchmark> benchmarks;
+    private Map<String, Quest> quests;
+    private Map<String, Task> tasks;
 
     /*
     Post account to database example
@@ -26,12 +29,13 @@ public class Account
     {
     }
 
-    public Account(int exp, String userType, Map<String, Object> benchmarks, Map<String, Object> quests)
+    public Account(int exp, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, Task> tasks)
     {
         this.exp = exp;
         this.userType = userType;
         this.benchmarks = benchmarks;
         this.quests = quests;
+        this.tasks = tasks;
     }
 
     public int getExp()
@@ -54,26 +58,35 @@ public class Account
         this.userType = userType;
     }
 
-    public Map<String, Object> getBenchmarks()
+    public Map<String, Benchmark> getBenchmarks()
     {
         return benchmarks;
     }
 
-    public void setBenchmarks(Map<String, Object> benchmarks)
+    public void setBenchmarks(Map<String, Benchmark> benchmarks)
     {
         this.benchmarks = benchmarks;
     }
 
-    public Map<String, Object> getQuests()
+    public Map<String, Quest> getQuests()
     {
         return quests;
     }
 
-    public void setQuests(Map<String, Object> quests)
+    public void setQuests(Map<String, Quest> quests)
     {
         this.quests = quests;
     }
 
+    public Map<String, Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Map<String, Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    @NonNull
     @Override
     public String toString()
     {
