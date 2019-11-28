@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.fitness_app"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -29,10 +29,24 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // library for drawing graphs
     implementation 'com.jjoe64:graphview:4.2.2'
+
+    // library for have multiple tabs per tab in the bottom navigation view
+    implementation 'com.ncapdevi:frag-nav:2.4.0'
+
+    // library for bottom bar
+    implementation "com.roughike:bottom-bar:2.3.1"
+
+    // library for saving states
+    implementation 'frankiesardo:icepick:3.2.0'
+    compileOnly 'frankiesardo:icepick-processor:3.2.0'
+    annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc2'
+
 }

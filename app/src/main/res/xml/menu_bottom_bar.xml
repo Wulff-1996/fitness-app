@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        icon="@drawable/ic_tasks_icon_solid"
+        id="@+id/nav_tasks"
+        title="@string/title_tasks" />
+    <tab
+        icon="@drawable/ic_measurement_icon_solid"
+        id="@+id/nav_measure"
+        title="@string/title_measurement" />
+    <tab
+        icon="@drawable/ic_quest_icon_solid"
+        id="@+id/nav_quests"
+        title="@string/title_quests" />
+    <tab
+        icon="@drawable/ic_achievement_icon_solid"
+        id="@+id/nav_achievements"
+        title="@string/title_achievements" />
+    <tab
+        icon="@drawable/ic_profile_solid"
+        id="@+id/nav_profile"
+        title="@string/title_profile" />
+</tabs>
