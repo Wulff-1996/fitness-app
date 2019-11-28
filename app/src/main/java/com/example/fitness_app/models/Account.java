@@ -30,6 +30,13 @@ public class Account
     }
 
     public Account(int exp, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, Task> tasks)
+    public Account(int exp, String userType)
+    {
+        this.exp = exp;
+        this.userType = userType;
+    }
+
+    public Account(int exp, String userType, Map<String, Object> benchmarks, Map<String, Object> quests)
     {
         this.exp = exp;
         this.userType = userType;

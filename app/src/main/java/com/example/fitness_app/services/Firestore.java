@@ -10,9 +10,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -43,27 +43,37 @@ public class Firestore
 
     }
 
-    public static void postObject(String collection, String document, Object data)
+    public static void postObject(final String collection, final String document, final Object data, final FirebaseCallback firebaseCallback)
     {
-        try
+        getInstance()
+                .collection(collection)
+                .document(document)
+                .set(data).addOnCompleteListener(new OnCompleteListener<Void>()
         {
-            getInstance()
-                    .collection(collection)
-                    .document(document)
-                    .set(data);
-            Log.i(TAG, "Successfully saved object: " + data + "in " + document + " within: " + collection);
-        }
-        catch (Exception e)
-        {
-            Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
-        }
+            @Override
+            public void onComplete(@NonNull Task<Void> task)
+            {
+                if (task.isSuccessful())
+                {
+                    firebaseCallback.onSuccess(data);
+                    Log.i(TAG, "Successfully saved object: " + data + "in " + document + " within: " + collection);
+                }
+                else
+                {
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                    Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
 
+                }
+                firebaseCallback.onFinish();
+            }
+        });
     }
 
     public static void fetchObject(final String collection, final String document, final Class currentClass, final FirebaseCallback firebaseCallback)
     {
-        DocumentReference result = getInstance().collection(collection).document(document);
-        result.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+        getInstance()
+            .collection(collection)
+            .document(document).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
         {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task)
@@ -79,12 +89,14 @@ public class Firestore
                     {
                         Log.w(TAG, "Failed fetching object: " + document + " from collection: " + collection);
                     }
-                    firebaseCallback.onCallback(object);
+                    firebaseCallback.onSuccess(object);
                 }
                 else
                 {
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
                     Log.w(TAG, "Failed fetching object: " + document + " from collection: " + collection);
                 }
+                firebaseCallback.onFinish();
             }
         });
     }
@@ -94,7 +106,7 @@ public class Firestore
     Firestore.fetchObject("quests", "AadwaDbK2BURPvCUhmtABG1vul", Quest.class, new FirebaseCallback()
     {
         @Override
-        public void onCallback(Object object)
+        public void onSuccess(Object object)
         {
             if (object != null)
             {
@@ -130,25 +142,42 @@ public class Firestore
                     {
                         Log.w(TAG, "Failed fetching IDs within collection: " + collection);
                     }
-                    firebaseCallback.onCallback(list);
+                    firebaseCallback.onSuccess(list);
                 }
                 else
                 {
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
                     Log.w(TAG, "Failed fetching IDs within collection: " + collection);
                 }
+                firebaseCallback.onFinish();
             }
         });
+    }
 
-        /*
-        try
-        {
-            System.out.println("FETCHING DOCUMENTLIST: " + getInstance().collection(collection));
-            return getInstance().collection(collection);
-        }
-        catch (Exception e)
-        {
-            Log.w(TAG, "Failed fetching documents for: " + collection);
-        }
-         */
+    public static void deleteID(final String collection, final String id, final FirebaseCallback firebaseCallback)
+    {
+        getInstance().collection(collection).document(id).delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            firebaseCallback.onSuccess(null);
+                            Log.i(TAG, "ID: " + id + " is deleted from collection: " + collection);
+                        }
+                        /*
+                            Will never fail as this is not implemented for delete operations in Firestore yet:
+                            https://stackoverflow.com/questions/53251138/firebase-firestore-returning-true-on-failed-document-delete
+                         */
+                        else
+                        {
+                            firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                            Log.w(TAG, "Failed to delete ID:" + id + " from collection: " + collection);
+                        }
+                        firebaseCallback.onFinish();
+                    }
+                });
     }
 }
