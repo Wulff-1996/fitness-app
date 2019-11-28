@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_track"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.Track.TrackFragment">
+    tools:context=".fragments.measurements.MeasurementFragment">
 
     <com.example.fitness_app.views.BackArrowView
         android:id="@+id/fragment_track_back_arrow"

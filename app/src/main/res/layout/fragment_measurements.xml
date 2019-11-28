@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Track.TrackCategoriesFragment">
+    tools:context=".fragments.measurements.MeasurementsFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/fragment_track_category_swipe_to_refresh_layout"
@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                tools:listitem="@layout/track_category_item"/>
+                tools:listitem="@layout/measurements_item"/>
 
 
         </ScrollView>

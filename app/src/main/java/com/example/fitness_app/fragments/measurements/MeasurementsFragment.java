@@ -1,6 +1,5 @@
-package com.example.fitness_app.fragments.Track;
+package com.example.fitness_app.fragments.measurements;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -20,9 +18,8 @@ import com.example.fitness_app.fragments.BaseFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackCategoriesFragment extends BaseFragment implements TrackCategoriesAdapter.ItemClickListener {
+public class MeasurementsFragment extends BaseFragment implements TrackCategoriesAdapter.ItemClickListener {
     private TrackCategoriesAdapter adapter;
-    private List<Pair<View, String>> views;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +31,7 @@ public class TrackCategoriesFragment extends BaseFragment implements TrackCatego
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_track_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_measurements, container, false);
 
         setupSwipeToRefresh(view);
 
@@ -48,10 +45,6 @@ public class TrackCategoriesFragment extends BaseFragment implements TrackCatego
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        views = new ArrayList<Pair<View, String>>();
-
-
     }
 
     private void setupSwipeToRefresh(View view){
@@ -89,8 +82,8 @@ public class TrackCategoriesFragment extends BaseFragment implements TrackCatego
 
     @Override
     public void onItemClick(View view, int position) {
-        TrackFragment fragment = new TrackFragment();
+        MeasurementFragment fragment = new MeasurementFragment();
         fragment.setCategory(adapter.getCategories().get(position));
-        fragmentNavigation.pushFragment(fragment, views);
+        fragmentNavigation.pushFragment(fragment);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.fitness_app.fragments.Track;
+package com.example.fitness_app.fragments.measurements;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -26,7 +26,7 @@ import com.jjoe64.graphview.series.Series;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackFragment extends BaseFragment implements SelectorView.SelectorViewDelegate, BackArrowView.BackArrowViewDelegate, BottomSheetDialog.BottomSheetDialogDelegate {
+public class MeasurementFragment extends BaseFragment implements SelectorView.SelectorViewDelegate, BackArrowView.BackArrowViewDelegate, BottomSheetDialog.BottomSheetDialogDelegate {
     private String selectedCategory;
     private SelectorView subCategoriesView;
     private BottomSheetDialog subCategoryBottomSheet;
@@ -41,7 +41,7 @@ public class TrackFragment extends BaseFragment implements SelectorView.Selector
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_track, container, false);
+        View view = inflater.inflate(R.layout.fragment_measurements, container, false);
 
         setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(
                 android.R.transition.fade

@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fitness_app.R;
 
 import java.util.List;
@@ -37,7 +39,7 @@ public class TrackCategoriesAdapter extends RecyclerView.Adapter<TrackCategories
     @NonNull
     @Override
     public CategoriesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.track_category_item, parent, false);
+        View view = mInflater.inflate(R.layout.measurements_item, parent, false);
         return new CategoriesViewHolder(view);
     }
 

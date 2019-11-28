@@ -7,10 +7,12 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/secondaryBackground</item>
+        <item name="android:windowBackground">@color/primaryBackground</item>
         <item name="android:textColorPrimary">@color/text</item>
-        <item name="cardViewStyle">@style/mCardView</item>
         <item name="android:textColorSecondary">@color/mutedText</item>
+        <item name="cardViewStyle">@style/mCardView</item>
+        <!--<item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>-->
+        <!--<item name="drawerArrowStyle">@style/DrawerIcon</item>-->
     </style>
 
     <style name="header" parent="TextAppearance.AppCompat">
@@ -21,10 +23,21 @@
 
 
 
+    <!--card view-->
     <style name="mCardView" parent="Base.CardView">
-        <item name="cardBackgroundColor">@color/primaryBackground</item>
+        <item name="cardBackgroundColor">@color/secondaryBackground</item>
         <item name="cardCornerRadius">@dimen/card_corner_radius</item>
         <item name="cardElevation">2dp</item>
     </style>
+
+    <!--horizontal progress bar-->
+    <style name="mProgressBarHorizontal" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:colorButtonNormal">#f50057</item>
+        <item name="colorControlActivated">#33691e</item>
+        <item name="colorControlHighlight">#ff6d00</item>
+        <item name="android:progressDrawable">@drawable/progress_bar_horizontal_custom</item>
+        <item name="android:minWidth">200dp</item>
+    </style>
+
 
 </resources>

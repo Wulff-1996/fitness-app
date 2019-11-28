@@ -2,14 +2,10 @@ package com.example.fitness_app.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-
-import java.util.List;
 
 import icepick.Icepick;
 
@@ -39,7 +35,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public interface FragmentNavigation {
-        void pushFragment(Fragment fragment, List<Pair<View, String>> sharedElementList);
+        void pushFragment(Fragment fragment);
         void popFragment();
     }
 }
