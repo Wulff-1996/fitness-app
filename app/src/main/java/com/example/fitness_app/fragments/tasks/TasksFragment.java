@@ -153,7 +153,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
 
     @Override
     public void onItemClick(View view, int position) {
-        //TODO open new details fragment of the selected task
+        fragmentNavigation.pushFragment(new TaskEditFragment());
     }
 
     @Override
