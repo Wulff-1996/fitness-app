@@ -14,24 +14,40 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.fitness_app.R;
 import com.example.fitness_app.adapters.TasksAdapter;
 import com.example.fitness_app.fragments.BaseFragment;
+import com.example.fitness_app.fragments.LoadingFragment;
+import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.Task;
 import com.example.fitness_app.models.TaskEntry;
 import com.example.fitness_app.models.TaskWrapper;
+import com.example.fitness_app.services.Firestore;
 import com.example.fitness_app.services.TaskService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
-public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAdapterListener, NewTaskBottomSheetDialog.NewTaskDialogDelegate {
+public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAdapterListener, NewTaskBottomSheetDialog.NewTaskDialogDelegate, LoadingFragment.LoadingFragmentDelegate {
     private TasksAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<TaskWrapper> taskWrappers = new ArrayList<>();
+    private Account account;
+    private LoadingFragment loadingFragment;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fetch();
     }
 
     @Override
@@ -49,6 +65,17 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         setupNewTaskButton(view);
     }
 
+    private void showProgressBar(boolean isShowing){
+        if (isShowing){
+            loadingFragment = LoadingFragment.newInstance();
+            loadingFragment.setDelegate(this);
+            assert getFragmentManager() != null;
+            loadingFragment.show(getFragmentManager(), "progress dialog");
+        } else {
+            loadingFragment.dismiss();
+        }
+    }
+
     private void setupRefreshView(View view){
         swipeRefreshLayout = view.findViewById(R.id.fragment_tasks_swipe_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -62,7 +89,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     private void setupAdapter(View view){
         RecyclerView recyclerView = view.findViewById(R.id.fragment_tasks_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new TasksAdapter(getContext(), new ArrayList<TaskWrapper>());
+        adapter = new TasksAdapter(getContext(), taskWrappers);
         adapter.setmItemListener(this);
         recyclerView.setAdapter(adapter);
     }
@@ -84,58 +111,44 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         newTaskBottomSheetDialog.show(getFragmentManager(), "New Task Dialog");
     }
 
-    private void fetchFromApi(){
-
-    }
-
     private void fetch(){
-        // TODO mock data
-        List<TaskEntry> taskEntries = new ArrayList<>();
-        taskEntries.add(new TaskEntry("1574970720000"));
-        taskEntries.add(new TaskEntry("1575057240000"));
-        taskEntries.add(new TaskEntry("1575143640000"));
-        taskWrappers.add(new TaskWrapper(
-                new Task(
-                    "1",
-                    "This is my first task",
-                    taskEntries),
-                TaskService.setIsCompletedToday(taskEntries)));
-        taskWrappers.add(new TaskWrapper(
-                new Task(
-                    "2",
-                    "Drink four glasses of water a day.",
-                    taskEntries),
-                TaskService.setIsCompletedToday(taskEntries)));
-        taskWrappers.add(new TaskWrapper(
-                new Task(
-                    "3",
-                    "Go to the gym",
-                    taskEntries),
-                TaskService.setIsCompletedToday(taskEntries))
-        );
-        taskWrappers.add(new TaskWrapper(
-                new Task(
-                    "4",
-                        "Take the kids to the playgound",
-                        taskEntries),
-                TaskService.setIsCompletedToday(taskEntries)
-        ));
-        taskWrappers.add(new TaskWrapper(
-                new Task(
-                    "5",
-                    "Make dinner for the wife",
-                    taskEntries),
-                TaskService.setIsCompletedToday(taskEntries)
-        ));
+       Firestore.getInstance()
+               .collection("accounts")
+               .document("wulffjakob@gmail.com")
+               .get()
+               .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                   @Override
+                   public void onComplete(@NonNull com.google.android.gms.tasks.Task<DocumentSnapshot> task) {
+                       if (task.isSuccessful()){
+                           taskWrappers.clear();
+                           account = Objects.requireNonNull(task.getResult()).toObject(Account.class);
 
+                           assert account != null;
+                           for (Map.Entry taskEntrySet: account.getTasks().entrySet()) {
+                               Task task1 = (Task) taskEntrySet.getValue();
+                               task1.setId(taskEntrySet.getKey().toString());
+                               taskWrappers.add(
+                                       new TaskWrapper(
+                                               task1,
+                                               TaskService.setIsCompletedToday(task1.getEntries())));
+                               Map<String, TaskEntry> taskEntryMap = new HashMap<>(task1.getEntries());
+                               task1.getEntries().clear();
+                               for (Map.Entry<String, TaskEntry> taskEntry: taskEntryMap.entrySet()) {
+                                   TaskEntry taskEntry1 = taskEntry.getValue();
+                                   taskEntry1.setId(taskEntry.getKey());
+                                   task1.getEntries().put(taskEntry.getKey(), taskEntry1);
+                               }
+                           }
 
-        adapter.setTaskWrappers(taskWrappers);
-        adapter.notifyDataSetChanged();
+                           adapter.setTaskWrappers(taskWrappers);
+                           adapter.notifyDataSetChanged();
 
-
-        // end loading
-        swipeRefreshLayout.setRefreshing(false);
-
+                           swipeRefreshLayout.setRefreshing(false);
+                       } else {
+                           String bvvv = "";
+                       }
+                   }
+               });
     }
 
     @Override
@@ -147,28 +160,112 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     public void OnTaskMarkedComplete(View view, int position, TaskWrapper taskWrapper) {
         // remove entry for the current day if task was marked complete before clicked
         if (taskWrapper.getCompletedToday()){
-            taskWrappers.get(position).getTask().getEntries().remove(TaskService.getEntryForCurrentDay(taskWrapper));
-            taskWrapper.setCompletedToday(false);
-            //TODO post delete to api
+            deleteEntry(taskWrapper, position);
+
         } else {
             // set date for
-            taskWrappers.get(position).getTask().getEntries().add(new TaskEntry(String.valueOf(System.currentTimeMillis())));
-            taskWrapper.setCompletedToday(true);
-            // TODO post new entity to api
+            postEntry(taskWrapper, position);
         }
+    }
+
+    private void deleteEntry(final TaskWrapper taskWrapper, final int position) {
+        DocumentReference docRef =
+                Firestore.
+                        getInstance()
+                        .collection("accounts")
+                        .document("wulffjakob@gmail.com");
+
+        final TaskEntry deleteEntry = TaskService.getEntryForCurrentDay(taskWrapper);
+
+        Objects.requireNonNull(account.getTasks()
+                .get(taskWrapper.getTask().getId()))
+                .getEntries()
+                .remove(
+                        deleteEntry.getId());
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("tasks", account.getTasks());
+
+        showProgressBar(true);
+        docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                showProgressBar(false);
+                if (task.isSuccessful()){
+                    taskWrappers.get(position).getTask().getEntries().remove(deleteEntry.getId());
+                    taskWrapper.setCompletedToday(false);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private void postEntry(final TaskWrapper taskWrapper, final int position){
+        DocumentReference docRef =
+                Firestore.
+                        getInstance()
+                        .collection("accounts")
+                        .document("wulffjakob@gmail.com");
+
+        final String id = UUID.randomUUID().toString();
+        final TaskEntry entryToBeAdded = new TaskEntry();
+        entryToBeAdded.setCompletionDate(String.valueOf(System.currentTimeMillis()));
+        entryToBeAdded.setId(id);
+        Objects.requireNonNull(account.getTasks().get(taskWrapper.getTask().getId())).getEntries().put(id, entryToBeAdded);
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("tasks", account.getTasks());
+
+        showProgressBar(true);
+        docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                showProgressBar(false);
+                taskWrappers.get(position).getTask().getEntries().put(id, entryToBeAdded);
+                taskWrapper.setCompletedToday(true);
+                adapter.getTaskWrappers().get(position).getTask().getEntries().put(id, entryToBeAdded);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
     public void onTaskSaved(Task task) {
-        taskWrappers.add(new TaskWrapper(task, false));
-        taskWrappers.size();
-        adapter.getTaskWrappers().size();
-        // TODO post new entity to api
-        adapter.notifyDataSetChanged();
+        postTaskToApi(task);
+    }
+
+    private void postTaskToApi(final Task task){
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> tasks = new HashMap<>();
+        String id = UUID.randomUUID().toString();
+        task.setId(id);
+        tasks.put(id, task);
+        data.put("tasks", tasks);
+        Firestore.getInstance().collection("accounts").document("wulffjakob@gmail.com")
+                .set(data, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                fetch();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                showProgressBar(false);
+            }
+        });
     }
 
     @Override
     public void onTaskDialogDismissed(NewTaskBottomSheetDialog dialogInstance) {
+
+    }
+
+    @Override
+    public void onLoadingFragmentDismissed() {
 
     }
 }

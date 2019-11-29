@@ -39,10 +39,19 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final TaskViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final TaskViewHolder holder, final int position) {
         final TaskWrapper data = taskWrappers.get(position);
-
         holder.populateView(data);
+        holder. completeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemListener.OnTaskMarkedComplete(
+                        view,
+                        position,
+                        taskWrappers.get(position));
+                holder.updateButtonBackground(data);
+            }
+        });
     }
 
     @Override
@@ -63,19 +72,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
         private void populateView(final TaskWrapper data){
             subject.setText(data.getTask().getSubject());
-
             updateButtonBackground(data);
-
-            completeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mItemListener.OnTaskMarkedComplete(itemView, getAdapterPosition(), taskWrappers.get(getAdapterPosition()));
-                    updateButtonBackground(data);
-                }
-            });
         }
 
-        private void updateButtonBackground(TaskWrapper data){
+        void updateButtonBackground(TaskWrapper data){
             if (data.getCompletedToday()){
                 completeButton.setBackground(context.getDrawable(R.drawable.task_complete_button_round_checked));
             } else {

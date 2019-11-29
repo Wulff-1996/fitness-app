@@ -2,6 +2,7 @@ package com.example.fitness_app.activities;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -12,6 +13,7 @@ import com.example.fitness_app.fragments.measurements.MeasurementsFragment;
 import com.example.fitness_app.fragments.profile.ProfileFragment;
 import com.example.fitness_app.fragments.quests.QuestFragment;
 import com.example.fitness_app.fragments.tasks.TasksFragment;
+import com.google.firebase.FirebaseApp;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
@@ -33,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements FragNavController
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //  register this app to firebase
+        FirebaseApp.initializeApp(this);
 
         FragNavController.Builder builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.activity_main_fragment_canvas);
 
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mNavController != null) {
             mNavController.onSaveInstanceState(outState);

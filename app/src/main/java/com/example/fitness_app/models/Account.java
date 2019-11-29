@@ -2,6 +2,7 @@ package com.example.fitness_app.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Account
@@ -10,7 +11,7 @@ public class Account
     private String userType;
     private Map<String, Benchmark> benchmarks;
     private Map<String, Quest> quests;
-    private Map<String, Task> tasks;
+    private Map<String, Task> tasks = new HashMap<>();
 
     /*
     Post account to database example
