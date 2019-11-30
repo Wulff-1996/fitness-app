@@ -1,4 +1,4 @@
-package com.example.fitness_app.services;
+package com.example.fitness_app.api;
 
 import android.util.Log;
 
@@ -10,19 +10,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class Firestore
+public class FirestoreRepository
 {
-    private static final String TAG = "Firestore";
+    private static final String TAG = "FirestoreRepository";
 
-    public static FirebaseFirestore getInstance()
+    private static FirebaseFirestore getInstance()
     {
         return FirebaseFirestore.getInstance();
     }
@@ -43,41 +46,49 @@ public class Firestore
 
     }
 
+    public static DocumentReference getDocumentReference(final String collection, final String document){
+        return getInstance()
+                .collection(collection)
+                .document(document);
+    }
+
+    public static void updateField(final DocumentReference docRef, Map<String, Object> updates, final FirebaseCallback firebaseCallback){
+        docRef.update(updates).addOnCompleteListener(task -> {
+            firebaseCallback.onFinish();
+            if (task.isSuccessful()){
+                firebaseCallback.onSuccess(updates);
+            } else {
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+            }
+        });
+    }
+
     public static void postObject(final String collection, final String document, final Object data, final FirebaseCallback firebaseCallback)
     {
         getInstance()
                 .collection(collection)
                 .document(document)
-                .set(data).addOnCompleteListener(new OnCompleteListener<Void>()
-        {
-            @Override
-            public void onComplete(@NonNull Task<Void> task)
-            {
-                if (task.isSuccessful())
-                {
-                    firebaseCallback.onSuccess(data);
-                    Log.i(TAG, "Successfully saved object: " + data + "in " + document + " within: " + collection);
-                }
-                else
-                {
-                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
-                    Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
+                .set(data, SetOptions.merge()).addOnCompleteListener(task -> {
+                    firebaseCallback.onFinish();
+                    if (task.isSuccessful())
+                    {
+                        firebaseCallback.onSuccess(data);
+                        Log.i(TAG, "Successfully saved object: " + data + "in " + document + " within: " + collection);
+                    }
+                    else
+                    {
+                        firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                        Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
 
-                }
-                firebaseCallback.onFinish();
-            }
-        });
+                    }
+                });
     }
 
     public static void fetchObject(final String collection, final String document, final Class currentClass, final FirebaseCallback firebaseCallback)
     {
         getInstance()
             .collection(collection)
-            .document(document).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
-        {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task)
-            {
+            .document(document).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful())
                 {
                     Object object = task.getResult().toObject(currentClass);
@@ -97,13 +108,12 @@ public class Firestore
                     Log.w(TAG, "Failed fetching object: " + document + " from collection: " + collection);
                 }
                 firebaseCallback.onFinish();
-            }
-        });
+            });
     }
 
     /*
     Example of fetching quest object from activity:
-    Firestore.fetchObject("quests", "AadwaDbK2BURPvCUhmtABG1vul", Quest.class, new FirebaseCallback()
+    FirestoreRepository.fetchObject("quests", "AadwaDbK2BURPvCUhmtABG1vul", Quest.class, new FirebaseCallback()
     {
         @Override
         public void onSuccess(Object object)
@@ -168,7 +178,7 @@ public class Firestore
                             Log.i(TAG, "ID: " + id + " is deleted from collection: " + collection);
                         }
                         /*
-                            Will never fail as this is not implemented for delete operations in Firestore yet:
+                            Will never fail as this is not implemented for delete operations in FirestoreRepository yet:
                             https://stackoverflow.com/questions/53251138/firebase-firestore-returning-true-on-failed-document-delete
                          */
                         else

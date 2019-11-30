@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.tasks.TaskEditFragment">
 
-    <TextView
-        android:id="@+id/fragment_task_edit_task_subject"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        tools:text="Drink five glasses of water a day"
-        android:textColor="@color/text"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:textSize="20dp"
-        style="@style/header"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
-
     <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/fragment_task_edit_calendar"
+        android:id="@+id/fragment_task_edit_calendar_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_task_edit_task_subject"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-
+        android:layout_marginTop="8dp"
+        app:abbreviationsBarColor="@color/primaryBackground"
+        app:abbreviationsLabelsColor="@color/text"
+        app:anotherMonthsDaysLabelsColor="@color/mutedText"
+        app:daysLabelsColor="@color/text"
+        app:eventsEnabled="false"
+        app:headerColor="@color/primaryBackground"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:pagesColor="@color/primaryBackground"
+        app:selectionColor="@color/accent"
+        app:selectionLabelColor="@color/text"
+        app:todayLabelColor="@color/accent"
+        app:type="many_days_picker" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

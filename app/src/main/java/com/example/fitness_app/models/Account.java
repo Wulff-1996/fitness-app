@@ -23,7 +23,7 @@ public class Account
         benchmarkmap.put(String.valueOf(benchmarkmap.size()), new Benchmark("November 21, 2019 at 12:00:00 AM UTC+1", "Benchpress", (float) 102));
 
         Account account = new Account(500, "TestUser", benchmarkmap, questmap);
-        Firestore.postObject("accounts", "test1234@gmail.com", account);
+        FirestoreRepository.postObject("accounts", "test1234@gmail.com", account);
      */
 
     public Account()

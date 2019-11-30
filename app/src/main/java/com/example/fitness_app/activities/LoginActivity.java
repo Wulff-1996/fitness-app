@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.services.Firestore;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity
         super.onStart();
 
         // Get current user and sign in with the current user
-        FirebaseUser currentUser = Firestore.getCurrentUser();
+        FirebaseUser currentUser = FirestoreRepository.getCurrentUser();
 
         updateUI(currentUser);
 
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity
         else
         {
             // Sign in using firestore
-            Firestore.getFirebaseAuth().signInWithEmailAndPassword(email, password)
+            FirestoreRepository.getFirebaseAuth().signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                     {
                         @Override
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity
                             {
                                 // Sign in successful, log it and sign in user
                                 Log.i(TAG, "Sign in with email/password:Success");
-                                FirebaseUser user = Firestore.getCurrentUser();
+                                FirebaseUser user = FirestoreRepository.getCurrentUser();
                                 updateUI(user);
                             }
                             else
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity
         }
         else
         {
-            Firestore.getFirebaseAuth().createUserWithEmailAndPassword(email, password)
+            FirestoreRepository.getFirebaseAuth().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                     {
                         @Override
@@ -126,9 +126,9 @@ public class LoginActivity extends AppCompatActivity
                             {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = Firestore.getCurrentUser();
+                                FirebaseUser user = FirestoreRepository.getCurrentUser();
                                 Account userAccount = new Account(0, "User");
-                                Firestore.postObject("accounts", user.getEmail(), userAccount, new FirebaseCallback()
+                                FirestoreRepository.postObject("accounts", user.getEmail(), userAccount, new FirebaseCallback()
                                 {
                                     @Override
                                     public void onSuccess(Object object)

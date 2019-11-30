@@ -11,6 +11,17 @@ import icepick.Icepick;
 
 public abstract class BaseFragment extends Fragment {
     public FragmentNavigation fragmentNavigation;
+    private LoadingFragment loadingFragment;
+
+    public void showProgressBar(boolean isShowing) {
+        if (isShowing) {
+            loadingFragment = LoadingFragment.newInstance();
+            assert getFragmentManager() != null;
+            loadingFragment.show(getFragmentManager(), "progress dialog");
+        } else {
+            loadingFragment.dismiss();
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

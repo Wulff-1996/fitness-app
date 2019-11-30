@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.models.Task;
 import com.example.fitness_app.models.TaskWrapper;
 
 import java.util.List;
@@ -86,13 +87,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         @Override
         public void onClick(View view) {
             if (mItemListener != null){
-                mItemListener.onItemClick(view, getAdapterPosition());
+                mItemListener.onItemClick(view, taskWrappers.get(getAdapterPosition()).getTask(), getAdapterPosition());
             }
         }
     }
 
     public interface TasksAdapterListener{
-        void onItemClick(View view, int position);
+        void onItemClick(View view, Task task, int position);
         void OnTaskMarkedComplete(View view, int position, TaskWrapper taskWrapper);
     }
 }
