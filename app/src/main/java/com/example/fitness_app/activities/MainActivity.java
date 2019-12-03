@@ -1,9 +1,12 @@
 package com.example.fitness_app.activities;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitness_app.R;
@@ -16,8 +19,6 @@ import com.example.fitness_app.fragments.tasks.TasksFragment;
 import com.google.firebase.FirebaseApp;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
-import com.roughike.bottombar.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements FragNavController
     private final int PROFILE_INDEX = FragNavController.TAB5;
     private FragNavController mNavController;
     private BottomBar bottomBar;
+    private Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements FragNavController
 
         //  register this app to firebase
         FirebaseApp.initializeApp(this);
+
+        setupToolbar();
 
         FragNavController.Builder builder = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.activity_main_fragment_canvas);
 
@@ -52,34 +57,41 @@ public class MainActivity extends AppCompatActivity implements FragNavController
         builder.rootFragmentListener(this, 5);
         mNavController = builder.build();
         bottomBar = findViewById(R.id.activity_main_bottom_navigation);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
-            public void onTabSelected(int tabId) {
-                switch (tabId){
-                    case R.id.nav_tasks:
-                        mNavController.switchTab(TASKS_INDEX);
-                        break;
-                    case R.id.nav_measure:
-                        mNavController.switchTab(MEASURE_INDEX);
-                        break;
-                    case R.id.nav_quests:
-                        mNavController.switchTab(QUEST_INDEX);
-                        break;
-                    case R.id.nav_achievements:
-                        mNavController.switchTab(ACHIEVEMENT_INDEX);
-                        break;
-                    case R.id.nav_profile:
-                        mNavController.switchTab(PROFILE_INDEX);
-                        break;
-                }
+        bottomBar.setOnTabSelectListener(tabId -> {
+            switch (tabId){
+                case R.id.nav_tasks:
+                    if (mNavController.isRootFragment()){
+                        setToolbarTitle(getString(R.string.title_tasks));
+                    }
+                    mNavController.switchTab(TASKS_INDEX);
+                    break;
+                case R.id.nav_measure:
+                    if (mNavController.isRootFragment()){
+                        setToolbarTitle(getString(R.string.title_measurement));
+                    }
+                    mNavController.switchTab(MEASURE_INDEX);
+                    break;
+                case R.id.nav_quests:
+                    if (mNavController.isRootFragment()){
+                        setToolbarTitle(getString(R.string.title_quests));
+                    }
+                    mNavController.switchTab(QUEST_INDEX);
+                    break;
+                case R.id.nav_achievements:
+                    if (mNavController.isRootFragment()){
+                        setToolbarTitle(getString(R.string.title_achievements));
+                    }
+                    mNavController.switchTab(ACHIEVEMENT_INDEX);
+                    break;
+                case R.id.nav_profile:
+                    if (mNavController.isRootFragment()){
+                        setToolbarTitle(getString(R.string.title_profile));
+                    }
+                    mNavController.switchTab(PROFILE_INDEX);
+                    break;
             }
         });
-        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
-            @Override
-            public void onTabReSelected(int tabId) {
-                mNavController.clearStack();
-            }
-        });
+        bottomBar.setOnTabReselectListener(tabId -> mNavController.clearStack());
     }
 
     @Override
@@ -97,6 +109,31 @@ public class MainActivity extends AppCompatActivity implements FragNavController
                 return new ProfileFragment();
         }
         throw new IllegalStateException("Need to send an index that we know");
+    }
+
+    private void setupToolbar(){
+        toolbar = findViewById(R.id.application_toolbar_toolbar);
+        setSupportActionBar(toolbar);
+        showBackArrowOnToolBar(false);
+    }
+
+    public void setToolbarTitle(String title){
+        TextView titleView = toolbar.findViewById(R.id.application_toolbar_header);
+        titleView.setText(title);
+    }
+
+    public void showBackArrowOnToolBar(boolean isVisible){
+        if (isVisible){
+            toolbar.findViewById(R.id.application_toolbar_back_arrow).setVisibility(View.VISIBLE);
+            toolbar.findViewById(R.id.application_toolbar_back_arrow).setOnClickListener(view -> {
+                popFragment();
+                if (mNavController.isRootFragment()){
+                    toolbar.findViewById(R.id.application_toolbar_back_arrow).setVisibility(View.INVISIBLE);
+                }
+            });
+        } else {
+            toolbar.findViewById(R.id.application_toolbar_back_arrow).setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

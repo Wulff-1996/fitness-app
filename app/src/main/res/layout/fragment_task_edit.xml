@@ -6,25 +6,143 @@
     android:layout_height="match_parent"
     tools:context=".fragments.tasks.TaskEditFragment">
 
-    <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/fragment_task_edit_calendar_view"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:abbreviationsBarColor="@color/primaryBackground"
-        app:abbreviationsLabelsColor="@color/text"
-        app:anotherMonthsDaysLabelsColor="@color/mutedText"
-        app:daysLabelsColor="@color/text"
-        app:eventsEnabled="false"
-        app:headerColor="@color/primaryBackground"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:pagesColor="@color/primaryBackground"
-        app:selectionColor="@color/accent"
-        app:selectionLabelColor="@color/text"
-        app:todayLabelColor="@color/accent"
-        app:type="many_days_picker" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragments_task_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/icon_task"
+                android:textColor="@color/icon_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/fragment_task_edit_title"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/fragment_task_edit_Task_title"
+                app:layout_constraintBottom_toBottomOf="@+id/fragments_task_edit"
+                app:layout_constraintStart_toEndOf="@+id/fragments_task_edit"
+                app:layout_constraintTop_toTopOf="@+id/fragments_task_edit" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/fragment_task_edit_is_completed_today_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:clickable="false"
+                android:text="@string/task_item_mark_complete_today"
+                android:textAppearance="@style/chipTextAppearance"
+                android:textColor="@color/primaryBackground"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipBackgroundColor="@color/transparent"
+                app:chipCornerRadius="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fragments_task_edit"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/fragment_task_edit_title"
+                app:layout_constraintTop_toTopOf="@+id/fragments_task_edit"
+                app:textEndPadding="0dp"
+                app:textStartPadding="0dp"
+                tools:text="Completed Today" />
+
+            <com.example.fitness_app.views.IconButton
+                android:id="@+id/fragment_task_edit_delete_button"
+                style="@style/icon_button_delete_style"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/transparent"
+                android:text="@string/icon_delete"
+                app:layout_constraintBottom_toBottomOf="@+id/fragments_task_edit"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/fragments_task_edit" />
+
+            <com.example.fitness_app.views.IconButton
+                android:id="@+id/fragment_task_edit_edit_button"
+                style="@style/icon_button_default_style"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@color/transparent"
+                android:text="@string/icon_edit"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_task_edit_delete_button"
+                app:layout_constraintEnd_toStartOf="@+id/fragment_task_edit_delete_button"
+                app:layout_constraintTop_toTopOf="@+id/fragment_task_edit_delete_button" />
+
+            <TextView
+                android:id="@+id/fragment_task_edit_task_title"
+                style="@style/header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/fragments_task_edit"
+                app:layout_constraintTop_toBottomOf="@+id/fragments_task_edit"
+                tools:text="Drink a total of 5 glasses of water af day" />
+
+            <com.applandeo.materialcalendarview.CalendarView
+                android:id="@+id/fragment_task_edit_calendar_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:abbreviationsBarColor="@color/primaryBackground"
+                app:abbreviationsLabelsColor="@color/text"
+                app:anotherMonthsDaysLabelsColor="@color/mutedText"
+                app:daysLabelsColor="@color/text"
+                app:eventsEnabled="false"
+                app:headerColor="@color/primaryBackground"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_task_edit_task_title"
+                app:pagesColor="@color/primaryBackground"
+                app:selectionColor="@color/accent"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:selectionLabelColor="@color/text"
+                app:todayLabelColor="@color/accent"
+                app:type="many_days_picker"
+                tools:background="@color/accent"
+                tools:layout_height="300dp" />
+
+            <TextView
+                android:id="@+id/fragment_task_edit_calender_description"
+                style="@style/bodyText.light.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/fragment_task_edit_calendar_functionality_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_task_edit_calendar_view" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

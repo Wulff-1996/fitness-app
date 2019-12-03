@@ -1,24 +1,20 @@
-package com.example.fitness_app.fragments;
+package com.example.fitness_app.fragments.buttom_sheet_dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
-import com.example.fitness_app.entities.BottomSheetActionItemEntity;
-import com.example.fitness_app.entities.BottomSheetTitleEntity;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fitness_app.R;
+import com.example.fitness_app.entities.BottomSheetTitleEntity;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
 
@@ -69,12 +65,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         headlineTextView.setText(title.getHeadline());
         sublineTextView.setText(title.getSubline());
-        cancelTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                delegate.onBottomSheetDialogDismissed(getInstance());
-                dismiss();
-            }
+        cancelTextView.setOnClickListener(view1 -> {
+            delegate.onBottomSheetDialogDismissed(getInstance());
+            dismiss();
         });
 
     }
@@ -109,13 +102,10 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         ViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.fragment_bottom_sheet_dialog_item, parent, false));
             titleView = itemView.findViewById(R.id.fragment_bottom_sheet_dialog_item_title);
-            titleView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (delegate != null) {
-                        delegate.onBottomSheetItemClicked(getInstance(), options.get(getAdapterPosition()), getAdapterPosition());
-                        dismiss();
-                    }
+            titleView.setOnClickListener(v -> {
+                if (delegate != null) {
+                    delegate.onBottomSheetItemClicked(getInstance(), options.get(getAdapterPosition()), getAdapterPosition());
+                    dismiss();
                 }
             });
         }
@@ -124,6 +114,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     private class BottomSheetAdapter extends RecyclerView.Adapter<ViewHolder> {
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ViewHolder(LayoutInflater.from(parent.getContext()), parent);

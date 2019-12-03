@@ -1,7 +1,11 @@
 package com.example.fitness_app.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class TaskEntry {
+    @SerializedName("id")
     private String id;
+    @SerializedName("completion_date")
     private String completionDate;
 
     public TaskEntry() {}

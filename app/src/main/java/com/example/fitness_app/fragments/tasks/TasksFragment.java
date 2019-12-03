@@ -1,5 +1,6 @@
 package com.example.fitness_app.fragments.tasks;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.example.fitness_app.R;
 import com.example.fitness_app.adapters.TasksAdapter;
 import com.example.fitness_app.api.FirestoreService;
 import com.example.fitness_app.constrants.ApiConstants;
+import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
@@ -25,6 +27,10 @@ import com.example.fitness_app.services.TaskService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,13 +38,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAdapterListener, NewTaskBottomSheetDialog.NewTaskDialogDelegate {
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_TASK_DELETED;
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_TASK_EDITED;
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_TASK_ENTRY_ADDED;
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_TASK_ENTRY_ADDED_CURRENT_DAY;
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_TASK_ENTRY_DELETED;
+
+public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAdapterListener, NewEditTaskDialog.NewTaskDialogDelegate {
     private TasksAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<TaskWrapper> taskWrappers = new ArrayList<>();
     private Account account;
-    private FirestoreService taskRepository = new FirestoreService();
-
+    private int selectedIndex;
+    private boolean hasBeenCreated = false; // avoid loading every time fragment is visible again
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +68,10 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (!hasBeenCreated){
+            showProgressBar(true);
+            hasBeenCreated = true;
+        }
         setupRefreshView(view);
         setupAdapter(view);
         setupNewTaskButton(view);
@@ -80,15 +96,18 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     }
 
     private void showNewTaskDialog() {
-        NewTaskBottomSheetDialog newTaskBottomSheetDialog = new NewTaskBottomSheetDialog();
-        newTaskBottomSheetDialog.setDelegate(this);
+        NewEditTaskDialog newEditTaskDialog = new NewEditTaskDialog();
+        newEditTaskDialog.setDelegate(this);
+        newEditTaskDialog.setIcon(getString(R.string.icon_new_item));
+        newEditTaskDialog.setHeadline(getString(R.string.fragment_tasks_new_task));
         assert getFragmentManager() != null;
-        newTaskBottomSheetDialog.show(getFragmentManager(), "New Task Dialog");
+        newEditTaskDialog.show(getFragmentManager(), "New Task Dialog");
     }
 
 
     @Override
     public void onItemClick(View view, Task task, int position) {
+        selectedIndex = position;
         TaskEditFragment fragment = new TaskEditFragment();
         fragment.setTask(task);
         fragment.setAccount(account);
@@ -97,6 +116,8 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
 
     @Override
     public void OnTaskMarkedComplete(View view, int position, TaskWrapper taskWrapper) {
+        selectedIndex = position;
+
         // remove entry for the current day if task was marked complete before clicked
         if (taskWrapper.getCompletedToday()) {
             deleteEntry(taskWrapper, position);
@@ -108,12 +129,12 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     }
 
     @Override
-    public void onTaskSaved(Task task) {
+    public void onDone(Task task) {
         postTaskToApi(task);
     }
 
     @Override
-    public void onTaskDialogDismissed(NewTaskBottomSheetDialog dialogInstance) {
+    public void onTaskDialogDismissed(NewEditTaskDialog dialogInstance) {
 
     }
 
@@ -135,6 +156,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
                 if (adapter != null){
                     adapter.setTaskWrappers(taskWrappers);
                     adapter.notifyDataSetChanged();
+                    showProgressBar(false);
                 }
             }
 
@@ -188,23 +210,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
                 ApiConstants.TASKS_FIELD_NAME,
                 account.getTasks());
 
-        showProgressBar(true);
-        FirestoreService.updateTaskEntry(updates, new FirebaseCallback() {
-            @Override
-            public void onSuccess(Object object) {
-                taskWrapper.setCompletedToday(true);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
-            }
-
-            @Override
-            public void onFinish() {
-                showProgressBar(false);
-            }
-        });
+        postUpdates(taskWrapper, updates, EVENT_BUS_EVENT_TASK_ENTRY_ADDED_CURRENT_DAY);
     }
 
     private void deleteEntry(final TaskWrapper taskWrapper, final int position) {
@@ -223,13 +229,26 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         updates.put(
                 ApiConstants.TASKS_FIELD_NAME,
                 account.getTasks());
+        postUpdates(taskWrapper, updates, EVENT_BUS_EVENT_TASK_ENTRY_DELETED);
+    }
 
+    private void postUpdates(Object data, Map<String, Object> updates, String updateType){
         showProgressBar(true);
         FirestoreService.updateTaskEntry(updates, new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
-                taskWrapper.setCompletedToday(false);
-                adapter.notifyDataSetChanged();
+                switch (updateType) {
+
+                    case EVENT_BUS_EVENT_TASK_ENTRY_ADDED_CURRENT_DAY:
+                        ((TaskWrapper) data).setCompletedToday(true);
+                        adapter.notifyItemChanged(selectedIndex);
+                        break;
+                    case EVENT_BUS_EVENT_TASK_ENTRY_DELETED:
+                        ((TaskWrapper) data).setCompletedToday(false);
+                        adapter.notifyItemChanged(selectedIndex);
+                        break;
+                }
+
             }
 
             @Override
@@ -241,5 +260,40 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
                 showProgressBar(false);
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBustEvent<Object> event){
+        switch (event.getEvent()){
+            case EVENT_BUS_EVENT_TASK_ENTRY_DELETED:
+                taskWrappers.get(selectedIndex).setCompletedToday(false);
+                adapter.notifyItemChanged(selectedIndex);
+                break;
+            case EVENT_BUS_EVENT_TASK_ENTRY_ADDED:
+                taskWrappers.get(selectedIndex).setCompletedToday(true);
+                adapter.notifyItemChanged(selectedIndex);
+                break;
+            case EVENT_BUS_EVENT_TASK_EDITED:
+                Task task = (Task) event.getData();
+                taskWrappers.get(selectedIndex).getTask().setTitle(task.getTitle());
+                adapter.notifyItemChanged(selectedIndex);
+                break;
+            case EVENT_BUS_EVENT_TASK_DELETED:
+                taskWrappers.remove(selectedIndex);
+                adapter.notifyItemRemoved(selectedIndex);
+                break;
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 }

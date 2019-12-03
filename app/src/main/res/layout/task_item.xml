@@ -7,34 +7,68 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/task_item_subject"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:textColor="@color/text"
-        android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/task_item_complete_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginEnd="8dp"
-        tools:text="Each day drink a total of 5 glasses of water and the waster needs to be clean and healthy." />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/task_item_is_completed_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:clickable="false"
+                android:text="@string/fragment_tasks_completed_today_chip_text"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/chipTextAppearance"
+                android:textColor="@color/primaryBackground"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipBackgroundColor="@color/transparent"
+                app:chipCornerRadius="5dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:textEndPadding="0dp"
+                app:textStartPadding="0dp" />
 
+            <TextView
+                android:id="@+id/task_item_task_title_value"
+                style="@style/bodyText.big"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/text"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:layout_constraintEnd_toStartOf="@+id/task_item_open_new_window_icon"
+                app:layout_constraintStart_toStartOf="@+id/task_item_is_completed_chip"
+                app:layout_constraintTop_toBottomOf="@+id/task_item_is_completed_chip"
+                tools:text="This an example of a task." />
 
-    <Button
-        android:id="@+id/task_item_complete_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/ic_icon_check_circle_solid_muted"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/task_item_mark_complete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/cancel_button_background"
+                android:padding="8dp"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/task_item_is_completed_chip"
+                app:layout_constraintTop_toBottomOf="@+id/task_item_task_title_value"
+                tools:text="Mark Complete" />
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/task_item_open_new_window_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/icon_right_arrow"
+                android:textColor="@color/mutedText"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

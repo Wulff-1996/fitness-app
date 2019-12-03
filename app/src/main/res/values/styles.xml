@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryBackground</item>
         <item name="colorAccent">@color/accent</item>
@@ -11,17 +11,7 @@
         <item name="android:textColorPrimary">@color/text</item>
         <item name="android:textColorSecondary">@color/mutedText</item>
         <item name="cardViewStyle">@style/mCardView</item>
-        <!--<item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>-->
-        <!--<item name="drawerArrowStyle">@style/DrawerIcon</item>-->
     </style>
-
-    <style name="header" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/text</item>
-        <item name="android:textSize">@dimen/header_big</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-
-
 
     <!--card view-->
     <style name="mCardView" parent="Base.CardView">
@@ -30,13 +20,61 @@
         <item name="cardElevation">2dp</item>
     </style>
 
-    <!--horizontal progress bar-->
-    <style name="mProgressBarHorizontal" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:colorButtonNormal">#f50057</item>
-        <item name="colorControlActivated">#33691e</item>
-        <item name="colorControlHighlight">#ff6d00</item>
-        <item name="android:progressDrawable">@drawable/progress_bar_horizontal_custom</item>
-        <item name="android:minWidth">200dp</item>
+    <style name="icon_button_default_style" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@drawable/icon_button_default_background</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="icon_button_delete_style" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@drawable/delete_button_background</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <!--text styles -->
+    <style name="header" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">@dimen/header_big</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="bodyText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/bodytext_normal</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="bodyText.big">
+        <item name="android:textSize">@dimen/bodytext_big</item>
+    </style>
+
+    <style name="bodyText.muted">
+        <item name="android:textColor">@color/mutedText</item>
+    </style>
+
+    <style name="bodyText.thin">
+        <item name="android:fontFamily">@font/roboto_thin</item>
+    </style>
+
+    <style name="bodyText.thin.muted">
+        <item name="android:textColor">@color/mutedText</item>
+    </style>
+
+    <style name="bodyText.light">
+        <item name="android:fontFamily">@font/roboto_light</item>
+    </style>
+
+    <style name="bodyText.light.muted">
+        <item name="android:textColor">@color/mutedText</item>
+    </style>
+
+    <!-- chips style-->
+    <style name="chipTextAppearance" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textSize">10dp</item>
     </style>
 
 

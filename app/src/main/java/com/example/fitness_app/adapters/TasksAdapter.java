@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fitness_app.R;
 import com.example.fitness_app.models.Task;
 import com.example.fitness_app.models.TaskWrapper;
+import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
@@ -43,15 +44,12 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     public void onBindViewHolder(@NonNull final TaskViewHolder holder, final int position) {
         final TaskWrapper data = taskWrappers.get(position);
         holder.populateView(data);
-        holder. completeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mItemListener.OnTaskMarkedComplete(
-                        view,
-                        position,
-                        taskWrappers.get(position));
-                holder.updateButtonBackground(data);
-            }
+        holder. completeButton.setOnClickListener(view -> {
+            mItemListener.OnTaskMarkedComplete(
+                    view,
+                    position,
+                    taskWrappers.get(position));
+            holder.updateStatus(data);
         });
     }
 
@@ -63,25 +61,28 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView subject;
         Button completeButton;
+        Chip isCompletedChip;
 
         private TaskViewHolder(@NonNull View itemView) {
             super(itemView);
-            subject = itemView.findViewById(R.id.task_item_subject);
-            completeButton = itemView.findViewById(R.id.task_item_complete_button);
+            subject = itemView.findViewById(R.id.task_item_task_title_value);
+            completeButton = itemView.findViewById(R.id.task_item_mark_complete_button);
+            isCompletedChip = itemView.findViewById(R.id.task_item_is_completed_chip);
             itemView.setOnClickListener(this);
         }
 
         private void populateView(final TaskWrapper data){
-            subject.setText(data.getTask().getSubject());
-            updateButtonBackground(data);
+            subject.setText(data.getTask().getTitle());
+            updateStatus(data);
         }
 
-        void updateButtonBackground(TaskWrapper data){
+        void updateStatus(TaskWrapper data){
             if (data.getCompletedToday()){
-                completeButton.setBackground(context.getDrawable(R.drawable.task_complete_button_round_checked));
+                isCompletedChip.setChipBackgroundColorResource(R.color.success);
+                completeButton.setText(context.getString(R.string.task_item_mark_uncomplete_today));
             } else {
-                completeButton.setBackground(context.getDrawable(R.drawable.task_complete_button_round_unchecked));
-            }
+                isCompletedChip.setChipBackgroundColorResource(R.color.cancel);
+                completeButton.setText(context.getString(R.string.task_item_mark_complete_today));}
         }
 
         @Override

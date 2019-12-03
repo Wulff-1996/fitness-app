@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="IconView">
+        <attr name="iconColor" format="color"/>
+        <attr name="iconType" format="enum">
+            <enum name="brands" value="0"/>
+            <enum name="regular" value="1"/>
+            <enum name="solid" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="IconButton">
+        <attr name="buttonType" format="enum">
+            <enum name="brands" value="0"/>
+            <enum name="regular" value="1"/>
+            <enum name="solid" value="2"/>
+        </attr>
+    </declare-styleable>
+</resources>

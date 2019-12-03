@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="icon_back_arrow">&#xf060;</string>
+    <string name="icon_right_arrow">&#xf105;</string>
+    <string name="icon_task">&#xf0ae;</string>
+    <string name="icon_cancel">&#xf05e;</string>
+    <string name="icon_confirm">&#xf00c;</string>
+    <string name="icon_delete">&#xf1f8;</string>
+    <string name="icon_edit">&#xf044;</string>
+    <string name="icon_new_item">&#xf067;</string>
+</resources>

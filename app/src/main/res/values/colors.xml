@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primaryBackground">#15161B</color>
+    <color name="primaryBackground_half_alpha">#5015161B</color>
     <color name="accent">#CE7727</color>
     <color name="accent_half_alpha">#50CE7727</color>
     <color name="secondaryBackground">#27282D</color>
@@ -21,5 +22,6 @@
     <color name="icon_color_muted_half_alpha">#505A5A5A</color>
     <color name="button_default_background">#27282C</color>
     <color name="text_alternative_light">#E8E9EB</color>
-
+    <color name="success">#00FF8C</color>
+    <color name="success_half_alpha">#5000FF8C</color>
 </resources>

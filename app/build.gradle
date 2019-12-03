@@ -71,5 +71,8 @@ dependencies {
     // library for calendar view
     implementation 'com.applandeo:material-calendar-view:1.7.0'
 
+    // library for communication between activities fragments, services etc.
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

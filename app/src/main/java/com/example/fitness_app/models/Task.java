@@ -1,24 +1,29 @@
 package com.example.fitness_app.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Task {
+    @SerializedName("id")
     private String id;
-    private String subject;
+    @SerializedName("title")
+    private String title;
+    @SerializedName("entries")
     private Map<String, TaskEntry> entries = new HashMap<>();
 
     public Task() {}
 
-    public Task(HashMap<String, TaskEntry> entries, String subject, String id){
+    public Task(HashMap<String, TaskEntry> entries, String title, String id){
         this.id = id;
-        this.subject = subject;
+        this.title = title;
         this.entries = entries;
     }
 
-    public Task(String id, String subject, HashMap<String, TaskEntry> entries) {
+    public Task(String id, String title, HashMap<String, TaskEntry> entries) {
         this.id = id;
-        this.subject = subject;
+        this.title = title;
         this.entries = entries;
     }
 
@@ -30,12 +35,12 @@ public class Task {
         this.id = id;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getTitle() {
+        return title;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Map<String, TaskEntry> getEntries() {

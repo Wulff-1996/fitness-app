@@ -9,25 +9,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.models.Task;
+import com.example.fitness_app.views.IconView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class NewTaskBottomSheetDialog extends BottomSheetDialogFragment {
+public class NewEditTaskDialog extends BottomSheetDialogFragment {
     private NewTaskDialogDelegate delegate;
     private  Button newButton;
     private EditText taskEditText;
+    private String icon;
+    private String headline;
+    private Task task;
 
-    public NewTaskBottomSheetDialog() {
+    public NewEditTaskDialog() {
         super();
     }
 
-    private NewTaskBottomSheetDialog getInstance(){return this;}
+    private NewEditTaskDialog getInstance(){return this;}
     void setDelegate(NewTaskDialogDelegate delegate){this.delegate = delegate;}
+    void setIcon(String icon){this.icon = icon;}
+    void setHeadline(String headline){this.headline = headline;}
+    void setTask(Task task){this.task = task;}
 
     @Nullable
     @Override
@@ -41,6 +49,15 @@ public class NewTaskBottomSheetDialog extends BottomSheetDialogFragment {
         taskEditText = view.findViewById(R.id.fragment_new_task_bottom_sheet_dialog_task);
         Button cancelButton = view.findViewById(R.id.fragment_new_task_bottom_sheet_dialog_cancel_button);
         newButton = view.findViewById(R.id.fragment_new_task_bottom_sheet_dialog_save_button);
+        IconView iconView = view.findViewById(R.id.fragment_new_task_bottom_sheet_dialog_task_icon);
+        TextView headlineView = view.findViewById(R.id.fragment_new_task_bottom_sheet_dialog_title);
+
+        iconView.setText(icon);
+        headlineView.setText(headline);
+        if (task != null){
+            taskEditText.setText(task.getTitle());
+        }
+
 
         taskEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -54,18 +71,8 @@ public class NewTaskBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getInstance().dismiss();
-            }
-        });
-        newButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleSave();
-            }
-        });
+        cancelButton.setOnClickListener(view1 -> getInstance().dismiss());
+        newButton.setOnClickListener(view12 -> handleSave());
         newButton.setEnabled(false);
 
     }
@@ -78,8 +85,8 @@ public class NewTaskBottomSheetDialog extends BottomSheetDialogFragment {
     // handle save of new task
     private void handleSave(){
         Task task = new Task();
-        task.setSubject(taskEditText.getText().toString());
-        delegate.onTaskSaved(task);
+        task.setTitle(taskEditText.getText().toString());
+        delegate.onDone(task);
         this.dismiss();
     }
 
@@ -103,7 +110,7 @@ public class NewTaskBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     public interface NewTaskDialogDelegate {
-        void onTaskSaved(Task task);
-        void onTaskDialogDismissed(NewTaskBottomSheetDialog dialogInstance);
+        void onDone(Task task);
+        void onTaskDialogDismissed(NewEditTaskDialog dialogInstance);
     }
 }
