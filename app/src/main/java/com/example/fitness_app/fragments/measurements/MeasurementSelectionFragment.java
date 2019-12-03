@@ -1,15 +1,18 @@
-package com.example.fitness_app.activities;
+package com.example.fitness_app.fragments.measurements;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.models.BenchmarkCategories;
 import com.example.fitness_app.models.FirebaseCallback;
 import com.example.fitness_app.services.Firestore;
@@ -18,34 +21,45 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeasurementSelectionActivity extends AppCompatActivity
-{
+public class MeasurementSelectionFragment extends BaseFragment {
     private ListView listView;
     private ArrayAdapter adapter;
     private List benchmarkCategories;
-
+    private View view;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_measurement_selection);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_measurement_selection, container, false);
+
         init();
+
+        return view;
     }
 
     private void init()
     {
-        listView = findViewById(R.id.listview);
+        listView = view.findViewById(R.id.listview);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Intent intent = new Intent(view.getContext(), MeasurementsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("CATEGORY", adapter.getItem(position).toString());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                MeasurementsFragment measurement = new MeasurementsFragment();
+                measurement.setArguments(bundle);
+                getChildFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, measurement, "tag")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         benchmarkCategories = new ArrayList();
@@ -61,7 +75,7 @@ public class MeasurementSelectionActivity extends AppCompatActivity
             {
                 BenchmarkCategories bmc = (BenchmarkCategories) object;
                 benchmarkCategories = bmc.getCategories();
-                adapter = new ArrayAdapter(MeasurementSelectionActivity.this, android.R.layout.simple_list_item_1, benchmarkCategories);
+                adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, benchmarkCategories);
                 listView.setAdapter(adapter);
             }
 
@@ -79,9 +93,10 @@ public class MeasurementSelectionActivity extends AppCompatActivity
         });
     }
 
+
     @Override
-    protected void onStart()
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        super.onStart();
+        super.onViewCreated(view, savedInstanceState);
     }
 }

@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MeasurementsActivity">
+    tools:context=".fragments.measurements.MeasurementSelectionFragment">
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/titleTextView"
@@ -13,7 +24,7 @@
         android:layout_marginStart="147dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="148dp"
-        android:text="Measurements"
+        android:text="Measurement categories"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,24 +34,14 @@
     <ListView
         android:id="@+id/listview"
         android:layout_width="349dp"
-        android:layout_height="300dp"
+        android:layout_height="500dp"
         android:layout_marginStart="31dp"
-        android:layout_marginTop="252dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="31dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/activity_measurements_addBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="68dp"
-        android:onClick="addMeasurement"
-        android:src="@drawable/ic_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    </ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
