@@ -1,89 +1,85 @@
 package com.example.fitness_app.fragments.buttom_sheet_dialogs;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.models.Benchmark;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.example.fitness_app.models.FirebaseCallback;
+import com.example.fitness_app.services.Firestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
-public class CreateMeasurementDialog extends BottomSheetDialogFragment {
-    private CreateBenchmarkDialogDelegate delegate;
-    private  Button createMeasurement;
-    private CalendarView calendar;
+public class CreateMeasurementDialog extends DialogFragment
+{
     private EditText value;
-    private String selectedDate;
+    private CalendarView calendar;
+    private String category;
+    private String date;
 
-
-    public CreateMeasurementDialog() {
-        super();
-    }
-
-    private CreateMeasurementDialog getInstance(){return this;}
-    public void setDelegate(CreateBenchmarkDialogDelegate delegate){this.delegate = delegate;}
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_create_benchmark, container, false);
-    }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
     {
-        createMeasurement = getView().findViewById(R.id.createBenchmarkBtn);
-        calendar = getView().findViewById(R.id.calendarView);
+        category = getArguments().getString("CATEGORY");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_create_benchmark, null);
+
+
+
+        builder.setView(view)
+                .setPositiveButton("Create", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        if (!value.getText().toString().isEmpty())
+                        {
+                            Benchmark benchmark = new Benchmark(date, category, Float.parseFloat(value.getText().toString()));
+                            LoginActivity.userAccount.getBenchmarks().put(date + " - " + category, benchmark);
+                            Firestore.postObject("accounts", Firestore.getCurrentUser().getEmail(), LoginActivity.userAccount, new FirebaseCallback()
+                            {
+                                @Override
+                                public void onSuccess(Object object)
+                                {
+                                }
+
+                                @Override
+                                public void onFailure(FirebaseFirestoreException.Code errorCode)
+                                {
+                                }
+
+                                @Override
+                                public void onFinish()
+                                {
+                                }
+                        });
+                        }
+                    }
+                });
+
+        value = view.findViewById(R.id.valueEditText);
+        calendar = view.findViewById(R.id.calendarView);
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener()
         {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
             {
-                selectedDate = year + "/" + month + "/" + dayOfMonth;
+                date = year + "/" + month + "/" + dayOfMonth;
             }
         });
-        value = getView().findViewById(R.id.valueEditText);
-    }
-
-    public void createMeasurement(View v)
-    {
-        Benchmark benchmark = new Benchmark(selectedDate, "TestCategory", Float.parseFloat(value.getText().toString()));
-        LoginActivity.userAccount.getBenchmarks().put("testID", benchmark);
-    }
-
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (delegate == null){
-            if (context instanceof CreateBenchmarkDialogDelegate){
-                delegate = (CreateBenchmarkDialogDelegate) context;
-            } else {
-                throw new RuntimeException("Context must implement the CreateBenchmarkDialogDelegate interface");
-            }
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        delegate.OnConfirmDeleteDialogDismissed(this);
-        delegate = null;
-        super.onDetach();
-    }
-
-    public interface CreateBenchmarkDialogDelegate
-    {
-        void onDelete();
-        void OnConfirmDeleteDialogDismissed(CreateMeasurementDialog dialogInstance);
+        return builder.create();
     }
 }

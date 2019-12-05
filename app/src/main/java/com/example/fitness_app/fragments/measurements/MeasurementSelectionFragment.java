@@ -55,11 +55,7 @@ public class MeasurementSelectionFragment extends BaseFragment {
                 bundle.putString("CATEGORY", adapter.getItem(position).toString());
                 MeasurementsFragment measurement = new MeasurementsFragment();
                 measurement.setArguments(bundle);
-                getChildFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, measurement, "tag")
-                        .addToBackStack(null)
-                        .commit();
+                fragmentNavigation.pushFragment(measurement);
             }
         });
         benchmarkCategories = new ArrayList();
