@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -69,6 +70,27 @@ public class Firestore
         });
     }
 
+    public static void postCurrentAccount(Account account)
+    {
+        postObject("accounts", getCurrentUser().getEmail(), account, new FirebaseCallback()
+        {
+            @Override
+            public void onSuccess(Object object)
+            {
+            }
+
+            @Override
+            public void onFailure(FirebaseFirestoreException.Code errorCode)
+            {
+            }
+
+            @Override
+            public void onFinish()
+            {
+            }
+        });
+    }
+
     public static void fetchObject(final String collection, final String document, final Class currentClass, final FirebaseCallback firebaseCallback)
     {
         getInstance()
@@ -100,25 +122,6 @@ public class Firestore
             }
         });
     }
-
-    /*
-    Example of fetching quest object from activity:
-    Firestore.fetchObject("quests", "AadwaDbK2BURPvCUhmtABG1vul", Quest.class, new FirebaseCallback()
-    {
-        @Override
-        public void onSuccess(Object object)
-        {
-            if (object != null)
-            {
-                // use object
-            }
-            else
-            {
-                // do something
-            }
-        }
-    });
-     */
 
     public static void fetchIDs(final String collection, final FirebaseCallback firebaseCallback)
     {

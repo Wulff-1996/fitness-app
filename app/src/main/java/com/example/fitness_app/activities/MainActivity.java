@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
     private final int QUEST_INDEX = FragNavController.TAB3;
     private final int ACHIEVEMENT_INDEX = FragNavController.TAB4;
     private final int PROFILE_INDEX = FragNavController.TAB5;
-    private FragNavController mNavController;
+    public static FragNavController mNavController;
     private BottomBar bottomBar;
 
     @Override

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.activities.MainActivity;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.models.BenchmarkCategories;
 import com.example.fitness_app.models.FirebaseCallback;
@@ -55,11 +56,7 @@ public class MeasurementSelectionFragment extends BaseFragment {
                 bundle.putString("CATEGORY", adapter.getItem(position).toString());
                 MeasurementsFragment measurement = new MeasurementsFragment();
                 measurement.setArguments(bundle);
-                getChildFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, measurement, "tag")
-                        .addToBackStack(null)
-                        .commit();
+                MainActivity.mNavController.pushFragment(measurement);
             }
         });
         benchmarkCategories = new ArrayList();
