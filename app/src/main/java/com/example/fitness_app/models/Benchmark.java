@@ -46,4 +46,14 @@ public class Benchmark
     {
         this.value = value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Benchmark{" +
+                "date='" + date + '\'' +
+                ", exerciseCategory='" + exerciseCategory + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }

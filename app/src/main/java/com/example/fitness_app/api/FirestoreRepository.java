@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.models.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,7 +26,7 @@ public class FirestoreRepository
 {
     private static final String TAG = "FirestoreRepository";
 
-    private static FirebaseFirestore getInstance()
+    public static FirebaseFirestore getInstance()
     {
         return FirebaseFirestore.getInstance();
     }
@@ -84,6 +85,27 @@ public class FirestoreRepository
                 });
     }
 
+    public static void postCurrentAccount()
+    {
+        postObject("accounts", getCurrentUser().getEmail(), LoginActivity.userAccount, new FirebaseCallback()
+        {
+            @Override
+            public void onSuccess(Object object)
+            {
+            }
+
+            @Override
+            public void onFailure(FirebaseFirestoreException.Code errorCode)
+            {
+            }
+
+            @Override
+            public void onFinish()
+            {
+            }
+        });
+    }
+
     public static void fetchObject(final String collection, final String document, final Class currentClass, final FirebaseCallback firebaseCallback)
     {
         getInstance()
@@ -110,25 +132,6 @@ public class FirestoreRepository
                 firebaseCallback.onFinish();
             });
     }
-
-    /*
-    Example of fetching quest object from activity:
-    FirestoreRepository.fetchObject("quests", "AadwaDbK2BURPvCUhmtABG1vul", Quest.class, new FirebaseCallback()
-    {
-        @Override
-        public void onSuccess(Object object)
-        {
-            if (object != null)
-            {
-                // use object
-            }
-            else
-            {
-                // do something
-            }
-        }
-    });
-     */
 
     public static void fetchIDs(final String collection, final FirebaseCallback firebaseCallback)
     {
@@ -178,7 +181,7 @@ public class FirestoreRepository
                             Log.i(TAG, "ID: " + id + " is deleted from collection: " + collection);
                         }
                         /*
-                            Will never fail as this is not implemented for delete operations in FirestoreRepository yet:
+                            Will never fail as this is not implemented for delete operations in Firestore yet:
                             https://stackoverflow.com/questions/53251138/firebase-firestore-returning-true-on-failed-document-delete
                          */
                         else

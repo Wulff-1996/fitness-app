@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="nav_tasks" type="id" />
+    <item name="nav_measure" type="id" />
+    <item name="nav_quests" type="id" />
+    <item name="nav_achievements" type="id" />
+    <item name="nav_profile" type="id" />
+</resources>

@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.fitness_app.R;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.achievements.AchievementsFragment;
-import com.example.fitness_app.fragments.measurements.MeasurementsFragment;
+import com.example.fitness_app.fragments.measurements.MeasurementSelectionFragment;
 import com.example.fitness_app.fragments.profile.ProfileFragment;
 import com.example.fitness_app.fragments.quests.QuestFragment;
 import com.example.fitness_app.fragments.tasks.TasksFragment;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
     private final int QUEST_INDEX = FragNavController.TAB3;
     private final int ACHIEVEMENT_INDEX = FragNavController.TAB4;
     private final int PROFILE_INDEX = FragNavController.TAB5;
-    private FragNavController mNavController;
+    public static FragNavController mNavController;
     private BottomBar bottomBar;
     private Toolbar toolbar;
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
 
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new TasksFragment());
-        fragments.add(new MeasurementsFragment());
+        fragments.add(new MeasurementSelectionFragment());
         fragments.add(new QuestFragment());
         fragments.add(new AchievementsFragment());
         fragments.add(new ProfileFragment());
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
             case TASKS_INDEX:
                 return new TasksFragment();
             case MEASURE_INDEX:
-                return new MeasurementsFragment();
+                return new MeasurementSelectionFragment();
             case QUEST_INDEX:
                 return new QuestFragment();
             case ACHIEVEMENT_INDEX:

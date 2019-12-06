@@ -1,17 +1,13 @@
 package com.example.fitness_app.models;
 
-import androidx.annotation.NonNull;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class Account
 {
     private int exp;
     private String userType;
-    private Map<String, Benchmark> benchmarks;
-    private Map<String, Quest> quests;
-    private Map<String, Task> tasks = new HashMap<>();
+    private Map<String, Object> benchmarks;
+    private Map<String, Object> quests;
 
     /*
     Post account to database example
@@ -23,7 +19,7 @@ public class Account
         benchmarkmap.put(String.valueOf(benchmarkmap.size()), new Benchmark("November 21, 2019 at 12:00:00 AM UTC+1", "Benchpress", (float) 102));
 
         Account account = new Account(500, "TestUser", benchmarkmap, questmap);
-        FirestoreRepository.postObject("accounts", "test1234@gmail.com", account);
+        Firestore.postObject("accounts", "test1234@gmail.com", account);
      */
 
     public Account()
@@ -36,7 +32,7 @@ public class Account
         this.userType = userType;
     }
 
-    public Account(int exp, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, Task> tasks)
+    public Account(int exp, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks)
     {
         this.exp = exp;
         this.userType = userType;
@@ -85,15 +81,16 @@ public class Account
         this.quests = quests;
     }
 
-    public Map<String, Task> getTasks() {
+    public Map<String, UserTask> getTasks()
+    {
         return tasks;
     }
 
-    public void setTasks(Map<String, Task> tasks) {
+    public void setTasks(Map<String, UserTask> tasks)
+    {
         this.tasks = tasks;
     }
 
-    @NonNull
     @Override
     public String toString()
     {
