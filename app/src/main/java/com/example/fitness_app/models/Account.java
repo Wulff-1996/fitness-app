@@ -1,26 +1,17 @@
 package com.example.fitness_app.models;
 
+import com.google.firebase.firestore.auth.User;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class Account
 {
     private int exp;
     private String userType;
-    private Map<String, Object> benchmarks;
-    private Map<String, Object> quests;
-
-    /*
-    Post account to database example
-    Map questmap = new HashMap();
-        questmap.put("testQuestID1", new Quest("testcategory", "testtitle", 1000, 3, 10));
-        questmap.put("testQuestID2", new Quest("testcategory", "testtitle", 5000, 15, 1));
-        Map benchmarkmap = new HashMap();
-        benchmarkmap.put(String.valueOf(benchmarkmap.size()), new Benchmark("November 18, 2019 at 12:00:00 AM UTC+1", "Benchpress", (float) 80));
-        benchmarkmap.put(String.valueOf(benchmarkmap.size()), new Benchmark("November 21, 2019 at 12:00:00 AM UTC+1", "Benchpress", (float) 102));
-
-        Account account = new Account(500, "TestUser", benchmarkmap, questmap);
-        Firestore.postObject("accounts", "test1234@gmail.com", account);
-     */
+    private Map<String, Benchmark> benchmarks = new HashMap<>();
+    private Map<String, Quest> quests = new HashMap<>();
+    private Map<String, UserTask> tasks = new HashMap<>();
 
     public Account()
     {

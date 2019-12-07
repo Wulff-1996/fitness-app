@@ -69,7 +69,7 @@ public class FirestoreRepository
         getInstance()
                 .collection(collection)
                 .document(document)
-                .set(data, SetOptions.merge()).addOnCompleteListener(task -> {
+                .set(data).addOnCompleteListener(task -> {
                     firebaseCallback.onFinish();
                     if (task.isSuccessful())
                     {
@@ -83,6 +83,27 @@ public class FirestoreRepository
 
                     }
                 });
+    }
+
+    public static void postObjectMerge(final String collection, final String document, final Object data, final FirebaseCallback firebaseCallback)
+    {
+        getInstance()
+                .collection(collection)
+                .document(document)
+                .set(data, SetOptions.merge()).addOnCompleteListener(task -> {
+            firebaseCallback.onFinish();
+            if (task.isSuccessful())
+            {
+                firebaseCallback.onSuccess(data);
+                Log.i(TAG, "Successfully saved object: " + data + "in " + document + " within: " + collection);
+            }
+            else
+            {
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
+
+            }
+        });
     }
 
     public static void postCurrentAccount()

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.models.Task;
+import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.models.TaskWrapper;
 import com.google.android.material.chip.Chip;
 
@@ -72,7 +72,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         }
 
         private void populateView(final TaskWrapper data){
-            subject.setText(data.getTask().getTitle());
+            subject.setText(data.getUserTask().getTitle());
             updateStatus(data);
         }
 
@@ -88,13 +88,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         @Override
         public void onClick(View view) {
             if (mItemListener != null){
-                mItemListener.onItemClick(view, taskWrappers.get(getAdapterPosition()).getTask(), getAdapterPosition());
+                mItemListener.onItemClick(view, taskWrappers.get(getAdapterPosition()).getUserTask(), getAdapterPosition());
             }
         }
     }
 
     public interface TasksAdapterListener{
-        void onItemClick(View view, Task task, int position);
+        void onItemClick(View view, UserTask userTask, int position);
         void OnTaskMarkedComplete(View view, int position, TaskWrapper taskWrapper);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.fitness_app.fragments.measurements;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,19 +32,23 @@ import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class MeasurementsFragment extends Fragment implements BottomSheetDialog.BottomSheetDialogDelegate
 {
     private TextView titleText;
     private ListView listView;
     private ArrayAdapter adapter;
-    private Map<String, Benchmark> measurements;
-    private List benchmarkNames;
+    private TreeMap<String, Benchmark> measurements = new TreeMap<>();
+    private List benchmarkNames = new ArrayList();
     private View view;
     private String category;
     private FloatingActionButton createBenchmark;
+    private GraphView graph;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,8 +61,8 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_measurements, container, false);
 
-        //initGraphView();
         init();
+        initGraphView();
 
         return view;
     }
@@ -73,7 +78,6 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
                 editMeasurement(position);
             }
         });
-        benchmarkNames = new ArrayList();
 
         category = getArguments().getString("CATEGORY");
         titleText = view.findViewById(R.id.titleTextView);
@@ -92,13 +96,18 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
 
     private void updateListView()
     {
-        measurements = LoginActivity.userAccount.getBenchmarks();
-        for (Map.Entry<String, Benchmark> entry: measurements.entrySet())
+        Map<String, Benchmark> tmpMap = LoginActivity.userAccount.getBenchmarks();
+
+        for (Map.Entry<String, Benchmark> entry: tmpMap.entrySet())
         {
             if (entry.getValue().getExerciseCategory().equals(category))
             {
-                benchmarkNames.add(entry.getKey() + ": " + entry.getValue().getValue());
+                measurements.put(entry.getKey(), entry.getValue());
             }
+        }
+        for (TreeMap.Entry<String, Benchmark> entry: measurements.entrySet())
+        {
+            benchmarkNames.add(entry.getKey() + ": " + entry.getValue().getValue());
         }
         adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, benchmarkNames);
         listView.setAdapter(adapter);
@@ -146,34 +155,31 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
 
 
     private void initGraphView(){
-        GraphView graph = view.findViewById(R.id.fragment_track_graph_view);
+
+        graph = view.findViewById(R.id.fragment_measurements_graphview);
+        // Hides the graph if no data is available
+        if (measurements.size() == 0)
+        {
+        graph.setVisibility(view.GONE);
+        }
 
         // remove grid
         graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
 
-        LineGraphSeries<DataPoint> lines = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(1, 35),
-                new DataPoint(2, 42),
-                new DataPoint(3, 30),
-                new DataPoint(4, 60),
-                new DataPoint(5, 70)
-        });
-        PointsGraphSeries<DataPoint> points = new PointsGraphSeries<>(new DataPoint[] {
-                new DataPoint(1, 35),
-                new DataPoint(2, 42),
-                new DataPoint(3, 30),
-                new DataPoint(4, 60),
-                new DataPoint(5, 70)
-        });
-        points.setOnDataPointTapListener(new OnDataPointTapListener(){
+        DataPoint[] dpArray = new DataPoint[measurements.size()];
+        int tmpCount = 0;
+        for (TreeMap.Entry<String, Benchmark> entry: measurements.entrySet())
+        {
+            dpArray[tmpCount] = new DataPoint(tmpCount+1, entry.getValue().getValue());
+            tmpCount++;
+        }
+        LineGraphSeries<DataPoint> lines = new LineGraphSeries<>(dpArray);
+        PointsGraphSeries<DataPoint> points = new PointsGraphSeries<>(dpArray);
 
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                Toast.makeText(getActivity(), "y: " + dataPoint.getY(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        graph.addSeries(lines);
+        points.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(getActivity(), "Value: " + dataPoint.getY(), Toast.LENGTH_SHORT).show());
+
         graph.addSeries(points);
+        graph.addSeries(lines);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
     }
 

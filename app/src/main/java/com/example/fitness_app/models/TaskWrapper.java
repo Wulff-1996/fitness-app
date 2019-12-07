@@ -1,26 +1,26 @@
 package com.example.fitness_app.models;
 
 /**
- * class to wrap a isCompleted for today field to the entity Task
- * this is because the Task Entity have to mirror the database entity
+ * class to wrap a isCompleted for today field to the entity UserTask
+ * this is because the UserTask Entity have to mirror the database entity
  */
 public class TaskWrapper {
-    private Task task;
+    private UserTask userTask;
     private Boolean isCompletedToday;
 
     public TaskWrapper() {}
 
-    public TaskWrapper(Task task, Boolean isCompletedToday) {
-        this.task = task;
+    public TaskWrapper(UserTask userTask, Boolean isCompletedToday) {
+        this.userTask = userTask;
         this.isCompletedToday = isCompletedToday;
     }
 
-    public Task getTask() {
-        return task;
+    public UserTask getUserTask() {
+        return userTask;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setUserTask(UserTask userTask) {
+        this.userTask = userTask;
     }
 
     public Boolean getCompletedToday() {

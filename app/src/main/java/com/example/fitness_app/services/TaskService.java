@@ -13,7 +13,7 @@ import java.util.Map;
 public class TaskService {
 
     public static TaskEntry getEntryForCurrentDay(TaskWrapper taskWrapper){
-        for (TaskEntry entry: taskWrapper.getTask().getEntries().values()){
+        for (TaskEntry entry: taskWrapper.getUserTask().getEntries().values()){
             if (DateUtils.isToday(Long.parseLong(entry.getCompletionDate()))) return entry;
         }
         throw new IndexOutOfBoundsException("element not in list");

@@ -3,7 +3,7 @@ package com.example.fitness_app.api;
 import com.example.fitness_app.constrants.ApiConstants;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.models.Task;
+import com.example.fitness_app.models.UserTask;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -29,15 +29,15 @@ public class FirestoreService {
         );
     }
 
-    public static void postNewTask(Task task, FirebaseCallback callback) {
+    public static void postNewTask(UserTask userTask, FirebaseCallback callback) {
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> tasks = new HashMap<>();
         String id = UUID.randomUUID().toString();
-        task.setId(id);
-        tasks.put(id, task);
+        userTask.setId(id);
+        tasks.put(id, userTask);
         data.put(ApiConstants.TASKS_FIELD_NAME, tasks);
 
-        FirestoreRepository.postObject(ApiConstants.ACCOUNTS_COLLECTION, currentUserEmail, data, callback);
+        FirestoreRepository.postObjectMerge(ApiConstants.ACCOUNTS_COLLECTION, currentUserEmail, data, callback);
     }
 
     /**

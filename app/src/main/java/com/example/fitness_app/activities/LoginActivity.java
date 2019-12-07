@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity
         if (user != null)
         {
             String email = user.getEmail();
-            Firestore.fetchObject("accounts", email, Account.class, new FirebaseCallback()
+            FirestoreRepository.fetchObject("accounts", email, Account.class, new FirebaseCallback()
             {
                 @Override
                 public void onSuccess(Object object)

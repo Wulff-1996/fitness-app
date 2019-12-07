@@ -12,10 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.models.BenchmarkCategories;
 import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.services.Firestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class MeasurementSelectionFragment extends BaseFragment {
 
     private void updateListView()
     {
-        Firestore.fetchObject("benchmark_categories", "benchmark_categories", BenchmarkCategories.class, new FirebaseCallback()
+        FirestoreRepository.fetchObject("benchmark_categories", "benchmark_categories", BenchmarkCategories.class, new FirebaseCallback()
         {
             @Override
             public void onSuccess(Object object)

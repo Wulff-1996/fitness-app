@@ -20,7 +20,7 @@ import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.ConfirmDeleteDialog;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.models.Task;
+import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.models.TaskEntry;
 import com.example.fitness_app.services.TaskService;
 import com.example.fitness_app.util.Dates;
@@ -45,7 +45,7 @@ import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_
 public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.NewTaskDialogDelegate, ConfirmDeleteDialog.ConfirmDeleteDialogDelegate {
     private CalendarView calendarView;
     private Account account;
-    private Task selectedTask;
+    private UserTask selectedUserTask;
     private String selectedTaskId;
     private TaskEntry todaysEntry;
 
@@ -80,7 +80,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         IconButton deleteButton = view.findViewById(R.id.fragment_task_edit_delete_button);
         IconButton editButton = view.findViewById(R.id.fragment_task_edit_edit_button);
 
-        setTaskTitle(selectedTask.getTitle());
+        setTaskTitle(selectedUserTask.getTitle());
 
         if (todaysEntry != null){
             setIsCompletedTodayChipState(true);
@@ -110,7 +110,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
     private void setupToolbar(){
         ((MainActivity)getActivity()).showBackArrowOnToolBar(true);
-        ((MainActivity)getActivity()).setToolbarTitle("Task Details");
+        ((MainActivity)getActivity()).setToolbarTitle("UserTask Details");
     }
 
     private void setupCalendarView(View view) {
@@ -129,7 +129,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         // set selected dates
         List<Calendar> calendars = new ArrayList<>();
-        for (TaskEntry entry : selectedTask.getEntries().values()) {
+        for (TaskEntry entry : selectedUserTask.getEntries().values()) {
             if (Dates.isToday(Long.valueOf(entry.getCompletionDate()))){
                 todaysEntry = entry;
             }
@@ -151,7 +151,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         dialog.setDelegate(this);
         dialog.setHeadline(getString(R.string.fragment_task_edit_edit_task));
         dialog.setIcon(getString(R.string.icon_edit));
-        dialog.setTask(selectedTask);
+        dialog.setUserTask(selectedUserTask);
         dialog.show(getFragmentManager(), "new or edit fragment dialog");
     }
 
@@ -165,8 +165,8 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         super.onDetach();
     }
 
-    public void setTask(Task task) {
-        this.selectedTask = task;
+    public void setTask(UserTask userTask) {
+        this.selectedUserTask = userTask;
     }
 
     public void setAccount(Account account){this.account = account;}
@@ -182,7 +182,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         // add new task entry
         account.getTasks()
-                .get(selectedTask.getId())
+                .get(selectedUserTask.getId())
                 .getEntries()
                 .put(entry.getId(), entry);
 
@@ -198,11 +198,11 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     private void deleteEntry(Calendar calendar) {
 
         // get entry for the current day
-        TaskEntry deleteEntry = TaskService.getTaskEntry(calendar, selectedTask.getEntries().values());
+        TaskEntry deleteEntry = TaskService.getTaskEntry(calendar, selectedUserTask.getEntries().values());
 
         // remove entry
         account.getTasks()
-                .get(selectedTask.getId())
+                .get(selectedUserTask.getId())
                 .getEntries()
                 .remove(
                         deleteEntry.getId());
@@ -216,15 +216,15 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     }
 
     @Override
-    public void onDone(Task task) {
-        account.getTasks().get(selectedTask.getId()).setTitle(task.getTitle());
+    public void onDone(UserTask userTask) {
+        account.getTasks().get(selectedUserTask.getId()).setTitle(userTask.getTitle());
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
                 ApiConstants.TASKS_FIELD_NAME,
                 account.getTasks());
 
-        postUpdates(task, updates, EVENT_BUS_EVENT_TASK_EDITED);
+        postUpdates(userTask, updates, EVENT_BUS_EVENT_TASK_EDITED);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
     @Override
     public void onDelete() {
-        account.getTasks().remove(selectedTask.getId());
+        account.getTasks().remove(selectedUserTask.getId());
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
@@ -278,9 +278,9 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
                         fragmentNavigation.popFragment();
                         break;
                     case EVENT_BUS_EVENT_TASK_EDITED:
-                        EventBustEvent<Task> eventUpdateTask = new EventBustEvent<>(EVENT_BUS_EVENT_TASK_EDITED, ((Task) data));
+                        EventBustEvent<UserTask> eventUpdateTask = new EventBustEvent<>(EVENT_BUS_EVENT_TASK_EDITED, ((UserTask) data));
                         EventBus.getDefault().post(eventUpdateTask);
-                        setTaskTitle(((Task) data).getTitle());
+                        setTaskTitle(((UserTask) data).getTitle());
                         break;
                 }
             }

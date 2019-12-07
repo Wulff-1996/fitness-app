@@ -20,7 +20,7 @@ import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.models.Task;
+import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.models.TaskEntry;
 import com.example.fitness_app.models.TaskWrapper;
 import com.example.fitness_app.services.TaskService;
@@ -101,15 +101,15 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         newEditTaskDialog.setIcon(getString(R.string.icon_new_item));
         newEditTaskDialog.setHeadline(getString(R.string.fragment_tasks_new_task));
         assert getFragmentManager() != null;
-        newEditTaskDialog.show(getFragmentManager(), "New Task Dialog");
+        newEditTaskDialog.show(getFragmentManager(), "New UserTask Dialog");
     }
 
 
     @Override
-    public void onItemClick(View view, Task task, int position) {
+    public void onItemClick(View view, UserTask userTask, int position) {
         selectedIndex = position;
         TaskEditFragment fragment = new TaskEditFragment();
-        fragment.setTask(task);
+        fragment.setTask(userTask);
         fragment.setAccount(account);
         fragmentNavigation.pushFragment(fragment);
     }
@@ -129,8 +129,8 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     }
 
     @Override
-    public void onDone(Task task) {
-        postTaskToApi(task);
+    public void onDone(UserTask userTask) {
+        postTaskToApi(userTask);
     }
 
     @Override
@@ -147,10 +147,10 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
                 account = (Account) object;
 
                 // map to taskWrapper to register if task is completed today
-                for (Task task : account.getTasks().values()) {
+                for (UserTask userTask : account.getTasks().values()) {
                     taskWrappers.add(new TaskWrapper(
-                            task,
-                            TaskService.setIsCompletedToday(task.getEntries())
+                            userTask,
+                            TaskService.setIsCompletedToday(userTask.getEntries())
                     ));
                 }
                 if (adapter != null){
@@ -171,9 +171,9 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         });
     }
 
-    private void postTaskToApi(final Task task) {
+    private void postTaskToApi(final UserTask userTask) {
         showProgressBar(true);
-        FirestoreService.postNewTask(task, new FirebaseCallback() {
+        FirestoreService.postNewTask(userTask, new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
                 fetch();
@@ -200,7 +200,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
 
         // add new task entry
         account.getTasks()
-                .get(taskWrapper.getTask().getId())
+                .get(taskWrapper.getUserTask().getId())
                 .getEntries()
                 .put(entry.getId(), entry);
 
@@ -220,7 +220,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
 
         // remove entry
         Objects.requireNonNull(account.getTasks()
-                .get(taskWrapper.getTask().getId()))
+                .get(taskWrapper.getUserTask().getId()))
                 .getEntries()
                 .remove(
                         deleteEntry.getId());
@@ -274,8 +274,8 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
                 adapter.notifyItemChanged(selectedIndex);
                 break;
             case EVENT_BUS_EVENT_TASK_EDITED:
-                Task task = (Task) event.getData();
-                taskWrappers.get(selectedIndex).getTask().setTitle(task.getTitle());
+                UserTask userTask = (UserTask) event.getData();
+                taskWrappers.get(selectedIndex).getUserTask().setTitle(userTask.getTitle());
                 adapter.notifyItemChanged(selectedIndex);
                 break;
             case EVENT_BUS_EVENT_TASK_DELETED:

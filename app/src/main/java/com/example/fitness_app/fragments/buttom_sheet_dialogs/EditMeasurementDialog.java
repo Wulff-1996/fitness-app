@@ -15,9 +15,10 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.models.Benchmark;
-import com.example.fitness_app.services.Firestore;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class EditMeasurementDialog extends DialogFragment
@@ -49,7 +50,7 @@ public class EditMeasurementDialog extends DialogFragment
                             LoginActivity.userAccount.getBenchmarks().remove(ID);
                             Benchmark benchmark = new Benchmark(date, oldBenchmark.getExerciseCategory(), Float.parseFloat(value.getText().toString()));
                             LoginActivity.userAccount.getBenchmarks().put(date + " - " + oldBenchmark.getExerciseCategory(), benchmark);
-                            Firestore.postCurrentAccount();
+                            FirestoreRepository.postCurrentAccount();
                         }
                     }
                 }).setNegativeButton("Delete measurement", new DialogInterface.OnClickListener()
@@ -58,7 +59,7 @@ public class EditMeasurementDialog extends DialogFragment
             public void onClick(DialogInterface dialog, int which)
             {
                 LoginActivity.userAccount.getBenchmarks().remove(ID);
-                Firestore.postCurrentAccount();
+                FirestoreRepository.postCurrentAccount();
             }
         });
 
@@ -83,13 +84,14 @@ public class EditMeasurementDialog extends DialogFragment
 
         // Create a calendar time
         Calendar tmpCalendar = Calendar.getInstance();
-        tmpCalendar.set(Calendar.YEAR, year);
-        tmpCalendar.set(Calendar.MONTH, month);
-        tmpCalendar.set(Calendar.DAY_OF_MONTH, day);
+        tmpCalendar.set(year, month-1, day);
         // Get milliseconds of the newly stated date
         long millisec = tmpCalendar.getTimeInMillis();
         // Set the displayed calendar to the milliseconds calculated
         calendar.setDate(millisec, true, true);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        date = sdf.format(calendar.getDate());
+        System.out.println("current date: " + date);
         return builder.create();
     }
 }

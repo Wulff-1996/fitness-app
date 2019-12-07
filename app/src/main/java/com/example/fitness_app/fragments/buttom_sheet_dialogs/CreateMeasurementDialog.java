@@ -15,10 +15,10 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.models.Benchmark;
-import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.services.Firestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.text.SimpleDateFormat;
 
 public class CreateMeasurementDialog extends DialogFragment
 {
@@ -40,46 +40,20 @@ public class CreateMeasurementDialog extends DialogFragment
 
 
         builder.setView(view)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
+                .setPositiveButton("Create", (dialog, which) -> {
+                    if (!value.getText().toString().isEmpty())
                     {
-                        if (!value.getText().toString().isEmpty())
-                        {
-                            Benchmark benchmark = new Benchmark(date, category, Float.parseFloat(value.getText().toString()));
-                            LoginActivity.userAccount.getBenchmarks().put(date + " - " + category, benchmark);
-                            Firestore.postObject("accounts", Firestore.getCurrentUser().getEmail(), LoginActivity.userAccount, new FirebaseCallback()
-                            {
-                                @Override
-                                public void onSuccess(Object object)
-                                {
-                                }
-
-                                @Override
-                                public void onFailure(FirebaseFirestoreException.Code errorCode)
-                                {
-                                }
-
-                                @Override
-                                public void onFinish()
-                                {
-                                }
-                        });
-                        }
+                        Benchmark benchmark = new Benchmark(date, category, Float.parseFloat(value.getText().toString()));
+                        LoginActivity.userAccount.getBenchmarks().put(date + " - " + category, benchmark);
+                        FirestoreRepository.postCurrentAccount();
                     }
                 });
 
         value = view.findViewById(R.id.valueEditText);
         calendar = view.findViewById(R.id.calendarView);
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener()
-        {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
-            {
-                date = year + "/" + month + "/" + dayOfMonth;
-            }
-        });
+        calendar.setOnDateChangeListener((view1, year, month, dayOfMonth) -> date = year + "/" + (month + 1)+ "/" + dayOfMonth);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        date = sdf.format(calendar.getDate());
         return builder.create();
     }
 }
