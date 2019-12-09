@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.fitness_app.activities.BaseActivity;
+
 import icepick.Icepick;
 
 public abstract class BaseFragment extends Fragment {
@@ -43,6 +45,14 @@ public abstract class BaseFragment extends Fragment {
         if (context instanceof FragmentNavigation){
             fragmentNavigation = (FragmentNavigation) context;
         }
+    }
+
+    public void showToast(String message){
+        ((BaseActivity)getActivity()).showToast(message);
+    }
+
+    public void hideToast(){
+        ((BaseActivity)getActivity()).hideToast();
     }
 
     public interface FragmentNavigation {

@@ -43,7 +43,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/task_item_open_new_window_icon"
                 app:layout_constraintStart_toStartOf="@+id/task_item_is_completed_chip"
                 app:layout_constraintTop_toBottomOf="@+id/task_item_is_completed_chip"
-                tools:text="This an example of a task." />
+                tools:text="This an example of a userTask." />
 
             <Button
                 android:id="@+id/task_item_mark_complete_button"

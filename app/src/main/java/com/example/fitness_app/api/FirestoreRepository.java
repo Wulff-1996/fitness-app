@@ -106,6 +106,35 @@ public class FirestoreRepository
         });
     }
 
+    /**
+     * get all documents from a collection
+     * every doc will be mapped to the specified class type
+     * callback with a list of the specified class
+     * @param collection to get documents from
+     * @param currentClass class to map every entry to
+     * @param callback callback on finish, failure with exception and success with a list of objects
+     */
+    public static void fetchAllDocumentsFromCollection(final String collection, final Class currentClass, final FirebaseCallback callback){
+        getInstance()
+                .collection(collection)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+                    if (task.isSuccessful()){
+                        List<Object> list = new ArrayList<>();
+                        for (DocumentSnapshot doc: task.getResult()) {
+                            list.add(doc.toObject(currentClass));
+                        }
+                        callback.onSuccess(list);
+                    } else {
+                        callback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                        Log.w(TAG, "Failed fetching all documents from collection: " + collection);
+                    }
+                });
+    }
+
+
+
     public static void fetchObject(final String collection, final String document, final Class currentClass, final FirebaseCallback firebaseCallback)
     {
         getInstance()

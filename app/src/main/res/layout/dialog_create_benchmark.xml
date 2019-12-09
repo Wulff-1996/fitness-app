@@ -27,7 +27,8 @@
         android:ems="10"
         android:hint="Enter value for benchmark"
         android:inputType="numberDecimal"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        style="@style/header"/>
 
     <TextView
         android:id="@+id/textView"

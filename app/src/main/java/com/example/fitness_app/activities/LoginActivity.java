@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
@@ -21,7 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-public class LoginActivity extends AppCompatActivity
+public class LoginActivity extends BaseActivity
 {
     private static final String TAG = "LoginActivity";
     public static Account userAccount;
@@ -61,7 +60,7 @@ public class LoginActivity extends AppCompatActivity
         if (user != null)
         {
             String email = user.getEmail();
-            Firestore.fetchObject("accounts", email, Account.class, new FirebaseCallback()
+            FirestoreRepository.fetchObject("accounts", email, Account.class, new FirebaseCallback()
             {
                 @Override
                 public void onSuccess(Object object)

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,23 +55,19 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_measurements, container, false);
 
-        //initGraphView();
+        setupToolbar();
         init();
 
         return view;
     }
 
+    private void setupToolbar(){
+    }
+
     private void init()
     {
         listView = view.findViewById(R.id.listview);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                editMeasurement(position);
-            }
-        });
+        listView.setOnItemClickListener((parent, view, position, id) -> editMeasurement(position));
         benchmarkNames = new ArrayList();
 
         category = getArguments().getString("CATEGORY");

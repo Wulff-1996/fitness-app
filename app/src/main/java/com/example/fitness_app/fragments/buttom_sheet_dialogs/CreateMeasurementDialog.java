@@ -15,9 +15,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.models.Benchmark;
 import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.services.Firestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class CreateMeasurementDialog extends DialogFragment
@@ -49,7 +49,7 @@ public class CreateMeasurementDialog extends DialogFragment
                         {
                             Benchmark benchmark = new Benchmark(date, category, Float.parseFloat(value.getText().toString()));
                             LoginActivity.userAccount.getBenchmarks().put(date + " - " + category, benchmark);
-                            Firestore.postObject("accounts", Firestore.getCurrentUser().getEmail(), LoginActivity.userAccount, new FirebaseCallback()
+                            FirestoreRepository.postObject("accounts", FirestoreRepository.getCurrentUser().getEmail(), LoginActivity.userAccount, new FirebaseCallback()
                             {
                                 @Override
                                 public void onSuccess(Object object)

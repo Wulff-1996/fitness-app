@@ -8,7 +8,7 @@
     <string name="title_tasks">Tasks</string>
     <string name="fragment_track_sub_categories_sub_title">Select a sub category.</string>
     <string name="fragment_new_task_bottom_sheet_dialog_new_task_title">New Task</string>
-    <string name="fragment_new_task_bottom_sheet_dialog_new_task_subject_hint">Write your new task here…</string>
+    <string name="fragment_new_task_bottom_sheet_dialog_new_task_subject_hint">Write your new userTask here…</string>
     <string name="cancel_title">Cancel</string>
     <string name="save_title">Save</string>
     <string name="task_title">Title</string>
@@ -18,11 +18,11 @@
     <string name="fragment_tasks_new_task">New Task</string>
     <string name="fragment_task_edit_edit_task">Edit Task</string>
     <string name="fragment_task_edit_Task_title">Task</string>
-    <string name="fragment_task_edit_calendar_functionality_description">You can mark and un-mark dates on the calendar for when you completed the given task or not.</string>
+    <string name="fragment_task_edit_calendar_functionality_description">You can mark and un-mark dates on the calendar for when you completedCount the given userTask or not.</string>
     <string name="confirm_delete_dialog_delete_header">Delete</string>
     <string name="confirm_delete_dialog_sure_to_delete_message">Are you sure you want to delete this?</string>
     <string name="fragment_tasks_completed_today_chip_text">Completed Today</string>
-
+    <string name="fragment_task_edit_future_dates_not_acceptable">You cannot mark a future dates as complete.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

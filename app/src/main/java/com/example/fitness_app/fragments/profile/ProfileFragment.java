@@ -27,9 +27,13 @@ public class ProfileFragment extends BaseFragment {
     {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        setupToolbar();
         init();
 
         return view;
+    }
+
+    private void setupToolbar(){
     }
 
     private void init()

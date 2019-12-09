@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.example.fitness_app.R;
-import com.example.fitness_app.activities.MainActivity;
 import com.example.fitness_app.api.FirestoreService;
 import com.example.fitness_app.constrants.ApiConstants;
 import com.example.fitness_app.entities.EventBustEvent;
@@ -20,8 +20,8 @@ import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.ConfirmDeleteDialog;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.models.Task;
 import com.example.fitness_app.models.TaskEntry;
+import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.services.TaskService;
 import com.example.fitness_app.util.Dates;
 import com.example.fitness_app.views.IconButton;
@@ -45,9 +45,10 @@ import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_
 public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.NewTaskDialogDelegate, ConfirmDeleteDialog.ConfirmDeleteDialogDelegate {
     private CalendarView calendarView;
     private Account account;
-    private Task selectedTask;
+    private UserTask selectedUserTask;
     private String selectedTaskId;
     private TaskEntry todaysEntry;
+    private Calendar selectedMonth;
 
     public TaskEditFragment() {
         // Required empty public constructor
@@ -56,6 +57,9 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        selectedMonth = Calendar.getInstance();
+        selectedMonth.setTimeInMillis(System.currentTimeMillis());
+
     }
 
     @Override
@@ -64,7 +68,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_edit, container, false);
 
-        setupToolbar();
+        setupToolbar(view);
         setupCalendarView(view);
 
         return view;
@@ -80,7 +84,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         IconButton deleteButton = view.findViewById(R.id.fragment_task_edit_delete_button);
         IconButton editButton = view.findViewById(R.id.fragment_task_edit_edit_button);
 
-        setTaskTitle(selectedTask.getTitle());
+        setTaskTitle(selectedUserTask.getTitle());
 
         if (todaysEntry != null){
             setIsCompletedTodayChipState(true);
@@ -108,28 +112,58 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         taskTitleView.setText(title);
     }
 
-    private void setupToolbar(){
-        ((MainActivity)getActivity()).showBackArrowOnToolBar(true);
-        ((MainActivity)getActivity()).setToolbarTitle("Task Details");
+    private void setupToolbar(View view){
+        ConstraintLayout toolbar = view.findViewById(R.id.fragment_task_edit_toolbar);
+        IconButton backArrow = toolbar.findViewById(R.id.application_toolbar_back_arrow);
+        backArrow.setOnClickListener(view1 -> {
+            fragmentNavigation.popFragment();
+        });
     }
 
     private void setupCalendarView(View view) {
         calendarView = view.findViewById(R.id.fragment_task_edit_calendar_view);
         calendarView.setOnDayClickListener(
                 eventDay -> {
-                    //
-                    if (calendarView.getSelectedDates().contains(eventDay.getCalendar())){
-                        deleteEntry(eventDay.getCalendar());
-                    }
-                    // day is going to be selected
-                    else {
-                        postEntry(eventDay.getCalendar());
+                    // check if selected date is in the same month
+                    if (eventDay.getCalendar().get(Calendar.YEAR) == selectedMonth.get(Calendar.YEAR) &&
+                        eventDay.getCalendar().get(Calendar.MONTH) == selectedMonth.get(Calendar.MONTH)){
+
+                        // same month
+                        Calendar currentDay = Calendar.getInstance();
+                        currentDay.setTimeInMillis(System.currentTimeMillis());
+
+                        // check if selected day is not after the current date
+                        if (eventDay.getCalendar().get(Calendar.DAY_OF_MONTH) <= currentDay.get(Calendar.DAY_OF_MONTH)){
+                            if (calendarView.getSelectedDates().contains(eventDay.getCalendar())){
+                                // date is going to be deselected
+                                deleteEntry(eventDay.getCalendar());
+                            }
+                            // day is going to be selected
+                            else {
+                                postEntry(eventDay.getCalendar());
+                            }
+                        } else {
+                            // show toast future dates cant be mark completed
+                            List<Calendar> disabledDays = new ArrayList<>();
+                            disabledDays.add(eventDay.getCalendar());
+                            calendarView.setDisabledDays(disabledDays);
+                            showToast(getContext().getString(R.string.fragment_task_edit_future_dates_not_acceptable));
+                        }
+
+                    } else {
+                        // different month, change month on calendarView
+                        try{
+                            calendarView.setDate(eventDay.getCalendar());
+                            selectedMonth = eventDay.getCalendar();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 });
 
         // set selected dates
         List<Calendar> calendars = new ArrayList<>();
-        for (TaskEntry entry : selectedTask.getEntries().values()) {
+        for (TaskEntry entry : selectedUserTask.getEntries().values()) {
             if (Dates.isToday(Long.valueOf(entry.getCompletionDate()))){
                 todaysEntry = entry;
             }
@@ -151,7 +185,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         dialog.setDelegate(this);
         dialog.setHeadline(getString(R.string.fragment_task_edit_edit_task));
         dialog.setIcon(getString(R.string.icon_edit));
-        dialog.setTask(selectedTask);
+        dialog.setUserTask(selectedUserTask);
         dialog.show(getFragmentManager(), "new or edit fragment dialog");
     }
 
@@ -165,8 +199,8 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         super.onDetach();
     }
 
-    public void setTask(Task task) {
-        this.selectedTask = task;
+    public void setTask(UserTask userTask) {
+        this.selectedUserTask = userTask;
     }
 
     public void setAccount(Account account){this.account = account;}
@@ -182,7 +216,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         // add new task entry
         account.getTasks()
-                .get(selectedTask.getId())
+                .get(selectedUserTask.getId())
                 .getEntries()
                 .put(entry.getId(), entry);
 
@@ -198,11 +232,11 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     private void deleteEntry(Calendar calendar) {
 
         // get entry for the current day
-        TaskEntry deleteEntry = TaskService.getTaskEntry(calendar, selectedTask.getEntries().values());
+        TaskEntry deleteEntry = TaskService.getTaskEntry(calendar, selectedUserTask.getEntries().values());
 
         // remove entry
         account.getTasks()
-                .get(selectedTask.getId())
+                .get(selectedUserTask.getId())
                 .getEntries()
                 .remove(
                         deleteEntry.getId());
@@ -216,15 +250,15 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     }
 
     @Override
-    public void onDone(Task task) {
-        account.getTasks().get(selectedTask.getId()).setTitle(task.getTitle());
+    public void onDone(UserTask userTask) {
+        account.getTasks().get(selectedUserTask.getId()).setTitle(userTask.getTitle());
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
                 ApiConstants.TASKS_FIELD_NAME,
                 account.getTasks());
 
-        postUpdates(task, updates, EVENT_BUS_EVENT_TASK_EDITED);
+        postUpdates(userTask, updates, EVENT_BUS_EVENT_TASK_EDITED);
     }
 
     @Override
@@ -234,7 +268,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
     @Override
     public void onDelete() {
-        account.getTasks().remove(selectedTask.getId());
+        account.getTasks().remove(selectedUserTask.getId());
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
@@ -278,9 +312,9 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
                         fragmentNavigation.popFragment();
                         break;
                     case EVENT_BUS_EVENT_TASK_EDITED:
-                        EventBustEvent<Task> eventUpdateTask = new EventBustEvent<>(EVENT_BUS_EVENT_TASK_EDITED, ((Task) data));
+                        EventBustEvent<UserTask> eventUpdateTask = new EventBustEvent<>(EVENT_BUS_EVENT_TASK_EDITED, ((UserTask) data));
                         EventBus.getDefault().post(eventUpdateTask);
-                        setTaskTitle(((Task) data).getTitle());
+                        setTaskTitle(((UserTask) data).getTitle());
                         break;
                 }
             }

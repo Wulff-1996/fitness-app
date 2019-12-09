@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.models.Task;
+import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.views.IconView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -25,7 +25,7 @@ public class NewEditTaskDialog extends BottomSheetDialogFragment {
     private EditText taskEditText;
     private String icon;
     private String headline;
-    private Task task;
+    private UserTask userTask;
 
     public NewEditTaskDialog() {
         super();
@@ -35,7 +35,7 @@ public class NewEditTaskDialog extends BottomSheetDialogFragment {
     void setDelegate(NewTaskDialogDelegate delegate){this.delegate = delegate;}
     void setIcon(String icon){this.icon = icon;}
     void setHeadline(String headline){this.headline = headline;}
-    void setTask(Task task){this.task = task;}
+    void setUserTask(UserTask userTask){this.userTask = userTask;}
 
     @Nullable
     @Override
@@ -54,8 +54,8 @@ public class NewEditTaskDialog extends BottomSheetDialogFragment {
 
         iconView.setText(icon);
         headlineView.setText(headline);
-        if (task != null){
-            taskEditText.setText(task.getTitle());
+        if (userTask != null){
+            taskEditText.setText(userTask.getTitle());
         }
 
 
@@ -66,7 +66,7 @@ public class NewEditTaskDialog extends BottomSheetDialogFragment {
             public void afterTextChanged(Editable editable) {}
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                // only enable save button if there is inputted text for a task
+                // only enable save button if there is inputted text for a userTask
                 enableSaveButtonIfNeeded(count);
             }
         });
@@ -77,16 +77,16 @@ public class NewEditTaskDialog extends BottomSheetDialogFragment {
 
     }
 
-    // enable save button if there is any text for the task
+    // enable save button if there is any text for the userTask
     private void enableSaveButtonIfNeeded(int count){
         newButton.setEnabled(count > 0);
     }
 
-    // handle save of new task
+    // handle save of new userTask
     private void handleSave(){
-        Task task = new Task();
-        task.setTitle(taskEditText.getText().toString());
-        delegate.onDone(task);
+        UserTask userTask = new UserTask();
+        userTask.setTitle(taskEditText.getText().toString());
+        delegate.onDone(userTask);
         this.dismiss();
     }
 
@@ -110,7 +110,7 @@ public class NewEditTaskDialog extends BottomSheetDialogFragment {
     }
 
     public interface NewTaskDialogDelegate {
-        void onDone(Task task);
+        void onDone(UserTask userTask);
         void onTaskDialogDismissed(NewEditTaskDialog dialogInstance);
     }
 }

@@ -15,8 +15,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.models.Benchmark;
-import com.example.fitness_app.services.Firestore;
 
 import java.util.Calendar;
 
@@ -49,7 +49,7 @@ public class EditMeasurementDialog extends DialogFragment
                             LoginActivity.userAccount.getBenchmarks().remove(ID);
                             Benchmark benchmark = new Benchmark(date, oldBenchmark.getExerciseCategory(), Float.parseFloat(value.getText().toString()));
                             LoginActivity.userAccount.getBenchmarks().put(date + " - " + oldBenchmark.getExerciseCategory(), benchmark);
-                            Firestore.postCurrentAccount();
+                            FirestoreRepository.postCurrentAccount();
                         }
                     }
                 }).setNegativeButton("Delete measurement", new DialogInterface.OnClickListener()
@@ -58,7 +58,7 @@ public class EditMeasurementDialog extends DialogFragment
             public void onClick(DialogInterface dialog, int which)
             {
                 LoginActivity.userAccount.getBenchmarks().remove(ID);
-                Firestore.postCurrentAccount();
+                FirestoreRepository.postCurrentAccount();
             }
         });
 
@@ -76,7 +76,7 @@ public class EditMeasurementDialog extends DialogFragment
         // Set the displayed values equals to the old values as a default point
         value.setText(oldBenchmark.getValue().toString());
 
-        String parts[] = oldBenchmark.getDate().split("/");
+        String[] parts = oldBenchmark.getDate().split("/");
         int year = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
         int day = Integer.parseInt(parts[2]);
