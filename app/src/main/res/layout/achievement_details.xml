@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/achievement_details_title_value"
+        style="@style/header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Complete a task 5 days in a row" />
+
+    <com.example.fitness_app.views.IconView
+        android:id="@+id/achievement_details_completed_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/icon_checked_circle"
+        android:textColor="@color/accent"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_title_value"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_title_value" />
+
+    <TextView
+        android:id="@+id/achievement_details_completed_value"
+        style="@style/bodyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Completed"
+        android:textColor="@color/accent"
+        app:layout_constraintBottom_toBottomOf="@+id/achievement_details_completed_icon"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_completed_icon"
+        app:layout_constraintTop_toTopOf="@+id/achievement_details_completed_icon" />
+
+
+    <com.example.fitness_app.views.IconView
+        android:id="@+id/achievement_details_players_completed_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_users"
+        android:textColor="@color/icon_color"
+        android:textSize="20dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_title_value"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_completed_icon" />
+
+    <TextView
+        android:id="@+id/achievement_details_players_completed_title"
+        style="@style/bodyText.muted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Players completed"
+        android:textSize="8dp"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_players_completed_icon"
+        app:layout_constraintTop_toTopOf="@+id/achievement_details_players_completed_icon" />
+
+    <TextView
+        android:id="@+id/achievement_details_achievement_points_data"
+        style="@style/bodyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/achievement_details_players_completed_icon"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_players_completed_icon"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_players_completed_title"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_players_completed_title"
+        tools:text="435" />
+
+
+    <com.example.fitness_app.views.IconView
+        android:id="@+id/achievement_details_achievement_type_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/icon_achievement"
+        android:textColor="@color/icon_color"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/achievement_details_players_completed_icon"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_players_completed_title"
+        app:layout_constraintTop_toTopOf="@+id/achievement_details_players_completed_icon" />
+
+    <TextView
+        android:id="@+id/achievement_details_achievement_type_title"
+        style="@style/bodyText.muted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Type"
+        android:textSize="8dp"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_achievement_type_icon"
+        app:layout_constraintTop_toTopOf="@+id/achievement_details_achievement_type_icon" />
+
+    <TextView
+        android:id="@+id/achievement_details_achievement_type_value"
+        style="@style/bodyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/achievement_details_achievement_type_icon"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_achievement_type_title"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_achievement_type_title"
+        tools:text="Streak" />
+
+    <com.example.fitness_app.views.IconView
+        android:id="@+id/achievement_details_achievement_points_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/icon_coins"
+        android:textColor="@color/accent"
+        android:textSize="50dp"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_title_value"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_players_completed_icon" />
+
+    <TextView
+        android:id="@+id/achievement_details_achievement_points_title"
+        style="@style/bodyText.muted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Achievement Points"
+        android:textSize="8dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/achievement_details_achievement_points_value"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_achievement_points_icon"
+        app:layout_constraintTop_toTopOf="@+id/achievement_details_achievement_points_icon" />
+
+    <TextView
+        android:id="@+id/achievement_details_achievement_points_value"
+        style="@style/bodyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/achievement_details_achievement_points_icon"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_achievement_points_title"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_achievement_points_title"
+        app:layout_constraintVertical_bias="0"
+        tools:text="200" />
+
+    <com.example.fitness_app.views.IconView
+        android:id="@+id/achievement_details_progress_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_progress"
+        android:textSize="20dp"
+        android:textColor="@color/icon_color"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_achievement_points_icon"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_title_value"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/achievement_details_progress_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/bodyText.muted"
+        android:textSize="8dp"
+        android:text="Progress"
+        app:layout_constraintTop_toTopOf="@+id/achievement_details_progress_icon"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_progress_icon"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/achievement_details_progress_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/bodyText"
+        tools:text="3/5"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_progress_title"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_progress_title"/>
+
+    <ProgressBar
+        android:id="@+id/achievement_details_progress_progress_bar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_progress_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        tools:progress="60"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_progress_value"
+        />
+
+
+
+    <com.example.fitness_app.views.IconView
+        android:id="@+id/achievement_details_description_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/icon_description"
+        android:textColor="@color/icon_color"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/achievement_details_title_value"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_progress_progress_bar" />
+
+
+    <TextView
+        android:id="@+id/achievement_details_description_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/bodyText.muted"
+        android:textSize="8dp"
+        android:text="Description"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_description_icon"
+        app:layout_constraintTop_toTopOf="@+id/achievement_details_description_icon"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/achievement_details_description_value"
+        style="@style/bodyText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/achievement_details_description_icon"
+        app:layout_constraintTop_toBottomOf="@+id/achievement_details_description_title"
+        tools:text="To complete this achievement, you will have to complete any task for a total of 5 days in a row. The task and the completion must be of the same task, you cant split with different tasks." />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

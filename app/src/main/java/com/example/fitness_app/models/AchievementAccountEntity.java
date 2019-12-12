@@ -10,13 +10,14 @@ public abstract class AchievementAccountEntity {
     private Boolean isCompleted;
     private Timestamp completionDate;
     private String whenToUpdate;
-    private int amountToCompleteCount;
-    private int completedCount;
+    private Long amountToCompleteCount;
+    private Long completedCount;
     private String type;
+    private Long totalPlayersCompleted;
 
     public AchievementAccountEntity() {}
 
-    public AchievementAccountEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Timestamp completionDate, String whenToUpdate, int amountToCompleteCount, int completedCount, String type) {
+    public AchievementAccountEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Timestamp completionDate, String whenToUpdate, Long amountToCompleteCount, Long completedCount, String type, Long totalPlayersCompleted) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -27,6 +28,7 @@ public abstract class AchievementAccountEntity {
         this.amountToCompleteCount = amountToCompleteCount;
         this.completedCount = completedCount;
         this.type = type;
+        this.totalPlayersCompleted = totalPlayersCompleted;
     }
 
     public String getId() {
@@ -85,19 +87,19 @@ public abstract class AchievementAccountEntity {
         this.whenToUpdate = whenToUpdate;
     }
 
-    public int getAmountToCompleteCount() {
+    public Long getAmountToCompleteCount() {
         return amountToCompleteCount;
     }
 
-    public void setAmountToCompleteCount(int amountToCompleteCount) {
+    public void setAmountToCompleteCount(Long amountToCompleteCount) {
         this.amountToCompleteCount = amountToCompleteCount;
     }
 
-    public int getCompletedCount() {
+    public Long getCompletedCount() {
         return completedCount;
     }
 
-    public void setCompletedCount(int completedCount) {
+    public void setCompletedCount(Long completedCount) {
         this.completedCount = completedCount;
     }
 
@@ -107,5 +109,13 @@ public abstract class AchievementAccountEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Long getTotalPlayersCompleted() {
+        return totalPlayersCompleted;
+    }
+
+    public void setTotalPlayersCompleted(Long totalPlayersCompleted) {
+        this.totalPlayersCompleted = totalPlayersCompleted;
     }
 }

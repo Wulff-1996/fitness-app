@@ -16,8 +16,8 @@ import androidx.fragment.app.DialogFragment;
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.api.FirestoreRepository;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Benchmark;
-import com.example.fitness_app.models.FirebaseCallback;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class CreateMeasurementDialog extends DialogFragment

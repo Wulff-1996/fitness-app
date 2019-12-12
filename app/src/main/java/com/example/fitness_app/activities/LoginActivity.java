@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.example.fitness_app.models.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;

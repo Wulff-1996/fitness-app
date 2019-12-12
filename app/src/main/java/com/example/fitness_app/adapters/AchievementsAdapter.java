@@ -10,26 +10,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.models.AchievementEntryEntity;
+import com.example.fitness_app.models.AchievementAccountEntity;
 import com.example.fitness_app.views.IconView;
 
 import java.util.List;
 
 public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder> {
     public Context context;
-    private List<AchievementEntryEntity> achievementEntryEntities;
+    private List<AchievementAccountEntity> achievements;
     private LayoutInflater mInflater;
     private AdapterOnItemClickListener mClickListener;
 
-    public AchievementsAdapter(Context context, List<AchievementEntryEntity> achievementEntryEntities) {
+    public AchievementsAdapter(Context context, List<AchievementAccountEntity> achievements) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
-        this.achievementEntryEntities = achievementEntryEntities;
+        this.achievements = achievements;
     }
 
     public void setClickListener(AdapterOnItemClickListener listener){this.mClickListener = listener;}
-    public void setAchievementEntryEntities(List<AchievementEntryEntity> achievementEntryEntities){this.achievementEntryEntities = achievementEntryEntities;}
-    public List<AchievementEntryEntity> getAchievementEntryEntities(){return this.achievementEntryEntities;}
+    public void setAchievements(List<AchievementAccountEntity> achievements){this.achievements = achievements;}
+    public List<AchievementAccountEntity> getAchievements(){return this.achievements;}
 
     @NonNull
     @Override
@@ -40,12 +40,12 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final AchievementViewHolder holder, final int position) {
-        holder.populateView(achievementEntryEntities.get(position));
+        holder.populateView(achievements.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return achievementEntryEntities.size();
+        return achievements.size();
     }
 
     public class AchievementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -61,13 +61,18 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
             itemView.setOnClickListener(this);
         }
 
-        private void populateView(final AchievementEntryEntity data){
+        private void populateView(final AchievementAccountEntity data){
             titleView.setText(data.getTitle());
             completedIconView.setText(context.getString(R.string.icon_unchecked_circle));
             completedIconView.setTextColor(context.getColor(R.color.icon_color_muted));
             achievementPointsIconView.setTextColor(context.getColor(R.color.icon_color_muted));
             achievementsPointsView.setText(String.valueOf(data.getAchievementPoints()));
             totalPlayersCompleted.setText(String.valueOf(data.getTotalPlayersCompleted()));
+
+            if (data.getIsCompleted()){
+                completedIconView.setTextColor(context.getColor(R.color.accent));
+                completedIconView.setText(context.getString(R.string.icon_checked_circle));
+            }
 
         }
 

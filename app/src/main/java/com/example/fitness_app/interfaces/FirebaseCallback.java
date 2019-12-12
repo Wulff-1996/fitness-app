@@ -1,4 +1,4 @@
-package com.example.fitness_app.models;
+package com.example.fitness_app.interfaces;
 
 import com.google.firebase.firestore.FirebaseFirestoreException;
 

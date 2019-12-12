@@ -42,7 +42,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:elevation="8dp"
         android:background="@drawable/edit_text_background"
         android:fontFamily="@font/roboto_regular"
         android:hint="@string/fragment_new_task_bottom_sheet_dialog_new_task_subject_hint"

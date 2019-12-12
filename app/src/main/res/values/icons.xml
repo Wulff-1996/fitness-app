@@ -13,4 +13,9 @@
     <string name="icon_unchecked_circle">&#xf057;</string>
     <string name="icon_users">&#xf0c0;</string>
     <string name="icon_coins">&#xf51e;</string>
+    <string name="icon_header">&#xf1dc;</string>
+    <string name="icon_description">&#xf249;</string>
+    <string name="icon_requirements">&#xf737;</string>
+    <string name="icon_achievement">&#xf06a;</string>
+    <string name="icon_progress">&#xf0ae;</string>
 </resources>

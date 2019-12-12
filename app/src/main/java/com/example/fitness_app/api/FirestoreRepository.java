@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.fitness_app.activities.LoginActivity;
-import com.example.fitness_app.models.FirebaseCallback;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
