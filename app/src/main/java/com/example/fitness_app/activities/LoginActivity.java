@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class LoginActivity extends AppCompatActivity
 {
     private static final String TAG = "LoginActivity";
-    public static Account userAccount;
 
     private EditText email, password;
 
@@ -60,31 +60,9 @@ public class LoginActivity extends AppCompatActivity
     {
         if (user != null)
         {
-            String email = user.getEmail();
-            FirestoreRepository.fetchObject("accounts", email, Account.class, new FirebaseCallback()
-            {
-                @Override
-                public void onSuccess(Object object)
-                {
-                    userAccount = (Account) object;
-                }
-
-                @Override
-                public void onFailure(FirebaseFirestoreException.Code errorCode)
-                {
-
-                }
-
-                @Override
-                public void onFinish()
-                {
-
-                }
-            });
-            Bundle bundle = new Bundle();
-            bundle.putString("EMAIL", email);
+            Globals.fetchEmail();
+            Globals.fetchAccount();
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("BUNDLE", bundle);
             startActivity(intent);
         }
     }

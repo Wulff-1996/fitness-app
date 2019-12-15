@@ -1,7 +1,6 @@
 package com.example.fitness_app.fragments.measurements;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.BottomSheetDialog;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.CreateMeasurementDialog;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.EditMeasurementDialog;
@@ -25,17 +24,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.PointsGraphSeries;
-import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class MeasurementsFragment extends Fragment implements BottomSheetDialog.BottomSheetDialogDelegate
@@ -43,8 +37,8 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
     private TextView titleText;
     private ListView listView;
     private ArrayAdapter adapter;
-    private TreeMap<String, Benchmark> measurements = new TreeMap<>();
-    private List benchmarkNames = new ArrayList();
+    private TreeMap<String, Benchmark> measurements;
+    private List benchmarkNames;
     private View view;
     private String category;
     private FloatingActionButton createBenchmark;
@@ -69,6 +63,8 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
 
     private void init()
     {
+        measurements = new TreeMap<>();
+        benchmarkNames = new ArrayList();
         listView = view.findViewById(R.id.listview);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -96,7 +92,7 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
 
     private void updateListView()
     {
-        Map<String, Benchmark> tmpMap = LoginActivity.userAccount.getBenchmarks();
+        Map<String, Benchmark> tmpMap = Globals.userAccount.getBenchmarks();
 
         for (Map.Entry<String, Benchmark> entry: tmpMap.entrySet())
         {

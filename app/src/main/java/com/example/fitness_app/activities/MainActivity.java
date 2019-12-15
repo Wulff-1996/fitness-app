@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitness_app.R;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.achievements.AchievementsFragment;
 import com.example.fitness_app.fragments.measurements.MeasurementSelectionFragment;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
         mNavController = builder.build();
         bottomBar = findViewById(R.id.activity_main_bottom_navigation);
         bottomBar.setOnTabSelectListener(tabId -> {
+            Globals.fetchAccount();
             switch (tabId){
                 case R.id.nav_tasks:
                     if (mNavController.isRootFragment()){

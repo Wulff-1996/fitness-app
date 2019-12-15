@@ -14,8 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.api.FirestoreRepository;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.models.Benchmark;
 
 import java.text.SimpleDateFormat;
@@ -33,7 +33,7 @@ public class EditMeasurementDialog extends DialogFragment
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
     {
         ID = getArguments().getString("ID");
-        oldBenchmark = LoginActivity.userAccount.getBenchmarks().get(ID);
+        oldBenchmark = Globals.userAccount.getBenchmarks().get(ID);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -47,9 +47,9 @@ public class EditMeasurementDialog extends DialogFragment
                     {
                         if (!value.getText().toString().isEmpty())
                         {
-                            LoginActivity.userAccount.getBenchmarks().remove(ID);
+                            Globals.userAccount.getBenchmarks().remove(ID);
                             Benchmark benchmark = new Benchmark(date, oldBenchmark.getExerciseCategory(), Float.parseFloat(value.getText().toString()));
-                            LoginActivity.userAccount.getBenchmarks().put(date + " - " + oldBenchmark.getExerciseCategory(), benchmark);
+                            Globals.userAccount.getBenchmarks().put(date + " - " + oldBenchmark.getExerciseCategory(), benchmark);
                             FirestoreRepository.postCurrentAccount();
                         }
                     }
@@ -58,19 +58,29 @@ public class EditMeasurementDialog extends DialogFragment
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                LoginActivity.userAccount.getBenchmarks().remove(ID);
+                Globals.userAccount.getBenchmarks().remove(ID);
                 FirestoreRepository.postCurrentAccount();
             }
         });
 
-        value = view.findViewById(R.id.valueEditText);
+        value = view.findViewById(R.id.dialog_create_benchmark_value);
         calendar = view.findViewById(R.id.calendarView);
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener()
         {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
             {
-                date = year + "/" + month + "/" + dayOfMonth;
+                String realMonth = String.valueOf(month+1);
+                String realDay = String.valueOf(dayOfMonth);
+                if (month + 1 < 10)
+                {
+                    realMonth = "0" + realMonth;
+                }
+                if (dayOfMonth < 10)
+                {
+                    realDay = "0" + realDay;
+                }
+                date = year + "/" + realMonth + "/" + realDay;
             }
         });
 

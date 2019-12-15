@@ -1,8 +1,8 @@
 package com.example.fitness_app.models;
 
-import com.google.firebase.firestore.auth.User;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Account
@@ -10,7 +10,7 @@ public class Account
     private int exp;
     private String userType;
     private Map<String, Benchmark> benchmarks = new HashMap<>();
-    private Map<String, Quest> quests = new HashMap<>();
+    private List<String> quests = new ArrayList<>();
     private Map<String, UserTask> tasks = new HashMap<>();
 
     public Account()
@@ -23,7 +23,7 @@ public class Account
         this.userType = userType;
     }
 
-    public Account(int exp, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks)
+    public Account(int exp, String userType, Map<String, Benchmark> benchmarks, List<String> quests, Map<String, UserTask> tasks)
     {
         this.exp = exp;
         this.userType = userType;
@@ -62,12 +62,12 @@ public class Account
         this.benchmarks = benchmarks;
     }
 
-    public Map<String, Quest> getQuests()
+    public List<String> getQuests()
     {
         return quests;
     }
 
-    public void setQuests(Map<String, Quest> quests)
+    public void setQuests(List<String> quests)
     {
         this.quests = quests;
     }

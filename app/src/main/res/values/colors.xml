@@ -24,4 +24,5 @@
     <color name="text_alternative_light">#E8E9EB</color>
     <color name="success">#00FF8C</color>
     <color name="success_half_alpha">#5000FF8C</color>
+    <color name="facebook">#3B5998</color>
 </resources>
