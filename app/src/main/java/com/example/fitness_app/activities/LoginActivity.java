@@ -4,21 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
+import com.example.fitness_app.constrants.ApplicationMode;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import static com.example.fitness_app.constrants.IntentKeys.INTENT_KEY_APPLICATION_MODE;
+import static com.example.fitness_app.constrants.UserTypes.SUPER_USER;
 
 public class LoginActivity extends BaseActivity
 {
@@ -34,13 +35,17 @@ public class LoginActivity extends BaseActivity
         setContentView(R.layout.activity_login);
 
         FirebaseApp.initializeApp(this);
-        init();
+        setupView();
     }
 
-    private void init()
+    private void setupView()
     {
-        this.email = findViewById(R.id.login_email);
-        this.password = findViewById(R.id.login_password);
+        this.email = findViewById(R.id.activity_login_email_value);
+        this.password = findViewById(R.id.activity_login_password_value);
+        Button signIn = findViewById(R.id.activity_login_login_button);
+        Button signUp = findViewById(R.id.activity_login_sign_up_button);
+        signIn.setOnClickListener(this::signIn);
+        signUp.setOnClickListener(this::signUp);
     }
 
     @Override
@@ -65,13 +70,12 @@ public class LoginActivity extends BaseActivity
                 @Override
                 public void onSuccess(Object object)
                 {
-                    userAccount = (Account) object;
+                    handleSignIn((Account) object);
                 }
 
                 @Override
                 public void onFailure(FirebaseFirestoreException.Code errorCode)
                 {
-
                 }
 
                 @Override
@@ -80,10 +84,39 @@ public class LoginActivity extends BaseActivity
 
                 }
             });
-            Bundle bundle = new Bundle();
-            bundle.putString("EMAIL", email);
+        } else {
+            showLogInElement();
+        }
+    }
+
+    private void showLogInElement(){
+        EditText usernameView = findViewById(R.id.activity_login_email_value);
+        EditText passwordView = findViewById(R.id.activity_login_password_value);
+        Button loginButton = findViewById(R.id.activity_login_login_button);
+        Button signUpButton = findViewById(R.id.activity_login_sign_up_button);
+        usernameView.setVisibility(View.VISIBLE);
+        passwordView.setVisibility(View.VISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
+        signUpButton.setVisibility(View.VISIBLE);
+        showProgress(false);
+    }
+
+    private void showProgress(boolean isVisible){
+        ProgressBar progressBar = findViewById(R.id.acticity_login_progress_bar);
+        if (isVisible){
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void handleSignIn(Account account){
+        if (account.getUserType().equals(SUPER_USER)){
+            Intent intent = new Intent(this, SelectApplicationActivity.class);
+            startActivity(intent);
+        } else {
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("BUNDLE", bundle);
+            intent.putExtra(INTENT_KEY_APPLICATION_MODE, ApplicationMode.APPLICATION_USERS);
             startActivity(intent);
         }
     }
@@ -99,26 +132,23 @@ public class LoginActivity extends BaseActivity
         }
         else
         {
+            showProgress(true);
             // Sign in using firestore
             FirestoreRepository.getFirebaseAuth().signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
+                    .addOnCompleteListener(this, task -> {
+                        showProgress(false);
+                        if (task.isSuccessful())
                         {
-                            if (task.isSuccessful())
-                            {
-                                // Sign in successful, log it and sign in user
-                                Log.i(TAG, "Sign in with email/password:Success");
-                                FirebaseUser user = FirestoreRepository.getCurrentUser();
-                                updateUI(user);
-                            }
-                            else
-                            {
-                                // Sign in failed, log it and tell the user
-                                Log.i(TAG, "Sign in with email/password:Failed");
-                                Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                            // Sign in successful, log it and sign in user
+                            Log.i(TAG, "Sign in with email/password:Success");
+                            FirebaseUser user = FirestoreRepository.getCurrentUser();
+                            updateUI(user);
+                        }
+                        else
+                        {
+                            // Sign in failed, log it and tell the user
+                            Log.i(TAG, "Sign in with email/password:Failed");
+                            Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -136,46 +166,43 @@ public class LoginActivity extends BaseActivity
         }
         else
         {
+            showProgress(true);
             FirestoreRepository.getFirebaseAuth().createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
+                    .addOnCompleteListener(this, task -> {
+                        showProgress(false);
+                        if (task.isSuccessful())
                         {
-                            if (task.isSuccessful())
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = FirestoreRepository.getCurrentUser();
+                            Account userAccount = new Account(0, "User");
+                            FirestoreRepository.postObject("accounts", user.getEmail(), userAccount, new FirebaseCallback()
                             {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = FirestoreRepository.getCurrentUser();
-                                Account userAccount = new Account(0, "User");
-                                FirestoreRepository.postObject("accounts", user.getEmail(), userAccount, new FirebaseCallback()
+                                @Override
+                                public void onSuccess(Object object)
                                 {
-                                    @Override
-                                    public void onSuccess(Object object)
-                                    {
-                                        // Maybe make toast?
-                                    }
+                                    // Maybe make toast?
+                                }
 
-                                    @Override
-                                    public void onFailure(FirebaseFirestoreException.Code errorCode)
-                                    {
-                                        // Failures are already handled
-                                    }
+                                @Override
+                                public void onFailure(FirebaseFirestoreException.Code errorCode)
+                                {
+                                    // Failures are already handled
+                                }
 
-                                    @Override
-                                    public void onFinish()
-                                    {}
-                                });
-                                updateUI(user);
-                            }
-                            else
-                            {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getApplicationContext(),task.getException().getLocalizedMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                                updateUI(null);
-                            }
+                                @Override
+                                public void onFinish()
+                                {}
+                            });
+                            updateUI(user);
+                        }
+                        else
+                        {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(),task.getException().getLocalizedMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
                         }
                     });
         }

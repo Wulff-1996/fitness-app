@@ -3,7 +3,7 @@ package com.example.fitness_app.services;
 import androidx.annotation.NonNull;
 
 import com.example.fitness_app.api.FirestoreRepository;
-import com.example.fitness_app.constrants.ApiConstants;
+import com.example.fitness_app.constrants.Api;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.util.Dates;
@@ -37,7 +37,7 @@ public class CompleteAnyTaskOnceUpdate extends UpdateEntity {
     private void getAccount(){
         FirestoreRepository
                 .getInstance()
-                .collection(ApiConstants.ACCOUNTS_COLLECTION)
+                .collection(Api.ACCOUNTS_COLLECTION)
                 .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -69,7 +69,7 @@ public class CompleteAnyTaskOnceUpdate extends UpdateEntity {
         DocumentReference docRef =
                     FirestoreRepository
                             .getInstance()
-                            .collection(ApiConstants.ACHIEVEMENTS_COLLECTION)
+                            .collection(Api.ACHIEVEMENTS_COLLECTION)
                             .document("61ab1661-b88f-4148-87d5-bb14828a66cc");
 
         FirestoreRepository.getInstance()
@@ -84,9 +84,9 @@ public class CompleteAnyTaskOnceUpdate extends UpdateEntity {
     private void writeUpdateToAccountsAchievements(){
         DocumentReference docRef = FirestoreRepository
                 .getInstance()
-                .collection(ApiConstants.ACCOUNTS_COLLECTION)
+                .collection(Api.ACCOUNTS_COLLECTION)
                 .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .collection(ApiConstants.ACCOUNT_ACHIEVEMENT_COLLECTION)
+                .collection(Api.ACCOUNT_ACHIEVEMENT_COLLECTION)
                 .document("61ab1661-b88f-4148-87d5-bb14828a66cc");
 
         FirestoreRepository.getInstance()

@@ -1,13 +1,14 @@
 package com.example.fitness_app.api;
 
-import com.example.fitness_app.constrants.ApiConstants;
+import com.example.fitness_app.constrants.Api;
 import com.example.fitness_app.interfaces.AchievementsCombinedResponseInterface;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.models.AchievementAccountEntity;
-import com.example.fitness_app.models.AchievementAccountOnceEntity;
+import com.example.fitness_app.models.AchievementAccountManualEntity;
 import com.example.fitness_app.models.AchievementAccountStreakEntity;
 import com.example.fitness_app.models.AchievementAccountTotalEntity;
+import com.example.fitness_app.models.AchievementApprovalRequest;
 import com.example.fitness_app.models.AchievementEntryEntity;
 import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.util.AchievementUtil;
@@ -27,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.example.fitness_app.constrants.Api.ACHIEVEMENT_APPROVAL_REQUESTS_COLLECTION;
+
 public class FirestoreService {
 
     /**
@@ -36,7 +39,7 @@ public class FirestoreService {
      */
     public static void getAllTasks(FirebaseCallback callBack) {
         FirestoreRepository.fetchObject(
-                ApiConstants.ACCOUNTS_COLLECTION,
+                Api.ACCOUNTS_COLLECTION,
                 FirebaseAuth.getInstance().getCurrentUser().getEmail(),
                 Account.class,
                 callBack
@@ -49,9 +52,9 @@ public class FirestoreService {
         String id = UUID.randomUUID().toString();
         userTask.setId(id);
         tasks.put(id, userTask);
-        data.put(ApiConstants.TASKS_FIELD_NAME, tasks);
+        data.put(Api.TASKS_FIELD_NAME, tasks);
 
-        FirestoreRepository.postObject(ApiConstants.ACCOUNTS_COLLECTION, FirebaseAuth.getInstance().getCurrentUser().getEmail(), data, callback);
+        FirestoreRepository.postObject(Api.ACCOUNTS_COLLECTION, FirebaseAuth.getInstance().getCurrentUser().getEmail(), data, callback);
     }
 
     /**
@@ -63,7 +66,7 @@ public class FirestoreService {
     public static void updateTaskEntry(Map<String, Object> updates, FirebaseCallback callback) {
         // create reference to new doc to know its id
         DocumentReference docRef = FirestoreRepository.getDocumentReference(
-                ApiConstants.ACCOUNTS_COLLECTION,
+                Api.ACCOUNTS_COLLECTION,
                 FirebaseAuth.getInstance().getCurrentUser().getEmail()
         );
         FirestoreRepository.updateField(docRef, updates, callback);
@@ -106,14 +109,14 @@ public class FirestoreService {
 
         // get all achievements from the current users account
         Task accountAchievementsTask = FirestoreRepository.getInstance()
-                .collection(ApiConstants.ACCOUNTS_COLLECTION)
+                .collection(Api.ACCOUNTS_COLLECTION)
                 .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .collection(ApiConstants.ACCOUNT_ACHIEVEMENT_COLLECTION)
+                .collection(Api.ACCOUNT_ACHIEVEMENT_COLLECTION)
                 .get();
 
         // get all achievements
         Task achievementsTask = FirestoreRepository.getInstance()
-                .collection(ApiConstants.ACHIEVEMENTS_COLLECTION)
+                .collection(Api.ACHIEVEMENTS_COLLECTION)
                 .get();
 
         // combine the two calls, because we need to compare the two lists
@@ -139,7 +142,7 @@ public class FirestoreService {
                         accountAchievements.add(snapshot.toObject(AchievementAccountTotalEntity.class));
                         break;
                     case "once":
-                        accountAchievements.add(snapshot.toObject(AchievementAccountOnceEntity.class));
+                        accountAchievements.add(snapshot.toObject(AchievementAccountManualEntity.class));
                         break;
                 }
             }
@@ -151,7 +154,7 @@ public class FirestoreService {
     public static void addAchievement(AchievementEntryEntity achievement, FirebaseCallback callback){
         AchievementAccountEntity accountAchievement = achievement.toAchievementAccountEntity();
         FirestoreRepository.getInstance()
-                .collection(ApiConstants.ACCOUNTS_COLLECTION)
+                .collection(Api.ACCOUNTS_COLLECTION)
                 .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
 
@@ -159,13 +162,13 @@ public class FirestoreService {
 
                         DocumentReference documentReference =
                                 FirestoreRepository.getInstance()
-                                .collection(ApiConstants.ACHIEVEMENTS_COLLECTION)
+                                .collection(Api.ACHIEVEMENTS_COLLECTION)
                                 .document(achievement.getId());
                         batch.set(documentReference, achievement);
 
                         for (DocumentSnapshot doc: task.getResult()){
                             DocumentReference docRef = doc.getReference()
-                                    .collection(ApiConstants.ACCOUNT_ACHIEVEMENT_COLLECTION)
+                                    .collection(Api.ACCOUNT_ACHIEVEMENT_COLLECTION)
                                     .document(accountAchievement.getId());
                             batch.set(docRef, accountAchievement);
                         }
@@ -187,7 +190,7 @@ public class FirestoreService {
 
     public static void deleteAchievement(AchievementEntryEntity achievement, FirebaseCallback callback){
         FirestoreRepository.getInstance()
-                .collection(ApiConstants.ACCOUNTS_COLLECTION)
+                .collection(Api.ACCOUNTS_COLLECTION)
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
 
@@ -195,13 +198,13 @@ public class FirestoreService {
 
                 DocumentReference documentReference =
                         FirestoreRepository.getInstance()
-                        .collection(ApiConstants.ACHIEVEMENTS_COLLECTION)
+                        .collection(Api.ACHIEVEMENTS_COLLECTION)
                         .document(achievement.getId());
                 batch.delete(documentReference);
 
                 for (DocumentSnapshot doc: task.getResult()){
                     DocumentReference docRef = doc.getReference()
-                            .collection(ApiConstants.ACCOUNT_ACHIEVEMENT_COLLECTION)
+                            .collection(Api.ACCOUNT_ACHIEVEMENT_COLLECTION)
                             .document(achievement.getId());
                     batch.delete(docRef);
                 }
@@ -219,6 +222,26 @@ public class FirestoreService {
             }
 
         });
+    }
+
+    public static void getAllAchievementApprovalRequests(FirebaseCallback callback){
+        FirestoreRepository
+                .getInstance()
+                .collection(ACHIEVEMENT_APPROVAL_REQUESTS_COLLECTION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+
+                    if (task.isSuccessful()){
+                        List<AchievementApprovalRequest> requests = new ArrayList<>();
+                        for(DocumentSnapshot doc: task.getResult()){
+                            AchievementApprovalRequest reguest = doc.toObject(AchievementApprovalRequest.class);
+                        }
+                        callback.onSuccess(requests);
+                    } else {
+                        callback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                    }
+                });
     }
 }
 

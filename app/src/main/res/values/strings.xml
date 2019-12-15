@@ -24,6 +24,11 @@
     <string name="fragment_tasks_completed_today_chip_text">Completed Today</string>
     <string name="fragment_task_edit_future_dates_not_acceptable">You cannot mark a future dates as complete.</string>
     <string name="completedOutOfTotal">%1$d/%2$d</string>
+    <string name="status_title">Status</string>
+    <string name="fragment_achievement_entry_request_achievement_approval">Request Approval</string>
+    <string name="achievement_status_accepted">Accepted</string>
+    <string name="achievement_status_pending">Pending</string>
+    <string name="achievement_status_declined">Declined</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

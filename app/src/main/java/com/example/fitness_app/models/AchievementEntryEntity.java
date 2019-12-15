@@ -1,5 +1,7 @@
 package com.example.fitness_app.models;
 
+import com.example.fitness_app.constrants.AchievementTypes;
+
 import java.util.UUID;
 
 public class AchievementEntryEntity {
@@ -27,7 +29,7 @@ public class AchievementEntryEntity {
 
     public AchievementAccountEntity toAchievementAccountEntity (){
         switch (type){
-            case "streak":
+            case AchievementTypes.STREAK:
                 AchievementAccountStreakEntity streak = new AchievementAccountStreakEntity();
                 streak.setId(UUID.randomUUID().toString());
                 streak.setAchievementPoints(achievementPoints);
@@ -35,12 +37,12 @@ public class AchievementEntryEntity {
                 streak.setDescription(description);
                 streak.setAmountToCompleteCount(amountToCompleteCount);
                 streak.setCompletedCount(0L);
-                streak.setType("streak");
+                streak.setType(AchievementTypes.STREAK);
                 streak.setIsCompleted(false);
                 streak.setTotalPlayersCompleted(totalPlayersCompleted);
                 streak.setWhenToUpdate(whenToUpdate);
                 return streak;
-            case "total":
+            case AchievementTypes.TOTAL:
                 AchievementAccountTotalEntity total = new AchievementAccountTotalEntity();
                 total.setId(UUID.randomUUID().toString());
                 total.setAchievementPoints(achievementPoints);
@@ -48,20 +50,20 @@ public class AchievementEntryEntity {
                 total.setDescription(description);
                 total.setAmountToCompleteCount(amountToCompleteCount);
                 total.setCompletedCount(0L);
-                total.setType("total");
+                total.setType(AchievementTypes.TOTAL);
                 total.setIsCompleted(false);
                 total.setTotalPlayersCompleted(totalPlayersCompleted);
                 total.setWhenToUpdate(whenToUpdate);
                 return total;
-            case "once":
-                AchievementAccountOnceEntity once = new AchievementAccountOnceEntity();
+            case AchievementTypes.MANUAL:
+                AchievementAccountManualEntity once = new AchievementAccountManualEntity();
                 once.setId(UUID.randomUUID().toString());
                 once.setAchievementPoints(achievementPoints);
                 once.setTitle(title);
                 once.setDescription(description);
                 once.setAmountToCompleteCount(amountToCompleteCount);
                 once.setCompletedCount(0L);
-                once.setType("once");
+                once.setType(AchievementTypes.MANUAL);
                 once.setIsCompleted(false);
                 once.setTotalPlayersCompleted(totalPlayersCompleted);
                 once.setWhenToUpdate(whenToUpdate);

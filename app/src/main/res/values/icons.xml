@@ -18,4 +18,8 @@
     <string name="icon_requirements">&#xf737;</string>
     <string name="icon_achievement">&#xf06a;</string>
     <string name="icon_progress">&#xf0ae;</string>
+    <string name="icon_info_circle">&#xf05a;</string>
+    <string name="icon_super_user">&#xf505;</string>
+    <string name="icon_user">&#xf007;</string>
+    <string name="icon_calendar">&#xf073;</string>
 </resources>

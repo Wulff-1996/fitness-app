@@ -14,7 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreService;
-import com.example.fitness_app.constrants.ApiConstants;
+import com.example.fitness_app.constrants.Api;
 import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.ConfirmDeleteDialog;
@@ -223,7 +223,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         // create update entity
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(entry, updates, EVENT_BUS_EVENT_TASK_ENTRY_ADDED);
@@ -243,7 +243,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(deleteEntry, updates, EVENT_BUS_EVENT_TASK_ENTRY_DELETED);
@@ -255,7 +255,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(userTask, updates, EVENT_BUS_EVENT_TASK_EDITED);
@@ -272,7 +272,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(null, updates, EVENT_BUS_EVENT_TASK_DELETED);

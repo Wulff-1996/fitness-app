@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.activities.SelectApplicationActivity;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,7 +29,7 @@ public class ProfileFragment extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         setupToolbar();
-        init();
+        init(view);
 
         return view;
     }
@@ -36,7 +37,7 @@ public class ProfileFragment extends BaseFragment {
     private void setupToolbar(){
     }
 
-    private void init()
+    private void init(View view)
     {
         signOutBtn = view.findViewById(R.id.signOutBtn);
         signOutBtn.setOnClickListener(new View.OnClickListener()
@@ -49,5 +50,16 @@ public class ProfileFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+
+        Button changeAppButton = view.findViewById(R.id.fragment_profile_change_app_button);
+        changeAppButton.setOnClickListener(view1 -> handleChangeApp());
+    }
+
+    private void handleChangeApp(){
+        Intent intent = new Intent(getContext(), SelectApplicationActivity.class);
+        startActivity(intent);
+        if (getActivity() != null){
+            getActivity().finish();
+        }
     }
 }

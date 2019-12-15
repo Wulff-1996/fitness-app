@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SelectApplicationActivity">
+
+    <TextView
+        android:id="@+id/activity_select_application_header"
+        style="@style/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select an Application"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/activity_select_application_normal_app_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/activity_select_application_normal_app_card"
+        style="@style/mCardView"
+        android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/activity_select_application_super_user_app_card"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_select_application_header">
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="?android:attr/selectableItemBackground">
+
+           <com.example.fitness_app.views.IconView
+               android:id="@+id/activity_select_application_normal_app_icon"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/icon_users"
+               android:textColor="@color/icon_color"
+               android:textSize="40dp"
+               android:layout_marginTop="30dp"
+               app:layout_constraintVertical_chainStyle="packed"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintBottom_toTopOf="@+id/activity_select_application_normal_app_title"
+               />
+
+           <TextView
+               android:id="@+id/activity_select_application_normal_app_title"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Users Application"
+               style="@style/header"
+               app:layout_constraintTop_toBottomOf="@+id/activity_select_application_normal_app_icon"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               android:layout_marginBottom="30dp"
+               app:layout_constraintEnd_toEndOf="parent"/>
+
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/activity_select_application_super_user_app_card"
+        style="@style/mCardView"
+        android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_select_application_normal_app_card">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground">
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/activity_select_application_super_user_app_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icon_super_user"
+                android:textColor="@color/icon_color"
+                android:textSize="40dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/activity_select_application_super_user_app_title"/>
+
+            <TextView
+                android:id="@+id/activity_select_application_super_user_app_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Super User Application"
+                style="@style/header"
+                app:layout_constraintTop_toBottomOf="@+id/activity_select_application_super_user_app_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="30dp"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

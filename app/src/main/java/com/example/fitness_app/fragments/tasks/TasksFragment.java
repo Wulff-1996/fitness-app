@@ -15,7 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.fitness_app.R;
 import com.example.fitness_app.adapters.TasksAdapter;
 import com.example.fitness_app.api.FirestoreService;
-import com.example.fitness_app.constrants.ApiConstants;
+import com.example.fitness_app.constrants.Api;
 import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
@@ -211,7 +211,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         // create update entity
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(taskWrapper, updates, EVENT_BUS_EVENT_TASK_ENTRY_ADDED_CURRENT_DAY);
@@ -231,7 +231,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
         postUpdates(taskWrapper, updates, EVENT_BUS_EVENT_TASK_ENTRY_DELETED);
     }

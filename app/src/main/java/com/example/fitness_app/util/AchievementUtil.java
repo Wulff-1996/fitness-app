@@ -2,7 +2,7 @@ package com.example.fitness_app.util;
 
 import com.example.fitness_app.constrants.AchievementTypes;
 import com.example.fitness_app.models.AchievementAccountEntity;
-import com.example.fitness_app.models.AchievementAccountOnceEntity;
+import com.example.fitness_app.models.AchievementAccountManualEntity;
 import com.example.fitness_app.models.AchievementAccountStreakEntity;
 import com.example.fitness_app.models.AchievementAccountTotalEntity;
 import com.example.fitness_app.models.AchievementEntryEntity;
@@ -41,14 +41,14 @@ public class AchievementUtil {
                 total.setWhenToUpdate(entryEntity.getWhenToUpdate());
                 total.setTotalPlayersCompleted(entryEntity.getTotalPlayersCompleted());
                 break;
-            case AchievementTypes.ONCE:
-                AchievementAccountOnceEntity once = (AchievementAccountOnceEntity) accountEntity;
-                once.setAmountToCompleteCount(entryEntity.getAmountToCompleteCount());
-                once.setDescription(entryEntity.getDescription());
-                once.setTitle(entryEntity.getTitle());
-                once.setAchievementPoints(entryEntity.getAchievementPoints());
-                once.setWhenToUpdate(entryEntity.getWhenToUpdate());
-                once.setTotalPlayersCompleted(entryEntity.getTotalPlayersCompleted());
+            case AchievementTypes.MANUAL:
+                AchievementAccountManualEntity manual = (AchievementAccountManualEntity) accountEntity;
+                manual.setAmountToCompleteCount(entryEntity.getAmountToCompleteCount());
+                manual.setDescription(entryEntity.getDescription());
+                manual.setTitle(entryEntity.getTitle());
+                manual.setAchievementPoints(entryEntity.getAchievementPoints());
+                manual.setWhenToUpdate(entryEntity.getWhenToUpdate());
+                manual.setTotalPlayersCompleted(entryEntity.getTotalPlayersCompleted());
                 break;
         }
     }

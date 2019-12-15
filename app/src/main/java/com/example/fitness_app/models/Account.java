@@ -1,28 +1,18 @@
 package com.example.fitness_app.models;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class Account
+public class Account implements Serializable
 {
-    @SerializedName("id")
     private String id;
-    @SerializedName("experience_points")
+    private String username;
     private int experiancePoints;
-    @SerializedName("user_type")
     private String userType;
-    @SerializedName("benchmarks")
     private Map<String, Benchmark> benchmarks = new HashMap<>();
-    @SerializedName("quests")
     private Map<String, Quest> quests = new HashMap<>();
-    @SerializedName("tasks")
     private Map<String, UserTask> tasks = new HashMap<>();
-    @SerializedName("achievementEntryEntities")
-    private List<AchievementEntryEntity> achievementEntryEntities = new ArrayList<>();
 
     public Account() {}
 
@@ -32,14 +22,14 @@ public class Account
         this.userType = userType;
     }
 
-    public Account(String id, int experiancePoints, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks, List<AchievementEntryEntity> achievementEntryEntities) {
+    public Account(String id, int experiancePoints, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks, String username) {
         this.id = id;
         this.experiancePoints = experiancePoints;
         this.userType = userType;
         this.benchmarks = benchmarks;
         this.quests = quests;
         this.tasks = tasks;
-        this.achievementEntryEntities = achievementEntryEntities;
+        this.username = username;
     }
 
     public String getId() {
@@ -98,24 +88,11 @@ public class Account
         this.tasks = tasks;
     }
 
-    public List<AchievementEntryEntity> getAchievementEntryEntities() {
-        return achievementEntryEntities;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAchievementEntryEntities(List<AchievementEntryEntity> achievementEntryEntities) {
-        this.achievementEntryEntities = achievementEntryEntities;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id='" + id + '\'' +
-                ", experiancePoints=" + experiancePoints +
-                ", userType='" + userType + '\'' +
-                ", benchmarks=" + benchmarks +
-                ", quests=" + quests +
-                ", tasks=" + tasks +
-                ", achievementEntryEntities=" + achievementEntryEntities +
-                '}';
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
