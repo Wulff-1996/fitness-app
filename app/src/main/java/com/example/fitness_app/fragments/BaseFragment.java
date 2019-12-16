@@ -2,6 +2,8 @@ package com.example.fitness_app.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,15 +15,16 @@ import icepick.Icepick;
 
 public abstract class BaseFragment extends Fragment {
     public FragmentNavigation fragmentNavigation;
-    private LoadingFragment loadingFragment;
+    private ProgressBar progressBar;
+    private boolean isFetching = false;
 
-    public void showProgressBar(boolean isShowing) {
-        if (isShowing) {
-            loadingFragment = LoadingFragment.newInstance();
-            assert getFragmentManager() != null;
-            loadingFragment.show(getFragmentManager(), "progress dialog");
-        } else {
-            loadingFragment.dismiss();
+    public void showProgress(boolean show) {
+        if (progressBar != null){
+            if (show){
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -53,6 +56,29 @@ public abstract class BaseFragment extends Fragment {
 
     public void hideToast(){
         ((BaseActivity)getActivity()).hideToast();
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    public boolean isFetching() {
+        return isFetching;
+    }
+
+    public void setFetching(boolean fetching) {
+        isFetching = fetching;
+        if (progressBar != null){
+            if (fetching){
+                showProgress(true);
+            } else {
+                showProgress(false);
+            }
+        }
     }
 
     public interface FragmentNavigation {

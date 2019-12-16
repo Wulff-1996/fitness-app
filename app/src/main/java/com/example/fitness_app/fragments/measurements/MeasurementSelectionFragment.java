@@ -16,7 +16,6 @@ import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.BenchmarkCategories;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +75,7 @@ public class MeasurementSelectionFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode)
+            public void onFailure(Exception e)
             {
 
             }

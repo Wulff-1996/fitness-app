@@ -1,6 +1,6 @@
 package com.example.fitness_app.models;
 
-import com.google.firebase.Timestamp;
+import java.util.List;
 
 public abstract class AchievementAccountEntity {
     private String id;
@@ -8,16 +8,14 @@ public abstract class AchievementAccountEntity {
     private String description;
     private Long achievementPoints;
     private Boolean isCompleted;
-    private Timestamp completionDate;
-    private String whenToUpdate;
-    private Long amountToCompleteCount;
-    private Long completedCount;
+    private Long completionDate;
+    private List<String> whenToUpdate;
     private String type;
     private Long totalPlayersCompleted;
 
     public AchievementAccountEntity() {}
 
-    public AchievementAccountEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Timestamp completionDate, String whenToUpdate, Long amountToCompleteCount, Long completedCount, String type, Long totalPlayersCompleted) {
+    public AchievementAccountEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -25,8 +23,6 @@ public abstract class AchievementAccountEntity {
         this.isCompleted = isCompleted;
         this.completionDate = completionDate;
         this.whenToUpdate = whenToUpdate;
-        this.amountToCompleteCount = amountToCompleteCount;
-        this.completedCount = completedCount;
         this.type = type;
         this.totalPlayersCompleted = totalPlayersCompleted;
     }
@@ -71,36 +67,20 @@ public abstract class AchievementAccountEntity {
         isCompleted = completed;
     }
 
-    public Timestamp getCompletionDate() {
+    public Long getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(Timestamp completionDate) {
+    public void setCompletionDate(Long completionDate) {
         this.completionDate = completionDate;
     }
 
-    public String getWhenToUpdate() {
+    public List<String> getWhenToUpdate() {
         return whenToUpdate;
     }
 
-    public void setWhenToUpdate(String whenToUpdate) {
+    public void setWhenToUpdate(List<String> whenToUpdate) {
         this.whenToUpdate = whenToUpdate;
-    }
-
-    public Long getAmountToCompleteCount() {
-        return amountToCompleteCount;
-    }
-
-    public void setAmountToCompleteCount(Long amountToCompleteCount) {
-        this.amountToCompleteCount = amountToCompleteCount;
-    }
-
-    public Long getCompletedCount() {
-        return completedCount;
-    }
-
-    public void setCompletedCount(Long completedCount) {
-        this.completedCount = completedCount;
     }
 
     public String getType() {

@@ -16,7 +16,6 @@ import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import static com.example.fitness_app.constrants.IntentKeys.INTENT_KEY_APPLICATION_MODE;
 import static com.example.fitness_app.constrants.UserTypes.SUPER_USER;
@@ -74,7 +73,7 @@ public class LoginActivity extends BaseActivity
                 }
 
                 @Override
-                public void onFailure(FirebaseFirestoreException.Code errorCode)
+                public void onFailure(Exception e)
                 {
                 }
 
@@ -175,7 +174,7 @@ public class LoginActivity extends BaseActivity
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = FirestoreRepository.getCurrentUser();
-                            Account userAccount = new Account(0, "User");
+                            Account userAccount = new Account(0L, "User");
                             FirestoreRepository.postObject("accounts", user.getEmail(), userAccount, new FirebaseCallback()
                             {
                                 @Override
@@ -185,7 +184,7 @@ public class LoginActivity extends BaseActivity
                                 }
 
                                 @Override
-                                public void onFailure(FirebaseFirestoreException.Code errorCode)
+                                public void onFailure(Exception e)
                                 {
                                     // Failures are already handled
                                 }

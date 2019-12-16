@@ -8,7 +8,8 @@ public class Account implements Serializable
 {
     private String id;
     private String username;
-    private int experiancePoints;
+    private Long experiencePoints;
+    private Long achievementPoints;
     private String userType;
     private Map<String, Benchmark> benchmarks = new HashMap<>();
     private Map<String, Quest> quests = new HashMap<>();
@@ -16,15 +17,15 @@ public class Account implements Serializable
 
     public Account() {}
 
-    public Account(int exp, String userType)
+    public Account(Long exp, String userType)
     {
-        this.experiancePoints = exp;
+        this.experiencePoints = exp;
         this.userType = userType;
     }
 
-    public Account(String id, int experiancePoints, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks, String username) {
+    public Account(String id, Long experiencePoints, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks, String username) {
         this.id = id;
-        this.experiancePoints = experiancePoints;
+        this.experiencePoints = experiencePoints;
         this.userType = userType;
         this.benchmarks = benchmarks;
         this.quests = quests;
@@ -40,12 +41,20 @@ public class Account implements Serializable
         this.id = id;
     }
 
-    public int getExperiancePoints() {
-        return experiancePoints;
+    public Long getExperiencePoints() {
+        return experiencePoints;
     }
 
-    public void setExperiancePoints(int experiancePoints) {
-        this.experiancePoints = experiancePoints;
+    public void setExperiencePoints(Long experiencePoints) {
+        this.experiencePoints = experiencePoints;
+    }
+
+    public Long getAchievementPoints() {
+        return achievementPoints;
+    }
+
+    public void setAchievementPoints(Long achievementPoints) {
+        this.achievementPoints = achievementPoints;
     }
 
     public String getUserType()

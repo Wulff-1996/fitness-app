@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.requests.AchievementEntryEditFragment">
+    tools:context=".fragments.achievements.AchievementEntryEditFragment">
 
     <include
         android:id="@+id/fragment_achievement_entry_edit_toolbar"

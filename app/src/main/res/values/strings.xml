@@ -27,8 +27,9 @@
     <string name="status_title">Status</string>
     <string name="fragment_achievement_entry_request_achievement_approval">Request Approval</string>
     <string name="achievement_status_accepted">Accepted</string>
-    <string name="achievement_status_pending">Pending</string>
+    <string name="achievement_status_pending">Pending Approval</string>
     <string name="achievement_status_declined">Declined</string>
+    <string name="achievement_status_not_requested">Not Requested</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

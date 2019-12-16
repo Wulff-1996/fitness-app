@@ -18,16 +18,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreService;
 import com.example.fitness_app.constrants.AchievementEntryEditFragmentMode;
+import com.example.fitness_app.constrants.AchievementTypes;
+import com.example.fitness_app.constrants.AchievementUpdateEvents;
 import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.AchievementEntryEntity;
 import com.example.fitness_app.views.IconButton;
 import com.example.fitness_app.views.IconView;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_ACHIEVEMENT_ADDED;
@@ -68,17 +71,20 @@ public class AchievementEntryEditFragment extends BaseFragment {
 
     private void setupNewAchievement(){
         achievement = new AchievementEntryEntity();
-        achievement.setWhenToUpdate("manual");
+        achievement.setType(AchievementTypes.AUTOMATIC);
         achievement.setTotalPlayersCompleted(0L);
         achievement.setId(UUID.randomUUID().toString());
         achievement.setAmountToCompleteCount(0L);
-        achievement.setWhenToUpdate("manual");
+        List<String> updates = new ArrayList<>();
+        updates.add(AchievementUpdateEvents.MANUAL);
+        achievement.setWhenToUpdate(updates);
     }
 
     private void setupToolbar(View view){
         ConstraintLayout toolbar = view.findViewById(R.id.fragment_achievement_entry_edit_toolbar);
         IconButton backArrow = toolbar.findViewById(R.id.application_toolbar_back_arrow);
         backArrow.setOnClickListener(view1 -> fragmentNavigation.popFragment());
+        /*
         toolbarActionButton = toolbar.findViewById(R.id.application_toolbar_save_button);
         toolbarActionButton.setVisibility(View.VISIBLE);
         toolbarActionButton.setEnabled(false);
@@ -91,7 +97,7 @@ public class AchievementEntryEditFragment extends BaseFragment {
             toolbarActionButton.setText("Delete");
             toolbarActionButton.setBackground(getContext().getDrawable(R.drawable.delete_button_background));
             toolbarActionButton.setOnClickListener(view12 ->  handleDelete());
-        }
+        }*/
     }
 
     private void populateView(View view){
@@ -156,7 +162,7 @@ public class AchievementEntryEditFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
+            public void onFailure(Exception e) {
 
             }
 
@@ -177,7 +183,7 @@ public class AchievementEntryEditFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
+            public void onFailure(Exception e) {
 
             }
 

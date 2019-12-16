@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.models.AchievementApprovalRequest;
+import com.example.fitness_app.util.Dates;
 
 import java.util.List;
 
@@ -60,8 +61,8 @@ public class AchievementsApprovalAdapter extends RecyclerView.Adapter<Achievemen
 
         private void populateView(final AchievementApprovalRequest data){
             achievementTitleView.setText(data.getAchievementTitle());
-            userName.setText(data.getUserNickname());
-            dateValue.setText(data.getRequestDate());
+            userName.setText(data.getUsername());
+            dateValue.setText(Dates.formatDate(data.getRequestDate()));
 
         }
 

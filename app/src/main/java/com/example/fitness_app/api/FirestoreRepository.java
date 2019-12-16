@@ -14,7 +14,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -59,7 +58,7 @@ public class FirestoreRepository
             if (task.isSuccessful()){
                 firebaseCallback.onSuccess(updates);
             } else {
-                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                firebaseCallback.onFailure(task.getException());
             }
         });
     }
@@ -78,7 +77,7 @@ public class FirestoreRepository
                     }
                     else
                     {
-                        firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                        firebaseCallback.onFailure(task.getException());
                         Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
 
                     }
@@ -95,7 +94,7 @@ public class FirestoreRepository
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode)
+            public void onFailure(Exception e)
             {
             }
 
@@ -127,7 +126,7 @@ public class FirestoreRepository
                         }
                         callback.onSuccess(list);
                     } else {
-                        callback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                        callback.onFailure(task.getException());
                         Log.w(TAG, "Failed fetching all documents from collection: " + collection);
                     }
                 });
@@ -155,7 +154,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                    firebaseCallback.onFailure(task.getException());
                     Log.w(TAG, "Failed fetching object: " + document + " from collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -188,7 +187,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                    firebaseCallback.onFailure(task.getException());
                     Log.w(TAG, "Failed fetching IDs within collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -215,7 +214,7 @@ public class FirestoreRepository
                          */
                         else
                         {
-                            firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                            firebaseCallback.onFailure(task.getException());
                             Log.w(TAG, "Failed to delete ID:" + id + " from collection: " + collection);
                         }
                         firebaseCallback.onFinish();

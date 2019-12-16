@@ -1,11 +1,12 @@
 package com.example.fitness_app.models;
 
 import com.example.fitness_app.constrants.AchievementTypes;
-import com.google.firebase.Timestamp;
+
+import java.util.List;
 
 public class AchievementAccountManualEntity extends AchievementAccountEntity {
     private Boolean hasRequested;
-    private String requestedDate;
+    private Long requestedDate;
     private String status;
     private String userDescription;
 
@@ -13,8 +14,8 @@ public class AchievementAccountManualEntity extends AchievementAccountEntity {
         setType(AchievementTypes.MANUAL);
     }
 
-    public AchievementAccountManualEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Timestamp completionDate, String whenToUpdate, Long amountToCompleteCount, Long completedCount, String type, Long totalPlayersCompleted, Boolean hasRequested, String requestedDate, String status, String userDescription) {
-        super(id, title, description, achievementPoints, isCompleted, completionDate, whenToUpdate, amountToCompleteCount, completedCount, type, totalPlayersCompleted);
+    public AchievementAccountManualEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted, Boolean hasRequested, Long requestedDate, String status, String userDescription) {
+        super(id, title, description, achievementPoints, isCompleted, completionDate, whenToUpdate, type, totalPlayersCompleted);
         this.hasRequested = hasRequested;
         this.requestedDate = requestedDate;
         this.status = status;
@@ -29,11 +30,11 @@ public class AchievementAccountManualEntity extends AchievementAccountEntity {
         this.hasRequested = hasRequested;
     }
 
-    public String getRequestedDate() {
+    public Long getRequestedDate() {
         return requestedDate;
     }
 
-    public void setRequestedDate(String requestedDate) {
+    public void setRequestedDate(Long requestedDate) {
         this.requestedDate = requestedDate;
     }
 

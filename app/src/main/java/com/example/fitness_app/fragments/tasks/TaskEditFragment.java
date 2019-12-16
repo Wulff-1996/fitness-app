@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,7 +27,6 @@ import com.example.fitness_app.services.TaskService;
 import com.example.fitness_app.util.Dates;
 import com.example.fitness_app.views.IconButton;
 import com.google.android.material.chip.Chip;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -68,10 +68,17 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_edit, container, false);
 
+        setupProgressBar(view);
         setupToolbar(view);
         setupCalendarView(view);
 
         return view;
+    }
+
+    private void setupProgressBar(View view){
+        ProgressBar progressBar = view.findViewById(R.id.fragment_task_edit_progress_bar);
+        progressBar.setIndeterminate(true);
+        setProgressBar(progressBar);
     }
 
     @Override
@@ -284,7 +291,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     }
 
     private void postUpdates(Object data, Map<String, Object> updates, String updateType){
-        showProgressBar(true);
+        setFetching(true);
         FirestoreService.updateTaskEntry(updates, new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
@@ -320,12 +327,12 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
+            public void onFailure(Exception e) {
             }
 
             @Override
             public void onFinish() {
-                showProgressBar(false);
+                setFetching(false);
             }
         });
     }

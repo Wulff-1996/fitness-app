@@ -18,7 +18,6 @@ import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Benchmark;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class CreateMeasurementDialog extends DialogFragment
 {
@@ -57,7 +56,7 @@ public class CreateMeasurementDialog extends DialogFragment
                                 }
 
                                 @Override
-                                public void onFailure(FirebaseFirestoreException.Code errorCode)
+                                public void onFailure(Exception e)
                                 {
                                 }
 
