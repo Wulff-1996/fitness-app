@@ -12,10 +12,11 @@ public abstract class AchievementAccountEntity {
     private List<String> whenToUpdate;
     private String type;
     private Long totalPlayersCompleted;
+    private Long dateCreated;
 
     public AchievementAccountEntity() {}
 
-    public AchievementAccountEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted) {
+    public AchievementAccountEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted, Long dateCreated) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -25,6 +26,7 @@ public abstract class AchievementAccountEntity {
         this.whenToUpdate = whenToUpdate;
         this.type = type;
         this.totalPlayersCompleted = totalPlayersCompleted;
+        this.dateCreated = dateCreated;
     }
 
     public String getId() {
@@ -97,5 +99,21 @@ public abstract class AchievementAccountEntity {
 
     public void setTotalPlayersCompleted(Long totalPlayersCompleted) {
         this.totalPlayersCompleted = totalPlayersCompleted;
+    }
+
+    public Boolean getCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(Boolean completed) {
+        isCompleted = completed;
+    }
+
+    public Long getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

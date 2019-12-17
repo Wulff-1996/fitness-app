@@ -37,7 +37,7 @@ public class AchievementsApprovalFragment extends BaseFragment implements Adapte
     private AchievementsApprovalAdapter adapter;
     private List<AchievementApprovalRequest> requests = new ArrayList<>();
     private int selectedIndex;
-    private boolean isFetching = false;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -62,26 +62,21 @@ public class AchievementsApprovalFragment extends BaseFragment implements Adapte
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!isFetching){
-            showMessage(requests.size() == 0, view);
-        }
+        showMessage(requests.size() == 0, view);
     }
 
     private void setupProgressBar(View view){
         ProgressBar progressBar = view.findViewById(R.id.fragment_achievement_approval_preogress);
         progressBar.setIndeterminate(true);
         setProgressBar(progressBar);
+        if (!isHasShownInitialLoading()){
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupSwipeToRefresh(View view){
-        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.fragment_achievement_approval_swipe_to_refresh);
+        swipeRefreshLayout = view.findViewById(R.id.fragment_achievement_approval_swipe_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> fetchRequests());
-    }
-
-    private void endRefreshing(){
-        if (getView() == null) return;
-        SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.fragment_achievement_approval_swipe_to_refresh);
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void setupAdapter(View view){
@@ -93,7 +88,6 @@ public class AchievementsApprovalFragment extends BaseFragment implements Adapte
     }
 
     private void fetchRequests(){
-        setFetching(true);
         FirestoreService.getAllAchievementApprovalRequests(new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
@@ -110,6 +104,7 @@ public class AchievementsApprovalFragment extends BaseFragment implements Adapte
 
             @Override
             public void onFinish() {
+                swipeRefreshLayout.setRefreshing(false);
                 setFetching(false);
             }
         });

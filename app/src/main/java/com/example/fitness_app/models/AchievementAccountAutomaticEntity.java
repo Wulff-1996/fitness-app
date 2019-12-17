@@ -9,8 +9,8 @@ public class AchievementAccountAutomaticEntity extends AchievementAccountEntity 
     public AchievementAccountAutomaticEntity() {
     }
 
-    public AchievementAccountAutomaticEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted, Long amountToCompleteCount, Long completedCount) {
-        super(id, title, description, achievementPoints, isCompleted, completionDate, whenToUpdate, type, totalPlayersCompleted);
+    public AchievementAccountAutomaticEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted, Long dateCreated, Long amountToCompleteCount, Long completedCount) {
+        super(id, title, description, achievementPoints, isCompleted, completionDate, whenToUpdate, type, totalPlayersCompleted, dateCreated);
         this.amountToCompleteCount = amountToCompleteCount;
         this.completedCount = completedCount;
     }

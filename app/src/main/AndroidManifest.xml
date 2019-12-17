@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.SelectApplicationActivity"></activity>
+        <activity
+            android:name=".activities.SelectApplicationActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.MainActivity"
             android:launchMode="singleTop"

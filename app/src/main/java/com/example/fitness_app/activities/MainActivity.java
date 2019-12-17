@@ -9,8 +9,8 @@ import com.example.fitness_app.R;
 import com.example.fitness_app.constrants.ApplicationMode;
 import com.example.fitness_app.constrants.IntentKeys;
 import com.example.fitness_app.fragments.BaseFragment;
-import com.example.fitness_app.fragments.achievements.AchievementsApprovalFragment;
 import com.example.fitness_app.fragments.achievements.AchievementsFragment;
+import com.example.fitness_app.fragments.achievements.AchievementsManagementViewPager;
 import com.example.fitness_app.fragments.measurements.MeasurementSelectionFragment;
 import com.example.fitness_app.fragments.profile.ProfileFragment;
 import com.example.fitness_app.fragments.quests.QuestFragment;
@@ -80,11 +80,9 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
                     mNavController.switchTab(MEASURE_INDEX);
                     break;
                 case R.id.nav_quests:
-
                     mNavController.switchTab(QUEST_INDEX);
                     break;
                 case R.id.nav_achievements:
-
                     mNavController.switchTab(ACHIEVEMENT_INDEX);
                     break;
                 case R.id.nav_profile:
@@ -99,7 +97,7 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
         bottomBar.setItems(R.xml.app_super_user_bottom_bar_menu);
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new QuestManagementFragment());
-        fragments.add(new AchievementsApprovalFragment());
+        fragments.add(new AchievementsManagementViewPager());
         fragments.add(new ProfileFragment());
 
         builder.rootFragments(fragments);
@@ -142,7 +140,7 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
                 case SUPER_USER_QUESTS_INDEX:
                     return new QuestManagementFragment();
                 case SUPER_USER_ACHIEVEMENT_REQUESTS_INDEX:
-                    return new AchievementsApprovalFragment();
+                    return new AchievementsManagementViewPager();
                 case SUPER_USER_PROFILE_INDEX:
                     return new ProfileFragment();
             }

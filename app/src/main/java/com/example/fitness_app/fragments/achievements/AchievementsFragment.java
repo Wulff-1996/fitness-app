@@ -54,6 +54,9 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
         ProgressBar progressBar = view.findViewById(R.id.fragment_achievement_progress_bar);
         progressBar.setIndeterminate(true);
         setProgressBar(progressBar);
+        if (!isHasShownInitialLoading()){
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupSwipeToRefresh(View view){
@@ -94,6 +97,7 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
             @Override
             public void onFinish() {
                 swipeRefreshLayout.setRefreshing(false);
+                setFetching(false);
             }
         });
     }
@@ -113,6 +117,7 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
         updates.add(AchievementUpdateEvents.ONCE);
         updates.add(AchievementUpdateEvents.COMPLETE);
         achievement.setWhenToUpdate(updates);
+        achievement.setDateCreated(System.currentTimeMillis());
 
         FirestoreService.addAchievement(achievement, new FirebaseCallback() {
             @Override
@@ -144,6 +149,7 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
         updates2.add(AchievementUpdateEvents.TOTAL);
         updates2.add(AchievementUpdateEvents.COMPLETE);
         achievement2.setWhenToUpdate(updates2);
+        achievement2.setDateCreated(System.currentTimeMillis());
 
         FirestoreService.addAchievement(achievement2, new FirebaseCallback() {
             @Override
@@ -173,6 +179,7 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
         List<String> updates3 = new ArrayList<>();
         updates3.add(AchievementUpdateEvents.MANUAL);
         achievement3.setWhenToUpdate(updates3);
+        achievement3.setDateCreated(System.currentTimeMillis());
 
         FirestoreService.addAchievement(achievement3, new FirebaseCallback() {
             @Override
@@ -204,11 +211,42 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
         updates4.add(AchievementUpdateEvents.STREAK);
         updates4.add(AchievementUpdateEvents.COMPLETE);
         achievement4.setWhenToUpdate(updates4);
+        achievement4.setDateCreated(System.currentTimeMillis());
 
         FirestoreService.addAchievement(achievement4, new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
                 Toast.makeText(getContext(), "completed 4", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
+
+        AchievementEntryEntity achievement5 = new AchievementEntryEntity();
+        achievement5.setId(UUID.randomUUID().toString());
+        achievement5.setTitle("Invite a friend to this application");
+        achievement5.setDescription("To complete this achievement invite a friend to join this app. Write the email of the friend you have added. This is so that we cant approve your request.");
+        achievement5.setAchievementPoints(800L);
+        achievement5.setType(AchievementTypes.MANUAL);
+        achievement5.setTotalPlayersCompleted(0L);
+        achievement5.setAmountToCompleteCount(null);
+        List<String> updates5 = new ArrayList<>();
+        updates5.add(AchievementUpdateEvents.MANUAL);
+        achievement5.setWhenToUpdate(updates5);
+        achievement5.setDateCreated(System.currentTimeMillis());
+
+        FirestoreService.addAchievement(achievement5, new FirebaseCallback() {
+            @Override
+            public void onSuccess(Object object) {
+                Toast.makeText(getContext(), "completed 5", Toast.LENGTH_SHORT).show();
             }
 
             @Override

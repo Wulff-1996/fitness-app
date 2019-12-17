@@ -14,8 +14,8 @@ public class AchievementAccountManualEntity extends AchievementAccountEntity {
         setType(AchievementTypes.MANUAL);
     }
 
-    public AchievementAccountManualEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted, Boolean hasRequested, Long requestedDate, String status, String userDescription) {
-        super(id, title, description, achievementPoints, isCompleted, completionDate, whenToUpdate, type, totalPlayersCompleted);
+    public AchievementAccountManualEntity(String id, String title, String description, Long achievementPoints, Boolean isCompleted, Long completionDate, List<String> whenToUpdate, String type, Long totalPlayersCompleted, Long dateCreated, Boolean hasRequested, Long requestedDate, String status, String userDescription) {
+        super(id, title, description, achievementPoints, isCompleted, completionDate, whenToUpdate, type, totalPlayersCompleted, dateCreated);
         this.hasRequested = hasRequested;
         this.requestedDate = requestedDate;
         this.status = status;

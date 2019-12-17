@@ -229,6 +229,25 @@ public class FirestoreService {
         });
     }
 
+    public static void getAllAchievements(FirebaseCallback callback){
+        FirestoreRepository
+                .getInstance()
+                .collection(Api.ACHIEVEMENTS_COLLECTION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+                    if (task.isSuccessful()){
+                        List<AchievementEntryEntity> achievements = new ArrayList<>();
+                        for(DocumentSnapshot doc: task.getResult()){
+                            achievements.add(doc.toObject(AchievementEntryEntity.class));
+                        }
+                        callback.onSuccess(achievements);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
     public static void getAllAchievementApprovalRequests(FirebaseCallback callback){
         FirestoreRepository
                 .getInstance()
