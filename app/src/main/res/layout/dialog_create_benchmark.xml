@@ -18,7 +18,7 @@
         android:layout_marginEnd="66dp" />
 
     <EditText
-        android:id="@+id/valueEditText"
+        android:id="@+id/dialog_create_benchmark_value"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
@@ -29,6 +29,8 @@
         android:inputType="numberDecimal"
         android:textAlignment="center"
         style="@style/header"/>
+        android:textAlignment="center"
+        android:textColor="@color/accent" />
 
     <TextView
         android:id="@+id/textView"

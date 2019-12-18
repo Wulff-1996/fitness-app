@@ -6,11 +6,11 @@ package com.example.fitness_app.models;
  */
 public class TaskWrapper {
     private UserTask userTask;
-    private Boolean isCompletedToday;
+    private boolean isCompletedToday;
 
     public TaskWrapper() {}
 
-    public TaskWrapper(UserTask userTask, Boolean isCompletedToday) {
+    public TaskWrapper(UserTask userTask, boolean isCompletedToday) {
         this.userTask = userTask;
         this.isCompletedToday = isCompletedToday;
     }
@@ -23,11 +23,11 @@ public class TaskWrapper {
         this.userTask = userTask;
     }
 
-    public Boolean getCompletedToday() {
+    public boolean getCompletedToday() {
         return isCompletedToday;
     }
 
-    public void setCompletedToday(Boolean completedToday) {
+    public void setCompletedToday(boolean completedToday) {
         isCompletedToday = completedToday;
     }
 }

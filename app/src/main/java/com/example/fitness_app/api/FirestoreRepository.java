@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -14,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -52,13 +53,35 @@ public class FirestoreRepository
                 .document(document);
     }
 
+    public static void getCollectionReference(final String collection, final FirebaseCallback firebaseCallback)
+    {
+        getInstance()
+                .collection(collection)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                firebaseCallback.onFinish();
+                if (task.isSuccessful())
+                {
+                    firebaseCallback.onSuccess(task.getResult());
+                }
+                else
+                {
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
+                }
+            }
+        });
+    }
+
     public static void updateField(final DocumentReference docRef, Map<String, Object> updates, final FirebaseCallback firebaseCallback){
         docRef.update(updates).addOnCompleteListener(task -> {
             firebaseCallback.onFinish();
             if (task.isSuccessful()){
                 firebaseCallback.onSuccess(updates);
             } else {
-                firebaseCallback.onFailure(task.getException());
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
             }
         });
     }
@@ -68,7 +91,7 @@ public class FirestoreRepository
         getInstance()
                 .collection(collection)
                 .document(document)
-                .set(data, SetOptions.merge()).addOnCompleteListener(task -> {
+                .set(data).addOnCompleteListener(task -> {
                     firebaseCallback.onFinish();
                     if (task.isSuccessful())
                     {
@@ -77,8 +100,49 @@ public class FirestoreRepository
                     }
                     else
                     {
-                        firebaseCallback.onFailure(task.getException());
+                        firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                         Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
+
+                    }
+                });
+    }
+
+    public static void postDocument(final String collection, final Object data, final FirebaseCallback firebaseCallback)
+    {
+        getInstance()
+                .collection(collection).add(data)
+                .addOnCompleteListener(task -> {
+            firebaseCallback.onFinish();
+            if (task.isSuccessful())
+            {
+                firebaseCallback.onSuccess(data);
+                Log.i(TAG, "Successfully saved document: " + data + " to: " + collection);
+            }
+            else
+            {
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
+                Log.w(TAG, "Failed posting document: " + data + " to: " + collection);
+
+            }
+        });
+    }
+
+    public static void postObjectMerge(final String collection, final String document, final Object data, final FirebaseCallback firebaseCallback)
+    {
+        getInstance()
+                .collection(collection)
+                .document(document)
+                .set(data, SetOptions.merge()).addOnCompleteListener(task -> {
+            firebaseCallback.onFinish();
+            if (task.isSuccessful())
+            {
+                firebaseCallback.onSuccess(data);
+                Log.i(TAG, "Successfully saved object: " + data + "in " + document + " within: " + collection);
+            }
+            else
+            {
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
+                Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
 
                     }
                 });
@@ -86,7 +150,7 @@ public class FirestoreRepository
 
     public static void postCurrentAccount()
     {
-        postObject("accounts", getCurrentUser().getEmail(), LoginActivity.userAccount, new FirebaseCallback()
+        postObject("accounts", Globals.email, Globals.userAccount, new FirebaseCallback()
         {
             @Override
             public void onSuccess(Object object)
@@ -126,7 +190,7 @@ public class FirestoreRepository
                         }
                         callback.onSuccess(list);
                     } else {
-                        callback.onFailure(task.getException());
+                        callback.onFailure(((FirebaseFirestoreException)task.getException()));
                         Log.w(TAG, "Failed fetching all documents from collection: " + collection);
                     }
                 });
@@ -154,7 +218,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(task.getException());
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                     Log.w(TAG, "Failed fetching object: " + document + " from collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -187,7 +251,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(task.getException());
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                     Log.w(TAG, "Failed fetching IDs within collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -214,7 +278,7 @@ public class FirestoreRepository
                          */
                         else
                         {
-                            firebaseCallback.onFailure(task.getException());
+                            firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                             Log.w(TAG, "Failed to delete ID:" + id + " from collection: " + collection);
                         }
                         firebaseCallback.onFinish();

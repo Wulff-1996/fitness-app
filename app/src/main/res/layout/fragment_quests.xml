@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.quests.QuestFragment">
+    tools:context=".fragments.quests.QuestFragment" >
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_quests_addBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2" />
+
+    <ListView
+        android:id="@+id/fragment_quests_listview"
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="112dp"
+        android:scrollbars="none"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ListView>
+
+    <ListView
+        android:id="@+id/fragment_quests_status_listview"
+        android:layout_width="80dp"
+        android:layout_height="450dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_quests_listview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fragment_quests_listview"
+        app:layout_constraintTop_toTopOf="@+id/fragment_quests_listview" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Quests fragment"
-        android:textColor="@color/text"/>
+        android:id="@+id/textView2"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:text="Quest name"
+        android:textAlignment="gravity"
+        android:textColor="@color/accent"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_quests_listview"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_quests_listview"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/fragment_quests_listview" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="Status"
+        android:textAlignment="center"
+        android:textColor="@color/accent"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_quests_status_listview"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_quests_status_listview"
+        app:layout_constraintStart_toStartOf="@+id/fragment_quests_status_listview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

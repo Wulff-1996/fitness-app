@@ -10,6 +10,7 @@
         <item name="android:windowBackground">@color/primaryBackground</item>
         <item name="android:textColorPrimary">@color/text</item>
         <item name="android:textColorSecondary">@color/mutedText</item>
+        <item name="android:textColorHint">@color/accent</item>
         <item name="cardViewStyle">@style/mCardView</item>
     </style>
 

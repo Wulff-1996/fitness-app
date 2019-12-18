@@ -75,7 +75,7 @@ public class MeasurementSelectionFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Exception e)
+            public void onFailure(Exception errorCode)
             {
 
             }

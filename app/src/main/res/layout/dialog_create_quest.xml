@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primaryBackground"
+    android:orientation="vertical"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <EditText
+        android:id="@+id/dialog_create_quest_title"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:hint="Enter quest title"
+        android:inputType="textLongMessage"
+        android:textAlignment="center"
+        android:textColor="@color/accent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/dialog_create_quest_category"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="Enter category"
+        android:inputType="textLongMessage"
+        android:textAlignment="center"
+        android:textColor="@color/accent"
+        app:layout_constraintStart_toStartOf="@+id/dialog_create_quest_title"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_create_quest_title" />
+
+    <EditText
+        android:id="@+id/dialog_create_quest_exp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="Enter experience reward"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColor="@color/accent"
+        app:layout_constraintStart_toStartOf="@+id/dialog_create_quest_title"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_create_quest_repititions" />
+
+    <EditText
+        android:id="@+id/dialog_create_quest_repititions"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="Enter repititions"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColor="@color/accent"
+        app:layout_constraintStart_toStartOf="@+id/dialog_create_quest_title"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_create_quest_category" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
