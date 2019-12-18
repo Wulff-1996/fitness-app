@@ -17,11 +17,10 @@ import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.CreateQuestDialog;
-import com.example.fitness_app.models.FirebaseCallback;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Quest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -122,7 +121,7 @@ public class QuestFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode)
+            public void onFailure(Exception errorCode)
             {
             }
 

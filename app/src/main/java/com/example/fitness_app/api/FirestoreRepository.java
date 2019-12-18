@@ -5,8 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.fitness_app.constrants.Globals;
-import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -71,7 +69,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                 }
             }
         });
@@ -83,7 +81,7 @@ public class FirestoreRepository
             if (task.isSuccessful()){
                 firebaseCallback.onSuccess(updates);
             } else {
-                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
             }
         });
     }
@@ -102,7 +100,7 @@ public class FirestoreRepository
                     }
                     else
                     {
-                        firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                        firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                         Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
 
                     }
@@ -122,7 +120,7 @@ public class FirestoreRepository
             }
             else
             {
-                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                 Log.w(TAG, "Failed posting document: " + data + " to: " + collection);
 
             }
@@ -143,7 +141,7 @@ public class FirestoreRepository
             }
             else
             {
-                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                 Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
 
                     }
@@ -192,7 +190,7 @@ public class FirestoreRepository
                         }
                         callback.onSuccess(list);
                     } else {
-                        callback.onFailure(task.getException());
+                        callback.onFailure(((FirebaseFirestoreException)task.getException()));
                         Log.w(TAG, "Failed fetching all documents from collection: " + collection);
                     }
                 });
@@ -220,7 +218,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(task.getException());
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                     Log.w(TAG, "Failed fetching object: " + document + " from collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -253,7 +251,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(task.getException());
+                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                     Log.w(TAG, "Failed fetching IDs within collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -280,7 +278,7 @@ public class FirestoreRepository
                          */
                         else
                         {
-                            firebaseCallback.onFailure(task.getException());
+                            firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()));
                             Log.w(TAG, "Failed to delete ID:" + id + " from collection: " + collection);
                         }
                         firebaseCallback.onFinish();

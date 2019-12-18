@@ -12,9 +12,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
-import com.example.fitness_app.models.FirebaseCallback;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Quest;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class CreateQuestDialog extends DialogFragment
 {
@@ -56,7 +55,7 @@ public class CreateQuestDialog extends DialogFragment
                             }
 
                             @Override
-                            public void onFailure(FirebaseFirestoreException.Code errorCode)
+                            public void onFailure(Exception errorCode)
                             {
 
                             }

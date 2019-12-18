@@ -67,13 +67,13 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         view = inflater.inflate(R.layout.fragment_measurements, container, false);
 
         init();
+        initGraphView();
 
         return view;
     }
 
     private void init()
     {
-        initGraphView();
         measurements = new TreeMap<>();
         benchmarkNames = new ArrayList();
         listView = view.findViewById(R.id.listview);
@@ -167,7 +167,7 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         // Hides the graph if no data is available
         if (measurements.size() == 0)
         {
-        graph.setVisibility(view.GONE);
+            graph.setVisibility(view.GONE);
         }
 
         // remove grid
@@ -188,24 +188,6 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         graph.addSeries(points);
         graph.addSeries(lines);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(EventBustEvent<Object> event){
-        switch (event.getEvent()){
-            case EVENT_BUS_EVENT_MEASUREMENT_ADDED:
-                init();
-                break;
-            case EVENT_BUS_EVENT_MEASUREMENT_UPDATED:
-                init();
-                break;
-            case EVENT_BUS_EVENT_MEASUREMENT_DELETED:
-                init();
-                break;
-            default:
-                break;
-        }
     }
 
 
@@ -231,5 +213,25 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
     public void onDetach() {
         super.onDetach();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBustEvent<Object> event){
+        switch (event.getEvent()){
+            case EVENT_BUS_EVENT_MEASUREMENT_ADDED:
+                init();
+                initGraphView();
+                break;
+            case EVENT_BUS_EVENT_MEASUREMENT_UPDATED:
+                init();
+                initGraphView();
+                break;
+            case EVENT_BUS_EVENT_MEASUREMENT_DELETED:
+                init();
+                initGraphView();
+                break;
+            default:
+                break;
+        }
     }
 }

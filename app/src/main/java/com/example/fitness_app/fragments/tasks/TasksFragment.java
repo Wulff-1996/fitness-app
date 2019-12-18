@@ -245,7 +245,6 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
             @Override
             public void onSuccess(Object object) {
                 switch (updateType) {
-
                     case EVENT_BUS_EVENT_TASK_ENTRY_ADDED_CURRENT_DAY:
                         ((TaskWrapper) data).setCompletedToday(true);
                         adapter.notifyItemChanged(selectedIndex);

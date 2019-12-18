@@ -1,9 +1,8 @@
 package com.example.fitness_app.constrants;
 
 import com.example.fitness_app.api.FirestoreRepository;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.example.fitness_app.models.FirebaseCallback;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class Globals
 {
@@ -26,7 +25,7 @@ public class Globals
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode)
+            public void onFailure(Exception errorCode)
             {
 
             }

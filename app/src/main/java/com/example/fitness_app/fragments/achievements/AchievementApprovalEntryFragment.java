@@ -91,8 +91,7 @@ public class AchievementApprovalEntryFragment extends BaseFragment {
 
             @Override
             public void onFailure(Exception e) {
-                Exception bob = e;
-                String lll = e.getLocalizedMessage();
+
             }
 
             @Override

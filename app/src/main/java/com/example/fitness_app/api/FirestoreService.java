@@ -6,11 +6,10 @@ import androidx.annotation.Nullable;
 import com.example.fitness_app.constrants.AchievementStatusTypes;
 import com.example.fitness_app.constrants.AchievementTypes;
 import com.example.fitness_app.constrants.Api;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.interfaces.AchievementsCombinedResponseInterface;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.models.AchievementAccountAutomaticEntity;
 import com.example.fitness_app.models.AchievementAccountEntity;
 import com.example.fitness_app.models.AchievementAccountManualEntity;
@@ -19,7 +18,6 @@ import com.example.fitness_app.models.AchievementEntryEntity;
 import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.util.AchievementUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +40,6 @@ import static com.example.fitness_app.constrants.Api.ACHIEVEMENT_APPROVAL_REQUES
 
 public class FirestoreService {
 
-    private static String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
     /**
      * get  account document by logged in user email
@@ -51,8 +48,8 @@ public class FirestoreService {
      */
     public static void getAllTasks(FirebaseCallback callBack) {
         FirestoreRepository.fetchObject(
-                ApiConstants.ACCOUNTS_COLLECTION,
-                currentUserEmail,
+                Api.ACCOUNTS_COLLECTION,
+                Globals.email,
                 Account.class,
                 callBack
         );
@@ -66,7 +63,7 @@ public class FirestoreService {
         tasks.put(id, userTask);
         data.put(Api.TASKS_FIELD_NAME, tasks);
 
-        FirestoreRepository.postObject(Api.ACCOUNTS_COLLECTION, FirebaseAuth.getInstance().getCurrentUser().getEmail(), data, callback);
+        FirestoreRepository.postObjectMerge(Api.ACCOUNTS_COLLECTION, FirebaseAuth.getInstance().getCurrentUser().getEmail(), data, callback);
     }
 
     /**
@@ -329,6 +326,8 @@ public class FirestoreService {
     }
 
     public static void approveAchievementRequest(AchievementApprovalRequest request, FirebaseCallback callback){
+        System.out.println("ACHIEVEMENT APPROVAL PROCESS " + request.getUserEmail());
+
         final DocumentReference requestRef = FirestoreRepository
                 .getInstance()
                 .collection(ACHIEVEMENT_APPROVAL_REQUESTS_COLLECTION)
@@ -360,32 +359,39 @@ public class FirestoreService {
             // check if already approved
             if (requestDoc.get("status").equals(AchievementStatusTypes.ACCEPTED)) return null;
             if (achievementDoc.get("status").equals(AchievementStatusTypes.ACCEPTED)) return null;
-
-            Long newTotalPlayersCompleted = achievementOverViewDoc.getLong("totalPlayersCompleted") + 1L;
+            System.out.println(362);
+            Long newTotalPlayersCompleted = achievementOverViewDoc.getLong("totalPlayersCompleted") + 1;
+            System.out.println(364);
+            System.out.println("ACHIE POINTS: " + accountDoc.getLong("achievementPoints"));
             Long newAchievementPoints = accountDoc.getLong("achievementPoints") + request.getAchievementPoints();
-
+            System.out.println(366);
             // update achievement
             transaction.update(achieveRef, "status", AchievementStatusTypes.ACCEPTED);
+            System.out.println(369);
             transaction.update(achieveRef, "completionDate", System.currentTimeMillis());
+            System.out.println(371);
             transaction.update(achieveRef, "isCompleted", true);
+            System.out.println(373);
 
             // update achievement overview of total players completed
             transaction.update(achievementsOverViewRef, "totalPlayersCompleted", newTotalPlayersCompleted);
+            System.out.println(377);
 
             // update account achievement points
             transaction.update(accountRef, "achievementPoints", newAchievementPoints);
+            System.out.println(381);
 
             // delete request
             transaction.delete(requestRef);
+            System.out.println(385);
 
             return null;
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                callback.onFinish();
-                callback.onSuccess(request);
-            }
+        }).addOnSuccessListener(aVoid -> {
+            System.out.println("SUCCESSFULLY UPDATED ACHIEVEMENT/ACCOUNT");
+            callback.onFinish();
+            callback.onSuccess(request);
         }).addOnFailureListener(e -> {
+            System.out.println("UNSUCCESSFULLY UPDATED ACHIEVEMENT/ACCOUNT");
             callback.onFinish();
             callback.onFailure(e);
         });
@@ -403,6 +409,33 @@ public class FirestoreService {
                 .document(request.getUserEmail())
                 .collection(Api.ACCOUNT_ACHIEVEMENT_COLLECTION)
                 .document(request.getAchievementId());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         FirestoreRepository.getInstance().runTransaction((Transaction.Function<Void>) transaction -> {
             DocumentSnapshot requestDoc = transaction.get(requestRef);

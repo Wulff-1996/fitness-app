@@ -1,7 +1,6 @@
 package com.example.fitness_app.models;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,20 +10,31 @@ public class Account implements Serializable
 {
     private String id;
     private String username;
-    private Long experiencePoints;
-    private Long achievementPoints;
+    private int experiencePoints;
+    private Long achievementPoints = 0L;
     private String userType;
     private Map<String, Benchmark> benchmarks = new HashMap<>();
     private List<String> quests = new ArrayList<>();
     private Map<String, UserTask> tasks = new HashMap<>();
 
-    public Account(Long exp, String userType)
+    public Account()
+    {
+    }
+
+    public Account(int exp, String userType)
     {
         this.experiencePoints = exp;
         this.userType = userType;
     }
 
-    public Account(String id, Long experiencePoints, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks, String username) {
+    public Account(int exp, String userType, String username)
+    {
+        this.experiencePoints = exp;
+        this.userType = userType;
+        this.username = username;
+    }
+
+    public Account(String id, int experiencePoints, String userType, Map<String, Benchmark> benchmarks, List<String> quests, Map<String, UserTask> tasks, String username) {
         this.id = id;
         this.experiencePoints = experiencePoints;
         this.userType = userType;
@@ -42,11 +52,11 @@ public class Account implements Serializable
         this.id = id;
     }
 
-    public Long getExperiencePoints() {
+    public int getExperiencePoints() {
         return experiencePoints;
     }
 
-    public void setExperiencePoints(Long experiencePoints) {
+    public void setExperiencePoints(int experiencePoints) {
         this.experiencePoints = experiencePoints;
     }
 

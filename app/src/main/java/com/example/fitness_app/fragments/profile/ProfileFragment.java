@@ -46,7 +46,7 @@ public class ProfileFragment extends BaseFragment {
         progressBar = view.findViewById(R.id.fragment_profile_progressBar);
         levelTextView = view.findViewById(R.id.fragment_profile_level_textview);
         expProgression = view.findViewById(R.id.fragment_profile_exp);
-        calculateLevel(Globals.userAccount.getExp());
+        calculateLevel(Globals.userAccount.getExperiencePoints());
 
         emailTextView = view.findViewById(R.id.fragment_profile_email_textview);
         emailTextView.setText(Globals.email);
