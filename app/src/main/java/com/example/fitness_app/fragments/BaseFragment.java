@@ -16,6 +16,7 @@ import icepick.Icepick;
 public abstract class BaseFragment extends Fragment {
     public FragmentNavigation fragmentNavigation;
     private ProgressBar progressBar;
+    private boolean hasShownInitialLoading = false;
     private boolean isFetching = false;
 
     public void showProgress(boolean show) {
@@ -33,6 +34,12 @@ public abstract class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // to register bundle for saving state
         Icepick.restoreInstanceState(this, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        hasShownInitialLoading = true;
     }
 
     @Override
@@ -84,5 +91,9 @@ public abstract class BaseFragment extends Fragment {
     public interface FragmentNavigation {
         void pushFragment(Fragment fragment);
         void popFragment();
+    }
+
+    public boolean isHasShownInitialLoading() {
+        return hasShownInitialLoading;
     }
 }

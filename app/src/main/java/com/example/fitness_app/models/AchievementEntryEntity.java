@@ -14,10 +14,11 @@ public class AchievementEntryEntity {
     private Long amountToCompleteCount;
     private String type;
     private List<String> whenToUpdate;
+    private Long dateCreated;
 
     public AchievementEntryEntity() {}
 
-    public AchievementEntryEntity(String id, Long achievementPoints, String title, String description, Long totalPlayersCompleted, Long amountToCompleteCount, String type, List<String> whenToUpdate) {
+    public AchievementEntryEntity(String id, Long achievementPoints, String title, String description, Long totalPlayersCompleted, Long amountToCompleteCount, String type, List<String> whenToUpdate, Long dateCreated) {
         this.id = id;
         this.achievementPoints = achievementPoints;
         this.title = title;
@@ -26,6 +27,7 @@ public class AchievementEntryEntity {
         this.amountToCompleteCount = amountToCompleteCount;
         this.type = type;
         this.whenToUpdate = whenToUpdate;
+        this.dateCreated = dateCreated;
     }
 
     public AchievementAccountEntity toAchievementAccountEntity (){
@@ -42,6 +44,7 @@ public class AchievementEntryEntity {
                 auto.setIsCompleted(false);
                 auto.setTotalPlayersCompleted(totalPlayersCompleted);
                 auto.setWhenToUpdate(whenToUpdate);
+                auto.setDateCreated(dateCreated);
                 return auto;
             case AchievementTypes.MANUAL:
                 AchievementAccountManualEntity manual = new AchievementAccountManualEntity();
@@ -55,6 +58,7 @@ public class AchievementEntryEntity {
                 manual.setStatus(AchievementStatusTypes.NOT_REQUESTED);
                 manual.setTotalPlayersCompleted(totalPlayersCompleted);
                 manual.setWhenToUpdate(whenToUpdate);
+                manual.setDateCreated(dateCreated);
                 return manual;
         }
         return null;
@@ -122,5 +126,13 @@ public class AchievementEntryEntity {
 
     public void setWhenToUpdate(List<String> whenToUpdate) {
         this.whenToUpdate = whenToUpdate;
+    }
+
+    public Long getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

@@ -174,6 +174,9 @@ public class AchievementEntryFragment extends BaseFragment implements View.OnCli
 
     @Override
     public void onClick(View view) {
+        // disable button so not to have multiple requests
+        disableRequestButton(true);
+
         AchievementApprovalRequest approvalRequest = new AchievementApprovalRequest();
         approvalRequest.setId(UUID.randomUUID().toString());
         approvalRequest.setAchievementId(achievement.getId());
@@ -209,8 +212,19 @@ public class AchievementEntryFragment extends BaseFragment implements View.OnCli
             @Override
             public void onFinish() {
                 showProgress(false);
+                disableRequestButton(false);
             }
         });
+    }
+
+    private void disableRequestButton(boolean isDisabled){
+        if (getView() == null) return;
+        Button requestApprovalButton = getView().findViewById(R.id.fragment_achievement_entry_request_button);
+        if (isDisabled){
+            requestApprovalButton.setEnabled(false);
+        } else {
+            requestApprovalButton.setEnabled(true);
+        }
     }
 
     private void enableUserDescriptionView(boolean isEnabled, View view){
