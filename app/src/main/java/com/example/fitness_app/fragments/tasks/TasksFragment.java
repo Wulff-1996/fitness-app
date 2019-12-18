@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,17 +17,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.fitness_app.R;
 import com.example.fitness_app.adapters.TasksAdapter;
 import com.example.fitness_app.api.FirestoreService;
-import com.example.fitness_app.constrants.ApiConstants;
+import com.example.fitness_app.constrants.Api;
 import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.models.TaskEntry;
 import com.example.fitness_app.models.TaskWrapper;
+import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.services.TaskService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,7 +51,6 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     private List<TaskWrapper> taskWrappers = new ArrayList<>();
     private Account account;
     private int selectedIndex;
-    private boolean hasBeenCreated = false; // avoid loading every time fragment is visible again
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,19 +62,26 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_tasks, container, false);
+
+        setupProgressBar(view);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!hasBeenCreated){
-            showProgressBar(true);
-            hasBeenCreated = true;
-        }
+
         setupRefreshView(view);
         setupAdapter(view);
         setupNewTaskButton(view);
+    }
+
+    private void setupProgressBar(View view){
+        ProgressBar progressBar = view.findViewById(R.id.fragment_tasks_progress_bar);
+        progressBar.setIndeterminate(true);
+        setProgressBar(progressBar);
     }
 
     private void setupRefreshView(View view) {
@@ -156,12 +163,12 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
                 if (adapter != null){
                     adapter.setTaskWrappers(taskWrappers);
                     adapter.notifyDataSetChanged();
-                    showProgressBar(false);
+                    showMessage(taskWrappers.size() == 0, getView());
                 }
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
+            public void onFailure(Exception e) {
             }
 
             @Override
@@ -172,7 +179,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
     }
 
     private void postTaskToApi(final UserTask userTask) {
-        showProgressBar(true);
+        setFetching(true);
         FirestoreService.postNewTask(userTask, new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
@@ -180,12 +187,12 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
+            public void onFailure(Exception e) {
             }
 
             @Override
             public void onFinish() {
-                showProgressBar(false);
+                setFetching(false);
             }
         });
     }
@@ -207,7 +214,7 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
         // create update entity
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(taskWrapper, updates, EVENT_BUS_EVENT_TASK_ENTRY_ADDED_CURRENT_DAY);
@@ -227,13 +234,13 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
         postUpdates(taskWrapper, updates, EVENT_BUS_EVENT_TASK_ENTRY_DELETED);
     }
 
     private void postUpdates(Object data, Map<String, Object> updates, String updateType){
-        showProgressBar(true);
+        setFetching(true);
         FirestoreService.updateTaskEntry(updates, new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
@@ -252,14 +259,24 @@ public class TasksFragment extends BaseFragment implements TasksAdapter.TasksAda
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
+            public void onFailure(Exception e) {
             }
 
             @Override
             public void onFinish() {
-                showProgressBar(false);
+                setFetching(false);
             }
         });
+    }
+
+    private void showMessage(boolean isVisible, View view){
+        if (view == null) return;
+        TextView message = view.findViewById(R.id.fragment_tasks_message);
+        if (isVisible){
+            message.setVisibility(View.VISIBLE);
+        } else {
+            message.setVisibility(View.GONE);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

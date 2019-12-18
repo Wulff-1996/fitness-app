@@ -1,45 +1,61 @@
 package com.example.fitness_app.models;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Account
+public class Account implements Serializable
 {
-    private int exp;
+    private String id;
+    private String username;
+    private Long experiencePoints;
+    private Long achievementPoints;
     private String userType;
     private Map<String, Benchmark> benchmarks = new HashMap<>();
     private List<String> quests = new ArrayList<>();
     private Map<String, UserTask> tasks = new HashMap<>();
 
-    public Account()
+    public Account(Long exp, String userType)
     {
-    }
-
-    public Account(int exp, String userType)
-    {
-        this.exp = exp;
+        this.experiencePoints = exp;
         this.userType = userType;
     }
 
-    public Account(int exp, String userType, Map<String, Benchmark> benchmarks, List<String> quests, Map<String, UserTask> tasks)
-    {
-        this.exp = exp;
+    public Account(String id, Long experiencePoints, String userType, Map<String, Benchmark> benchmarks, Map<String, Quest> quests, Map<String, UserTask> tasks, String username) {
+        this.id = id;
+        this.experiencePoints = experiencePoints;
         this.userType = userType;
         this.benchmarks = benchmarks;
         this.quests = quests;
         this.tasks = tasks;
+        this.username = username;
     }
 
-    public int getExp()
-    {
-        return exp;
+    public String getId() {
+        return id;
     }
 
-    public void setExp(int exp)
-    {
-        this.exp = exp;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Long getExperiencePoints() {
+        return experiencePoints;
+    }
+
+    public void setExperiencePoints(Long experiencePoints) {
+        this.experiencePoints = experiencePoints;
+    }
+
+    public Long getAchievementPoints() {
+        return achievementPoints;
+    }
+
+    public void setAchievementPoints(Long achievementPoints) {
+        this.achievementPoints = achievementPoints;
     }
 
     public String getUserType()
@@ -82,14 +98,11 @@ public class Account
         this.tasks = tasks;
     }
 
-    @Override
-    public String toString()
-    {
-        return "Account{" +
-                "exp=" + exp +
-                ", userType='" + userType + '\'' +
-                ", benchmarks=" + benchmarks +
-                ", quests=" + quests +
-                '}';
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -5,8 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserTask
-{
+public class UserTask {
     @SerializedName("id")
     private String id;
     @SerializedName("title")

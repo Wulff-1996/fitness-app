@@ -2,7 +2,9 @@ package com.example.fitness_app.util;
 
 import android.text.format.DateUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Dates {
 
@@ -14,5 +16,16 @@ public class Dates {
 
     public static boolean isToday(Long timestamp){
         return DateUtils.isToday(timestamp);
+    }
+
+    public static String formatDate(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(date);
+    }
+
+    public static String formatDate(Long timestamp){
+        Date date = new Date(timestamp);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(date);
     }
 }

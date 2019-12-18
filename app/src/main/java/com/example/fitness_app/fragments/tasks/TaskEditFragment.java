@@ -5,28 +5,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.example.fitness_app.R;
-import com.example.fitness_app.activities.MainActivity;
 import com.example.fitness_app.api.FirestoreService;
-import com.example.fitness_app.constrants.ApiConstants;
+import com.example.fitness_app.constrants.Api;
 import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.ConfirmDeleteDialog;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.example.fitness_app.models.FirebaseCallback;
-import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.models.TaskEntry;
+import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.services.TaskService;
 import com.example.fitness_app.util.Dates;
 import com.example.fitness_app.views.IconButton;
 import com.google.android.material.chip.Chip;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -48,6 +48,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     private UserTask selectedUserTask;
     private String selectedTaskId;
     private TaskEntry todaysEntry;
+    private Calendar selectedMonth;
 
     public TaskEditFragment() {
         // Required empty public constructor
@@ -56,6 +57,9 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        selectedMonth = Calendar.getInstance();
+        selectedMonth.setTimeInMillis(System.currentTimeMillis());
+
     }
 
     @Override
@@ -64,10 +68,17 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_edit, container, false);
 
-        setupToolbar();
+        setupProgressBar(view);
+        setupToolbar(view);
         setupCalendarView(view);
 
         return view;
+    }
+
+    private void setupProgressBar(View view){
+        ProgressBar progressBar = view.findViewById(R.id.fragment_task_edit_progress_bar);
+        progressBar.setIndeterminate(true);
+        setProgressBar(progressBar);
     }
 
     @Override
@@ -108,22 +119,52 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         taskTitleView.setText(title);
     }
 
-    private void setupToolbar(){
-        ((MainActivity)getActivity()).showBackArrowOnToolBar(true);
-        ((MainActivity)getActivity()).setToolbarTitle("UserTask Details");
+    private void setupToolbar(View view){
+        ConstraintLayout toolbar = view.findViewById(R.id.fragment_task_edit_toolbar);
+        IconButton backArrow = toolbar.findViewById(R.id.application_toolbar_back_arrow);
+        backArrow.setOnClickListener(view1 -> {
+            fragmentNavigation.popFragment();
+        });
     }
 
     private void setupCalendarView(View view) {
         calendarView = view.findViewById(R.id.fragment_task_edit_calendar_view);
         calendarView.setOnDayClickListener(
                 eventDay -> {
-                    //
-                    if (calendarView.getSelectedDates().contains(eventDay.getCalendar())){
-                        deleteEntry(eventDay.getCalendar());
-                    }
-                    // day is going to be selected
-                    else {
-                        postEntry(eventDay.getCalendar());
+                    // check if selected date is in the same month
+                    if (eventDay.getCalendar().get(Calendar.YEAR) == selectedMonth.get(Calendar.YEAR) &&
+                        eventDay.getCalendar().get(Calendar.MONTH) == selectedMonth.get(Calendar.MONTH)){
+
+                        // same month
+                        Calendar currentDay = Calendar.getInstance();
+                        currentDay.setTimeInMillis(System.currentTimeMillis());
+
+                        // check if selected day is not after the current date
+                        if (eventDay.getCalendar().get(Calendar.DAY_OF_MONTH) <= currentDay.get(Calendar.DAY_OF_MONTH)){
+                            if (calendarView.getSelectedDates().contains(eventDay.getCalendar())){
+                                // date is going to be deselected
+                                deleteEntry(eventDay.getCalendar());
+                            }
+                            // day is going to be selected
+                            else {
+                                postEntry(eventDay.getCalendar());
+                            }
+                        } else {
+                            // show toast future dates cant be mark completed
+                            List<Calendar> disabledDays = new ArrayList<>();
+                            disabledDays.add(eventDay.getCalendar());
+                            calendarView.setDisabledDays(disabledDays);
+                            showToast(getContext().getString(R.string.fragment_task_edit_future_dates_not_acceptable));
+                        }
+
+                    } else {
+                        // different month, change month on calendarView
+                        try{
+                            calendarView.setDate(eventDay.getCalendar());
+                            selectedMonth = eventDay.getCalendar();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -189,7 +230,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
         // create update entity
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(entry, updates, EVENT_BUS_EVENT_TASK_ENTRY_ADDED);
@@ -209,7 +250,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(deleteEntry, updates, EVENT_BUS_EVENT_TASK_ENTRY_DELETED);
@@ -221,7 +262,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(userTask, updates, EVENT_BUS_EVENT_TASK_EDITED);
@@ -238,7 +279,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
 
         Map<String, Object> updates = new HashMap<>();
         updates.put(
-                ApiConstants.TASKS_FIELD_NAME,
+                Api.TASKS_FIELD_NAME,
                 account.getTasks());
 
         postUpdates(null, updates, EVENT_BUS_EVENT_TASK_DELETED);
@@ -250,7 +291,7 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
     }
 
     private void postUpdates(Object data, Map<String, Object> updates, String updateType){
-        showProgressBar(true);
+        setFetching(true);
         FirestoreService.updateTaskEntry(updates, new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
@@ -286,12 +327,12 @@ public class TaskEditFragment extends BaseFragment implements NewEditTaskDialog.
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode) {
+            public void onFailure(Exception e) {
             }
 
             @Override
             public void onFinish() {
-                showProgressBar(false);
+                setFetching(false);
             }
         });
     }

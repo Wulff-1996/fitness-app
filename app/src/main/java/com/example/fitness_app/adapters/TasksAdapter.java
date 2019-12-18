@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.models.TaskWrapper;
+import com.example.fitness_app.models.UserTask;
 import com.google.android.material.chip.Chip;
 
 import java.util.List;

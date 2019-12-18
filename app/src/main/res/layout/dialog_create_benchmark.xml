@@ -28,6 +28,8 @@
         android:hint="Enter value for benchmark"
         android:inputType="numberDecimal"
         android:textAlignment="center"
+        style="@style/header"/>
+        android:textAlignment="center"
         android:textColor="@color/accent" />
 
     <TextView

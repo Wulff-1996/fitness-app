@@ -8,4 +8,19 @@
     <string name="icon_delete">&#xf1f8;</string>
     <string name="icon_edit">&#xf044;</string>
     <string name="icon_new_item">&#xf067;</string>
+    <string name="icon_trophy">&#xf091;</string>
+    <string name="icon_checked_circle">&#xf058;</string>
+    <string name="icon_unchecked_circle">&#xf057;</string>
+    <string name="icon_users">&#xf0c0;</string>
+    <string name="icon_coins">&#xf51e;</string>
+    <string name="icon_header">&#xf1dc;</string>
+    <string name="icon_description">&#xf249;</string>
+    <string name="icon_requirements">&#xf737;</string>
+    <string name="icon_achievement">&#xf06a;</string>
+    <string name="icon_progress">&#xf0ae;</string>
+    <string name="icon_info_circle">&#xf05a;</string>
+    <string name="icon_super_user">&#xf505;</string>
+    <string name="icon_user">&#xf007;</string>
+    <string name="icon_calendar">&#xf073;</string>
+    <string name="icon_clip_board">&#xf328;</string>
 </resources>

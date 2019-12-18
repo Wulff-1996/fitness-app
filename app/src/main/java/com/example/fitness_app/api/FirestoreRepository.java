@@ -6,10 +6,13 @@ import androidx.annotation.NonNull;
 
 import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.models.FirebaseCallback;
+import com.example.fitness_app.activities.LoginActivity;
+import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +43,11 @@ public class FirestoreRepository
         return FirebaseAuth.getInstance();
     }
 
+    private void readData(final FirebaseCallback firebaseCallback, String collection)
+    {
+        CollectionReference result = getInstance().collection(collection);
+
+    }
 
     public static DocumentReference getDocumentReference(final String collection, final String document){
         return getInstance()
@@ -138,8 +146,8 @@ public class FirestoreRepository
                 firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
                 Log.w(TAG, "Failed posting object: " + data + " in: " + document + " within: " + collection);
 
-            }
-        });
+                    }
+                });
     }
 
     public static void postCurrentAccount()
@@ -152,7 +160,7 @@ public class FirestoreRepository
             }
 
             @Override
-            public void onFailure(FirebaseFirestoreException.Code errorCode)
+            public void onFailure(Exception e)
             {
             }
 
@@ -162,6 +170,35 @@ public class FirestoreRepository
             }
         });
     }
+
+    /**
+     * get all documents from a collection
+     * every doc will be mapped to the specified class type
+     * callback with a list of the specified class
+     * @param collection to get documents from
+     * @param currentClass class to map every entry to
+     * @param callback callback on finish, failure with exception and success with a list of objects
+     */
+    public static void fetchAllDocumentsFromCollection(final String collection, final Class currentClass, final FirebaseCallback callback){
+        getInstance()
+                .collection(collection)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+                    if (task.isSuccessful()){
+                        List<Object> list = new ArrayList<>();
+                        for (DocumentSnapshot doc: task.getResult()) {
+                            list.add(doc.toObject(currentClass));
+                        }
+                        callback.onSuccess(list);
+                    } else {
+                        callback.onFailure(task.getException());
+                        Log.w(TAG, "Failed fetching all documents from collection: " + collection);
+                    }
+                });
+    }
+
+
 
     public static void fetchObject(final String collection, final String document, final Class currentClass, final FirebaseCallback firebaseCallback)
     {
@@ -183,7 +220,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                    firebaseCallback.onFailure(task.getException());
                     Log.w(TAG, "Failed fetching object: " + document + " from collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -216,7 +253,7 @@ public class FirestoreRepository
                 }
                 else
                 {
-                    firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                    firebaseCallback.onFailure(task.getException());
                     Log.w(TAG, "Failed fetching IDs within collection: " + collection);
                 }
                 firebaseCallback.onFinish();
@@ -243,7 +280,7 @@ public class FirestoreRepository
                          */
                         else
                         {
-                            firebaseCallback.onFailure(((FirebaseFirestoreException)task.getException()).getCode());
+                            firebaseCallback.onFailure(task.getException());
                             Log.w(TAG, "Failed to delete ID:" + id + " from collection: " + collection);
                         }
                         firebaseCallback.onFinish();
