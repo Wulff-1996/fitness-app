@@ -1,5 +1,6 @@
 package com.example.fitness_app.fragments.measurements;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.constrants.Globals;
+import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.BottomSheetDialog;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.CreateMeasurementDialog;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.EditMeasurementDialog;
@@ -27,10 +30,18 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_MEASUREMENT_ADDED;
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_MEASUREMENT_DELETED;
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_MEASUREMENT_UPDATED;
 
 public class MeasurementsFragment extends Fragment implements BottomSheetDialog.BottomSheetDialogDelegate
 {
@@ -56,13 +67,13 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         view = inflater.inflate(R.layout.fragment_measurements, container, false);
 
         init();
-        initGraphView();
 
         return view;
     }
 
     private void init()
     {
+        initGraphView();
         measurements = new TreeMap<>();
         benchmarkNames = new ArrayList();
         listView = view.findViewById(R.id.listview);
@@ -180,6 +191,24 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
     }
 
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBustEvent<Object> event){
+        switch (event.getEvent()){
+            case EVENT_BUS_EVENT_MEASUREMENT_ADDED:
+                init();
+                break;
+            case EVENT_BUS_EVENT_MEASUREMENT_UPDATED:
+                init();
+                break;
+            case EVENT_BUS_EVENT_MEASUREMENT_DELETED:
+                init();
+                break;
+            default:
+                break;
+        }
+    }
+
+
     @Override
     public void onBottomSheetItemClicked(BottomSheetDialog dialogInstance, String option, int position)
     {
@@ -190,5 +219,17 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
     public void onBottomSheetDialogDismissed(BottomSheetDialog dialogInstance)
     {
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 }

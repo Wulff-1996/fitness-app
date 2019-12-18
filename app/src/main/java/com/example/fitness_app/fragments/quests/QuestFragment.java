@@ -135,7 +135,7 @@ public class QuestFragment extends BaseFragment {
 
     private void addQuest()
     {
-        // Create popup with input fields for date/value
+        // Create popup with input fields
         CreateQuestDialog createQuestDialog = new CreateQuestDialog();
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

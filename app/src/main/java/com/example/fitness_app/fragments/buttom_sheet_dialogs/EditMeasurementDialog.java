@@ -16,10 +16,16 @@ import androidx.fragment.app.DialogFragment;
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.constrants.Globals;
+import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.models.Benchmark;
+import com.example.fitness_app.models.TaskEntry;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_MEASUREMENT_UPDATED;
 
 public class EditMeasurementDialog extends DialogFragment
 {
@@ -50,7 +56,7 @@ public class EditMeasurementDialog extends DialogFragment
                             Globals.userAccount.getBenchmarks().remove(ID);
                             Benchmark benchmark = new Benchmark(date, oldBenchmark.getExerciseCategory(), Float.parseFloat(value.getText().toString()));
                             Globals.userAccount.getBenchmarks().put(date + " - " + oldBenchmark.getExerciseCategory(), benchmark);
-                            FirestoreRepository.postCurrentAccount();
+                            updateEventBus();
                         }
                     }
                 }).setNegativeButton("Delete measurement", new DialogInterface.OnClickListener()
@@ -103,5 +109,12 @@ public class EditMeasurementDialog extends DialogFragment
         date = sdf.format(calendar.getDate());
         System.out.println("current date: " + date);
         return builder.create();
+    }
+
+    private void updateEventBus()
+    {
+        FirestoreRepository.postCurrentAccount();
+        EventBustEvent<TaskEntry> eventBustEvent = new EventBustEvent<>(EVENT_BUS_EVENT_MEASUREMENT_UPDATED, null);
+        EventBus.getDefault().post(eventBustEvent);
     }
 }
