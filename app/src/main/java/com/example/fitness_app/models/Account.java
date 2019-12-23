@@ -9,9 +9,8 @@ public class Account implements Serializable
     private String id;
     private String username;
     private String email;
-    private Long experiencePoints;
-    private Long achievementPoints;
-    private Long level;
+    private int experiencePoints = 0;
+    private Long achievementPoints = 0L;
     private String userType;
     private Map<String, Benchmark> benchmarks = new HashMap<>();
     private Map<String, UserTask> tasks = new HashMap<>();
@@ -20,26 +19,19 @@ public class Account implements Serializable
     {
     }
 
-    public Account(Long exp, String userType)
-    {
-        this.experiencePoints = exp;
-        this.userType = userType;
-    }
 
-    public Account(Long exp, String userType, String username)
+    public Account(String userType, String username)
     {
-        this.experiencePoints = exp;
         this.userType = userType;
         this.username = username;
     }
 
-    public Account(String id, String username, String email, Long experiencePoints, Long achievementPoints, Long level, String userType, Map<String, Benchmark> benchmarks, Map<String, UserTask> tasks) {
+    public Account(String id, String username, String email, int experiencePoints, Long achievementPoints, String userType, Map<String, Benchmark> benchmarks, Map<String, UserTask> tasks) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.experiencePoints = experiencePoints;
         this.achievementPoints = achievementPoints;
-        this.level = level;
         this.userType = userType;
         this.benchmarks = benchmarks;
         this.tasks = tasks;
@@ -61,11 +53,11 @@ public class Account implements Serializable
         this.username = username;
     }
 
-    public Long getExperiencePoints() {
+    public int getExperiencePoints() {
         return experiencePoints;
     }
 
-    public void setExperiencePoints(Long experiencePoints) {
+    public void setExperiencePoints(int experiencePoints) {
         this.experiencePoints = experiencePoints;
     }
 
@@ -75,14 +67,6 @@ public class Account implements Serializable
 
     public void setAchievementPoints(Long achievementPoints) {
         this.achievementPoints = achievementPoints;
-    }
-
-    public Long getLevel() {
-        return level;
-    }
-
-    public void setLevel(Long level) {
-        this.level = level;
     }
 
     public String getUserType() {
@@ -116,4 +100,49 @@ public class Account implements Serializable
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public int[] getLevelInformation()
+    {
+        int level = 1;
+        int expNeeded = 100;
+        int lastExp = 0;
+        int maxLevel = 60;
+
+        for (int i = level; i < maxLevel; i++)
+        {
+            if (experiencePoints < expNeeded)
+            {
+                break;
+            }
+            lastExp = expNeeded;
+            if (i < 30)
+            {
+                expNeeded = 100 * i + (int) (expNeeded * 1.10);
+            }
+            else if (i < 50)
+            {
+                expNeeded = 100 * i + (int) (expNeeded * 1.05);
+            }
+            else
+            {
+                expNeeded = 100 * i + (int) (expNeeded * 1.025);
+            }
+            level++;
+        }
+
+        float percentDone = 0;
+
+        if (level < maxLevel)
+        {
+            percentDone = (experiencePoints-lastExp)*100.0f/(expNeeded-lastExp);
+        }
+        else
+        {
+            percentDone = 100f;
+        }
+
+        return new int[]{level, (int) percentDone, experiencePoints-lastExp, expNeeded-lastExp};
+    }
+
+
 }

@@ -150,9 +150,10 @@ public class ProfileFragment extends BaseFragment {
 
     private void populateView(View view){
         if (view == null) return;
-        levelProgressBar.setProgress(50);
-        levelView.setText(String.valueOf(account.getLevel()));
-        experiencePointsView.setText(String.valueOf(account.getExperiencePoints()));
+        int[] levelProgressionArray = account.getLevelInformation();
+        levelView.setText(String.valueOf(levelProgressionArray[0]));
+        levelProgressBar.setProgress(levelProgressionArray[1]);
+        experiencePointsView.setText(levelProgressionArray[2] + "/" + levelProgressionArray[3]);
         emailValueView.setText(account.getEmail());
 
         updateChangeAppVisibility(account.getUserType().equals(SUPER_USER), view);

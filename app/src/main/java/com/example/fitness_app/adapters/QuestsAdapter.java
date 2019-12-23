@@ -92,7 +92,7 @@ public class QuestsAdapter extends RecyclerView.Adapter<QuestsAdapter.QuestViewH
                 statusMessage.setVisibility(View.VISIBLE);
                 statusMessage.setText("Expired");
             }
-            else if (data.getLevelRequirement() > StorageManager.getInstance(context).getAccount().getLevel()) {
+            else if (data.getLevelRequirement() > StorageManager.getInstance(context).getAccount().getLevelInformation()[0]) {
                 statusIconView.setText(context.getString(R.string.icon_lock));
                 titleView.setTextColor(context.getColor(R.color.mutedText));
                 statusIconView.setTextColor(context.getColor(R.color.icon_color_muted));

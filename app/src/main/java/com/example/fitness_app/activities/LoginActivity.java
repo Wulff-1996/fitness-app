@@ -11,13 +11,17 @@ import android.widget.Toast;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
+import com.example.fitness_app.api.FirestoreService;
 import com.example.fitness_app.constrants.ApplicationMode;
 import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
+import com.example.fitness_app.models.AchievementEntryEntity;
 import com.example.fitness_app.storage.StorageManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 import static com.example.fitness_app.constrants.IntentKeys.INTENT_KEY_APPLICATION_MODE;
 import static com.example.fitness_app.constrants.UserTypes.SUPER_USER;
@@ -165,7 +169,7 @@ public class LoginActivity extends BaseActivity
     //TODO crate signup page and logic for creating a new user in the db
     public void signUp(View v)
     {
-        /*
+
         // Implement sign up functionality
         final String email = this.email.getText().toString();
         String password = this.password.getText().toString();
@@ -185,7 +189,28 @@ public class LoginActivity extends BaseActivity
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = FirestoreRepository.getCurrentUser();
-                            Account userAccount = new Account(0, "User");
+                            Account userAccount = new Account("User", "Bob");
+                            FirestoreService.getAllAchievements(new FirebaseCallback()
+                            {
+                                @Override
+                                public void onSuccess(Object object)
+                                {
+
+                                }
+
+                                @Override
+                                public void onFailure(Exception e)
+                                {
+
+                                }
+
+                                @Override
+                                public void onFinish()
+                                {
+
+                                }
+                            });
+
                             FirestoreRepository.postObject("accounts", user.getEmail(), userAccount, new FirebaseCallback()
                             {
                                 @Override
@@ -258,7 +283,6 @@ public class LoginActivity extends BaseActivity
                         }
                     });
         }
-         */
     }
 
     @Override
