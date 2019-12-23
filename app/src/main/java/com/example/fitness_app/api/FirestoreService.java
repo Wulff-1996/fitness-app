@@ -16,6 +16,7 @@ import com.example.fitness_app.models.AchievementAccountEntity;
 import com.example.fitness_app.models.AchievementAccountManualEntity;
 import com.example.fitness_app.models.AchievementApprovalRequest;
 import com.example.fitness_app.models.AchievementEntryEntity;
+import com.example.fitness_app.models.BenchmarkCategories;
 import com.example.fitness_app.models.QuestAccountEntity;
 import com.example.fitness_app.models.QuestApprovalRequestEntity;
 import com.example.fitness_app.models.QuestEntity;
@@ -41,6 +42,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.example.fitness_app.constrants.Api.ACHIEVEMENT_APPROVAL_REQUESTS_COLLECTION;
+import static com.example.fitness_app.constrants.Api.BENCHMARK_CATEGORIES_COLLECTION;
 import static com.example.fitness_app.constrants.Api.QUEST_APPROVAL_REQUESTS_COLLECTION;
 
 public class FirestoreService {
@@ -736,5 +738,26 @@ public class FirestoreService {
                     }
                 });
     }
+
+    public static void getBenchmarkCategories(FirebaseCallback callback){
+        FirestoreRepository
+                .getInstance()
+                .collection(BENCHMARK_CATEGORIES_COLLECTION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+
+                    if (task.isSuccessful()){
+                        BenchmarkCategories benchmarkCategories = new BenchmarkCategories();
+                        for(DocumentSnapshot doc: task.getResult()){
+                            callback.onSuccess(doc.toObject(BenchmarkCategories.class));
+                            break;
+                        }
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
 }
 
