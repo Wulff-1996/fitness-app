@@ -66,7 +66,7 @@ public class QuestEntryFragment extends BaseFragment implements View.OnClickList
             // quest is expired
             populateExpiredState(view);
 
-        } else if (quest.getLevelRequirement() > StorageManager.getInstance(getContext()).getAccount().getLevelInformation()[0]) {
+        } else if (quest.getLevelRequirement() > StorageManager.getInstance(getContext()).getAccount().retrieveLevelInformation().get(0)) {
             // quest has to high of a rank
             populateLevelToHighState(view);
 

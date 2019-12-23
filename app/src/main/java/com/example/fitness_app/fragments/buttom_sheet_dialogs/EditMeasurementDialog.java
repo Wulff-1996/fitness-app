@@ -65,7 +65,7 @@ public class EditMeasurementDialog extends DialogFragment
             public void onClick(DialogInterface dialog, int which)
             {
                 Globals.userAccount.getBenchmarks().remove(ID);
-                FirestoreRepository.postCurrentAccount();
+                updateEventBus();
             }
         });
 

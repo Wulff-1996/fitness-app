@@ -11,7 +11,6 @@
         android:id="@+id/calendarView"
         android:layout_width="400dp"
         android:layout_height="325dp"
-        android:layout_below="@+id/valueEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="66dp"
         android:layout_marginTop="42dp"
@@ -19,6 +18,7 @@
 
     <EditText
         android:id="@+id/dialog_create_benchmark_value"
+        style="@style/header"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
@@ -28,7 +28,8 @@
         android:hint="Enter value for benchmark"
         android:inputType="numberDecimal"
         android:textAlignment="center"
-        style="@style/header"/>
+        android:textColor="@color/accent"
+        android:textColorHint="@color/bb_inActiveBottomBarItemColor" />
         android:textAlignment="center"
         android:textColor="@color/accent" />
 
@@ -41,6 +42,7 @@
         android:layout_marginTop="80dp"
         android:text="Select date"
         android:textAlignment="center"
-        android:textSize="24sp" />
+        android:textColor="@color/bb_inActiveBottomBarItemColor"
+        android:textSize="20sp" />
 
 </RelativeLayout>

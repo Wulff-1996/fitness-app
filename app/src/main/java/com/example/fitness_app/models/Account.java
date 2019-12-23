@@ -1,12 +1,12 @@
 package com.example.fitness_app.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Account implements Serializable
 {
-    private String id;
     private String username;
     private String email;
     private int experiencePoints = 0;
@@ -20,14 +20,14 @@ public class Account implements Serializable
     }
 
 
-    public Account(String userType, String username)
+    public Account(String userType, String username, String email)
     {
         this.userType = userType;
         this.username = username;
+        this.email = email;
     }
 
-    public Account(String id, String username, String email, int experiencePoints, Long achievementPoints, String userType, Map<String, Benchmark> benchmarks, Map<String, UserTask> tasks) {
-        this.id = id;
+    public Account(String username, String email, int experiencePoints, Long achievementPoints, String userType, Map<String, Benchmark> benchmarks, Map<String, UserTask> tasks) {
         this.username = username;
         this.email = email;
         this.experiencePoints = experiencePoints;
@@ -35,14 +35,6 @@ public class Account implements Serializable
         this.userType = userType;
         this.benchmarks = benchmarks;
         this.tasks = tasks;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -101,7 +93,7 @@ public class Account implements Serializable
         this.email = email;
     }
 
-    public int[] getLevelInformation()
+    public ArrayList<Integer> retrieveLevelInformation()
     {
         int level = 1;
         int expNeeded = 100;
@@ -140,9 +132,24 @@ public class Account implements Serializable
         {
             percentDone = 100f;
         }
-
-        return new int[]{level, (int) percentDone, experiencePoints-lastExp, expNeeded-lastExp};
+        ArrayList<Integer> results = new ArrayList<>();
+        results.add(level);
+        results.add((int) percentDone);
+        results.add((experiencePoints-lastExp));
+        results.add((expNeeded-lastExp));
+        return results;
     }
-
-
+    @Override
+    public String toString()
+    {
+        return "Account{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", experiencePoints=" + experiencePoints +
+                ", achievementPoints=" + achievementPoints +
+                ", userType='" + userType + '\'' +
+                ", benchmarks=" + benchmarks +
+                ", tasks=" + tasks +
+                '}';
+    }
 }

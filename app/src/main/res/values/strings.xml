@@ -38,6 +38,10 @@
     <string name="login_activity_password">Password</string>
     <string name="login_activity_login">Login</string>
     <string name="login_activity_sign_up">Sign Up</string>
+    <string name="dialog_signup_email">Email</string>
+    <string name="dialog_signup_username">Username</string>
+    <string name="dialog_signup_password">Password</string>
+    <string name="dialog_signup_create_account">Create Account</string>
     <string name="fragment_quest_approval_requests_user">User</string>
     <string name="fragment_quest_approval_requests_date_requested">Date Requested</string>
     <string name="title">Title</string>

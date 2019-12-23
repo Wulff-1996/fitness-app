@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +18,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.activities.SelectApplicationActivity;
-import com.example.fitness_app.api.FirestoreService;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.fragments.BaseFragment;
-import com.example.fitness_app.interfaces.FirebaseCallback;
-import com.example.fitness_app.models.Account;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 import static com.example.fitness_app.constrants.UserTypes.SUPER_USER;
 
 public class ProfileFragment extends BaseFragment {
-    private Account account;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView levelView;
     private TextView experiencePointsView;
@@ -40,7 +40,7 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchAccount();
+        populateView(getView());
     }
 
     @Override
@@ -55,9 +55,9 @@ public class ProfileFragment extends BaseFragment {
         setupChangeAppButton(view);
         setupSignOutButton(view);
 
-        if (account != null){
+        if (Globals.userAccount != null){
             populateView(view);
-            updateChangeAppVisibility(account.getUserType().equals(SUPER_USER), view);
+            updateChangeAppVisibility(Globals.userAccount.getUserType().equals(SUPER_USER), view);
         }
 
         return view;
@@ -65,8 +65,14 @@ public class ProfileFragment extends BaseFragment {
 
     private void setupSwipeToRefresh(View view){
         swipeRefreshLayout = view.findViewById(R.id.fragment_profile_swipe_to_refresh);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            fetchAccount();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                Globals.fetchAccount();
+                populateView(getView());
+            }
         });
     }
 
@@ -90,8 +96,8 @@ public class ProfileFragment extends BaseFragment {
     private void setupChangeAppButton(View view){
         changeAppView = view.findViewById(R.id.fragment_profile_change_app_button);
         changeAppView.setOnClickListener(view1 -> handleChangeApp());
-        if (account != null){
-            if (account.getUserType().equals(SUPER_USER)){
+        if (Globals.userAccount != null){
+            if (Globals.userAccount.getUserType().equals(SUPER_USER)){
                 updateChangeAppVisibility(true, view);
             }
         }
@@ -150,34 +156,25 @@ public class ProfileFragment extends BaseFragment {
 
     private void populateView(View view){
         if (view == null) return;
-        int[] levelProgressionArray = account.getLevelInformation();
-        levelView.setText(String.valueOf(levelProgressionArray[0]));
-        levelProgressBar.setProgress(levelProgressionArray[1]);
-        experiencePointsView.setText(levelProgressionArray[2] + "/" + levelProgressionArray[3]);
-        emailValueView.setText(account.getEmail());
+        ArrayList<Integer> levelProgressionArray = Globals.userAccount.retrieveLevelInformation();
+        levelView.setText(String.valueOf(levelProgressionArray.get(0)));
 
-        updateChangeAppVisibility(account.getUserType().equals(SUPER_USER), view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            levelProgressBar.setProgress(levelProgressionArray.get(1), true);
+        }
+        else
+        {
+            levelProgressBar.setProgress(levelProgressionArray.get(1));
+        }
+
+        String experienceText = levelProgressionArray.get(2) + "/" + levelProgressionArray.get(3);
+        experiencePointsView.setText(experienceText);
+        emailValueView.setText(Globals.userAccount.getEmail());
+
+        updateChangeAppVisibility(Globals.userAccount.getUserType().equals(SUPER_USER), view);
     }
 
-    private void fetchAccount(){
-        FirestoreService.getAccount(new FirebaseCallback() {
-            @Override
-            public void onSuccess(Object object) {
-                account = (Account) object;
-                populateView(getView());
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
 
     private void disableButtons(boolean isDisabled){
         if (getView() == null) return;
