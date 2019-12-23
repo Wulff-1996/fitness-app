@@ -63,7 +63,7 @@ public class AchievementManagementFragment extends BaseFragment implements Adapt
         ProgressBar progressBar = view.findViewById(R.id.fragment_achievements_management_progressbar);
         progressBar.setIndeterminate(true);
         setProgressBar(progressBar);
-        if (!isHasShownInitialLoading()){
+        if (!hasShownInitialLoading()) {
             progressBar.setVisibility(View.VISIBLE);
         }
     }
@@ -130,13 +130,15 @@ public class AchievementManagementFragment extends BaseFragment implements Adapt
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBustEvent<Object> event) {
+        AchievementEntryEntity achievement = (AchievementEntryEntity) event.getData();
+
         switch (event.getEvent()) {
             case EVENT_BUS_EVENT_ACHIEVEMENT_ADDED:
-                achievements.add((AchievementEntryEntity) event.getData());
+                achievements.add(achievement);
                 adapter.notifyItemInserted(adapter.getItemCount());
                 break;
             case EVENT_BUS_EVENT_ACHIEVEMENT_DELETED:
-                achievements.remove(event.getData());
+                achievements.remove(achievement);
                 adapter.notifyItemRemoved(selectedPosition);
                 break;
         }

@@ -11,16 +11,13 @@ import android.widget.Toast;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
-import com.example.fitness_app.api.FirestoreService;
 import com.example.fitness_app.constrants.ApplicationMode;
 import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.example.fitness_app.models.AchievementEntryEntity;
+import com.example.fitness_app.storage.StorageManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.List;
 
 import static com.example.fitness_app.constrants.IntentKeys.INTENT_KEY_APPLICATION_MODE;
 import static com.example.fitness_app.constrants.UserTypes.SUPER_USER;
@@ -38,7 +35,17 @@ public class LoginActivity extends BaseActivity
         setContentView(R.layout.activity_login);
 
         FirebaseApp.initializeApp(this);
+        setupProgressBar();
         setupView();
+    }
+
+    private void setupProgressBar(){
+        ProgressBar progressBar = findViewById(R.id.activity_login_progress_bar);
+        progressBar.setIndeterminate(true);
+        setProgressBar(progressBar);
+        if (!hasShownInitialLoading()){
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupView()
@@ -75,6 +82,8 @@ public class LoginActivity extends BaseActivity
                 @Override
                 public void onSuccess(Object object)
                 {
+                    Account account = (Account) object;
+                    StorageManager.getInstance(getApplicationContext()).setAccount(account);
                     handleSignIn((Account) object);
                 }
 
@@ -106,15 +115,6 @@ public class LoginActivity extends BaseActivity
         showProgress(false);
     }
 
-    private void showProgress(boolean isVisible){
-        ProgressBar progressBar = findViewById(R.id.acticity_login_progress_bar);
-        if (isVisible){
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
-    }
-
     private void handleSignIn(Account account){
         if (account.getUserType().equals(SUPER_USER)){
             Intent intent = new Intent(this, SelectApplicationActivity.class);
@@ -124,6 +124,7 @@ public class LoginActivity extends BaseActivity
             intent.putExtra(INTENT_KEY_APPLICATION_MODE, ApplicationMode.APPLICATION_USERS);
             startActivity(intent);
         }
+        this.finish();
     }
 
     public void signIn(View v)
@@ -161,8 +162,10 @@ public class LoginActivity extends BaseActivity
         }
     }
 
+    //TODO crate signup page and logic for creating a new user in the db
     public void signUp(View v)
     {
+        /*
         // Implement sign up functionality
         final String email = this.email.getText().toString();
         String password = this.password.getText().toString();
@@ -255,6 +258,7 @@ public class LoginActivity extends BaseActivity
                         }
                     });
         }
+         */
     }
 
     @Override

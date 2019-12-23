@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.quests.QuestEntryFragment">
+
+    <include
+        android:id="@+id/fragment_quest_entry_toolbar"
+        layout="@layout/toolbar_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_quest_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/icon_quest"
+                android:textColor="@color/accent"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_title_value"
+                style="@style/header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_quest_icon"
+                tools:text="Quest title" />
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_completed_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/icon_checked_circle"
+                android:textColor="@color/accent"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_title_value" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_completed_value"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/completed_title"
+                android:textColor="@color/accent"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_quest_entry_completed_icon"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_completed_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_completed_icon" />
+
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_required_level_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/icon_star"
+                android:textColor="@color/icon_color"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_completed_icon" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_required_level_title"
+                style="@style/bodyText.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/required_level"
+                android:textSize="12dp"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_required_level_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_required_level_icon" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_required_level_value"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_required_level_icon"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_required_level_title"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_required_level_title"
+                tools:text="2" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_required_level_to_high"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/level_to_high"
+                android:visibility="gone"
+                android:textColor="@color/cancel"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_quest_entry_required_level_value"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_required_level_value"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_required_level_value" />
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_expired_date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/icon_color"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_required_level_value"
+                tools:text="@string/icon_clock" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_expire_date_title"
+                style="@style/bodyText.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/quest_expire_date"
+                android:textSize="12dp"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_expired_date_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_expired_date_icon" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_expire_date_value"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_expire_date_title"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_expire_date_title"
+                tools:text="2019-12-31" />
+
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_expire_date_overdue"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/expired"
+                android:visibility="gone"
+                android:textColor="@color/cancel"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_quest_entry_expire_date_value"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_expire_date_value"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_expire_date_value" />
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_experience_points_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/icon_coins"
+                android:textColor="@color/accent"
+                android:textSize="50dp"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_expire_date_value" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_experience_points_title"
+                style="@style/bodyText.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/experience_points_title"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/fragment_quest_entry_experience_points_value"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_experience_points_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_experience_points_icon"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_experience_points_value"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_quest_entry_experience_points_icon"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_experience_points_title"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_experience_points_title"
+                app:layout_constraintVertical_bias="0"
+                tools:text="200" />
+
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_description_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/icon_description"
+                android:textColor="@color/icon_color"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_experience_points_value" />
+
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_description_title"
+                style="@style/bodyText.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/description"
+                android:textSize="12dp"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_description_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_description_icon" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_description_value"
+                style="@style/bodyText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_description_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_description_title"
+                app:layout_constraintVertical_bias="0"
+                tools:text="To complete this achievement, you will have to complete any task for a total of 5 days in a row. The task and the completion must be of the same task, you cant split with different tasks." />
+
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_status_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/icon_info_circle"
+                android:textColor="@color/icon_color"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_description_value" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_status_title"
+                style="@style/bodyText.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/status_title"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_status_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_status_icon" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_status_value"
+                style="@style/bodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_status_title"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_status_title"
+                tools:text="Declined" />
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_requested_date_icon"
+                style="@style/icon_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:text="@string/icon_calendar"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_status_value"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_status_icon" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_requested_date_title"
+                style="@style/bodyText.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/date_requested_title"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_requested_date_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_requested_date_icon" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_requested_date_value"
+                style="@style/bodyText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_requested_date_title"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_requested_date_title"
+                tools:text="2019-12-01" />
+
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_quest_entry_user_description_icon"
+                style="@style/icon_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/icon_clip_board"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_quest_icon"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_status_value" />
+
+            <TextView
+                android:id="@+id/fragment_quest_entry_user_description_title"
+                style="@style/bodyText.muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/user_note_title"
+                app:layout_constraintStart_toEndOf="@+id/fragment_quest_entry_user_description_icon"
+                app:layout_constraintTop_toTopOf="@+id/fragment_quest_entry_user_description_icon" />
+
+            <EditText
+                android:id="@+id/fragment_quest_entry_user_description_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edit_text_background"
+                android:ellipsize="none"
+                android:gravity="start|left"
+                android:hint="note to the authenticator, like where you posted a video etc."
+                android:inputType="textMultiLine"
+                android:maxLength="2048"
+                android:minLines="5"
+                android:paddingStart="8dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="6dp"
+                android:scrollbars="vertical"
+                android:scrollHorizontally="false"
+                android:textColorHint="@color/mutedText"
+                android:textSize="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/fragment_quest_entry_user_description_title"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_user_description_title"
+                app:layout_constraintVertical_bias="0" />
+
+            <Button
+                android:id="@+id/fragment_quest_entry_request_button"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/cancel_button_background"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@string/request_approval_title"
+                android:textAllCaps="false"
+                android:textColor="@color/accent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_quest_entry_user_description_value" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/fragment_quest_entry_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

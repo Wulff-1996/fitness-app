@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Dates {
 
@@ -27,5 +28,35 @@ public class Dates {
         Date date = new Date(timestamp);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return simpleDateFormat.format(date);
+    }
+
+    public static String formatDate(int year, int month, int day) {
+        String correctYear = String.valueOf(year);
+        String correctMonth;
+        String correctDay;
+        if (month < 10){
+            correctMonth = "0" + month;
+        } else {
+            correctMonth = String.valueOf(month);
+        }
+        if (day < 10){
+            correctDay = "0" + day;
+        } else {
+            correctDay = String.valueOf(day);
+        }
+        return correctYear + "-" + correctMonth + "-" + correctDay;
+    }
+
+    public static boolean isDeadlineReached(Long deadline){
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+        Date currentDate = new GregorianCalendar(currentYear, currentMonth, currentDay).getTime();
+        GregorianCalendar deadlineGreCal = new GregorianCalendar();
+        deadlineGreCal.setTimeInMillis(deadline);
+        Date deadlineDate = deadlineGreCal.getTime();
+
+        return currentDate.after(deadlineDate);
     }
 }

@@ -1,47 +1,48 @@
 package com.example.fitness_app.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Account implements Serializable
 {
     private String id;
     private String username;
-    private int experiencePoints;
-    private Long achievementPoints = 0L;
+    private String email;
+    private Long experiencePoints;
+    private Long achievementPoints;
+    private Long level;
     private String userType;
     private Map<String, Benchmark> benchmarks = new HashMap<>();
-    private List<String> quests = new ArrayList<>();
     private Map<String, UserTask> tasks = new HashMap<>();
 
     public Account()
     {
     }
 
-    public Account(int exp, String userType)
+    public Account(Long exp, String userType)
     {
         this.experiencePoints = exp;
         this.userType = userType;
     }
 
-    public Account(int exp, String userType, String username)
+    public Account(Long exp, String userType, String username)
     {
         this.experiencePoints = exp;
         this.userType = userType;
         this.username = username;
     }
 
-    public Account(String id, int experiencePoints, String userType, Map<String, Benchmark> benchmarks, List<String> quests, Map<String, UserTask> tasks, String username) {
+    public Account(String id, String username, String email, Long experiencePoints, Long achievementPoints, Long level, String userType, Map<String, Benchmark> benchmarks, Map<String, UserTask> tasks) {
         this.id = id;
+        this.username = username;
+        this.email = email;
         this.experiencePoints = experiencePoints;
+        this.achievementPoints = achievementPoints;
+        this.level = level;
         this.userType = userType;
         this.benchmarks = benchmarks;
-        this.quests = quests;
         this.tasks = tasks;
-        this.username = username;
     }
 
     public String getId() {
@@ -52,11 +53,19 @@ public class Account implements Serializable
         this.id = id;
     }
 
-    public int getExperiencePoints() {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Long getExperiencePoints() {
         return experiencePoints;
     }
 
-    public void setExperiencePoints(int experiencePoints) {
+    public void setExperiencePoints(Long experiencePoints) {
         this.experiencePoints = experiencePoints;
     }
 
@@ -68,51 +77,43 @@ public class Account implements Serializable
         this.achievementPoints = achievementPoints;
     }
 
-    public String getUserType()
-    {
+    public Long getLevel() {
+        return level;
+    }
+
+    public void setLevel(Long level) {
+        this.level = level;
+    }
+
+    public String getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType)
-    {
+    public void setUserType(String userType) {
         this.userType = userType;
     }
 
-    public Map<String, Benchmark> getBenchmarks()
-    {
+    public Map<String, Benchmark> getBenchmarks() {
         return benchmarks;
     }
 
-    public void setBenchmarks(Map<String, Benchmark> benchmarks)
-    {
+    public void setBenchmarks(Map<String, Benchmark> benchmarks) {
         this.benchmarks = benchmarks;
     }
 
-    public List<String> getQuests()
-    {
-        return quests;
-    }
-
-    public void setQuests(List<String> quests)
-    {
-        this.quests = quests;
-    }
-
-    public Map<String, UserTask> getTasks()
-    {
+    public Map<String, UserTask> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Map<String, UserTask> tasks)
-    {
+    public void setTasks(Map<String, UserTask> tasks) {
         this.tasks = tasks;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

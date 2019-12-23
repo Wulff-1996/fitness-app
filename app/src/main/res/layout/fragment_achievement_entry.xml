@@ -29,30 +29,43 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            
+            <com.example.fitness_app.views.IconView
+                android:id="@+id/fragment_achievement_entry_achievement_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/accent"
+                android:text="@string/icon_achievement"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"/>
 
             <TextView
                 android:id="@+id/fragment_achievement_entry_title_value"
                 style="@style/header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_achievement_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_achievement_entry_achievement_icon"
+
+                app:layout_constraintTop_toTopOf="@+id/fragment_achievement_entry_achievement_icon"
                 tools:text="Complete a task 5 days in a row" />
 
             <com.example.fitness_app.views.IconView
                 android:id="@+id/fragment_achievement_entry_completed_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/icon_checked_circle"
                 android:textColor="@color/accent"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_title_value"
+                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_achievement_icon"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_achievement_entry_title_value" />
 
             <TextView
@@ -61,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Completed"
+                android:text="@string/completed_title"
                 android:textColor="@color/accent"
                 app:layout_constraintBottom_toBottomOf="@+id/fragment_achievement_entry_completed_icon"
                 app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_completed_icon"
@@ -76,7 +89,7 @@
                 android:text="@string/icon_users"
                 android:textColor="@color/icon_color"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_title_value"
+                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_achievement_icon"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_achievement_entry_completed_icon" />
 
             <TextView
@@ -85,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Players completed"
+                android:text="@string/players_completed_title"
                 android:textSize="12dp"
                 app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_players_completed_icon"
                 app:layout_constraintTop_toTopOf="@+id/fragment_achievement_entry_players_completed_icon" />
@@ -108,7 +121,7 @@
                 android:text="@string/icon_coins"
                 android:textColor="@color/accent"
                 android:textSize="50dp"
-                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_title_value"
+                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_achievement_icon"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_achievement_entry_players_completed_value" />
 
             <TextView
@@ -117,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Achievement Points"
+                android:text="@string/achievement_points_title"
                 android:textSize="12dp"
                 app:layout_constraintBottom_toTopOf="@+id/fragment_achievement_entry_achievement_points_value"
                 app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_achievement_points_icon"
@@ -144,7 +157,7 @@
                 android:text="@string/icon_progress"
                 android:textColor="@color/icon_color"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_title_value"
+                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_achievement_icon"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_achievement_entry_achievement_points_icon" />
 
             <TextView
@@ -153,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Progress"
+                android:text="@string/progress_title"
                 android:textSize="12dp"
                 app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_progress_icon"
                 app:layout_constraintTop_toTopOf="@+id/fragment_achievement_entry_progress_icon" />
@@ -187,7 +200,7 @@
                 android:text="@string/icon_description"
                 android:textColor="@color/icon_color"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_title_value"
+                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_achievement_icon"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_achievement_entry_progress_progress_bar" />
 
 
@@ -197,7 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Description"
+                android:text="@string/description"
                 android:textSize="12dp"
                 app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_description_icon"
                 app:layout_constraintTop_toTopOf="@+id/fragment_achievement_entry_description_icon" />
@@ -228,7 +241,7 @@
                 android:text="@string/icon_info_circle"
                 android:textColor="@color/icon_color"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_title_value"
+                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_achievement_icon"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_achievement_entry_description_value" />
 
             <TextView
@@ -265,7 +278,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/bodyText.muted"
-                android:text="Date Requested"
+                android:text="@string/date_requested_title"
                 app:layout_constraintTop_toTopOf="@+id/fragment_achievement_entry_requested_date_icon"
                 app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_requested_date_icon"
                 android:layout_marginStart="8dp"/>
@@ -288,7 +301,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/icon_clip_board"
-                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_title_value"
+                app:layout_constraintStart_toStartOf="@+id/fragment_achievement_entry_achievement_icon"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_achievement_entry_status_value" />
 
             <TextView
@@ -297,7 +310,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="User Note"
+                android:text="@string/user_note_title"
                 app:layout_constraintStart_toEndOf="@+id/fragment_achievement_entry_user_description_icon"
                 app:layout_constraintTop_toTopOf="@+id/fragment_achievement_entry_user_description_icon" />
 
@@ -309,7 +322,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/edit_text_background"
                 android:ellipsize="none"
-                android:gravity="top|left"
+                android:gravity="start|left"
                 android:hint="note to the authenticator, like where you posted a video etc."
                 android:inputType="textMultiLine"
                 android:maxLength="2048"

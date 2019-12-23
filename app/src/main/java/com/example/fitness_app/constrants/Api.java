@@ -8,6 +8,9 @@ public class Api {
     public static final String ACCOUNTS_COLLECTION = "accounts";
     public static final String ACCOUNT_ACHIEVEMENT_COLLECTION = "achievements";
     public static final String ACHIEVEMENT_APPROVAL_REQUESTS_COLLECTION = "achievement_approval_requests";
+    public static final String QUEST_APPROVAL_REQUESTS_COLLECTION = "quest_approval_requests";
+    public static final String ACCOUNT_QUESTS_COLLECTION = "quests";
+    public static final String QUESTS_COLLECTION = "quests";
 
     // documents
     public static final String ACHIEVEMENTS_COLLECTION = "achievements";

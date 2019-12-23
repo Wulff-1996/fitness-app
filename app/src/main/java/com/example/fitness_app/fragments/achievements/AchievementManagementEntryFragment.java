@@ -315,9 +315,9 @@ public class AchievementManagementEntryFragment extends BaseFragment implements 
 
     @Override
     public void onClick(View view) {
-        // set achievement date created
-        achievement.setDateCreated(System.currentTimeMillis());
         if (mode == AchievementManagementMode.ADDING_NEW_ACHIEVEMENT){
+            // set achievement date created
+            achievement.setDateCreated(System.currentTimeMillis());
             handleSave();
         } else {
             handleDelete();

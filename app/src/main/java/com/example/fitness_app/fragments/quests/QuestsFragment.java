@@ -1,4 +1,4 @@
-package com.example.fitness_app.fragments.achievements;
+package com.example.fitness_app.fragments.quests;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,31 +11,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fitness_app.R;
-import com.example.fitness_app.adapters.AchievementsAdapter;
 import com.example.fitness_app.adapters.AdapterOnItemClickListener;
+import com.example.fitness_app.adapters.QuestsAdapter;
 import com.example.fitness_app.api.FirestoreService;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
-import com.example.fitness_app.models.AchievementAccountEntity;
+import com.example.fitness_app.models.QuestAccountEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AchievementsFragment extends BaseFragment implements AdapterOnItemClickListener {
-    private AchievementsAdapter adapter;
-    private List<AchievementAccountEntity> achievements = new ArrayList<>();
+public class QuestsFragment extends BaseFragment implements AdapterOnItemClickListener {
+    private List<QuestAccountEntity> quests = new ArrayList<>();
+    private QuestsAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchAllAchievementsFromUser();
+        fetchQuests();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_achievement, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_quests, container, false);
 
         setupProgressBar(view);
         setupSwipeToRefresh(view);
@@ -45,7 +46,7 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
     }
 
     private void setupProgressBar(View view){
-        ProgressBar progressBar = view.findViewById(R.id.fragment_achievement_progress_bar);
+        ProgressBar progressBar = view.findViewById(R.id.fragment_quests_progress_bar);
         progressBar.setIndeterminate(true);
         setProgressBar(progressBar);
         if (!hasShownInitialLoading()){
@@ -54,34 +55,27 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
     }
 
     private void setupSwipeToRefresh(View view){
-        swipeRefreshLayout = view.findViewById(R.id.fragment_achievements_swipe_to_refresh);
+        swipeRefreshLayout = view.findViewById(R.id.fragment_quests_swipe_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            fetchAllAchievementsFromUser();
+            fetchQuests();
         });
     }
 
     private void setupAdapter(View view){
-        RecyclerView recyclerView = view.findViewById(R.id.fragment_achievements_list);
+        RecyclerView recyclerView = view.findViewById(R.id.fragment_quests_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AchievementsAdapter(getContext(), achievements);
+        adapter = new QuestsAdapter(getContext(), quests);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        AchievementEntryFragment fragment = new AchievementEntryFragment();
-        fragment.setAchievement(achievements.get(position));
-        fragmentNavigation.pushFragment(fragment);
-    }
-
-    private void fetchAllAchievementsFromUser(){
-        FirestoreService.fetchAllAchievementsByUser(new FirebaseCallback() {
+    private void fetchQuests(){
+        FirestoreService.getAllAccountQuests(new FirebaseCallback() {
             @Override
             public void onSuccess(Object object) {
-                achievements = (List<AchievementAccountEntity>) object;
+                quests = (List<QuestAccountEntity>) object;
                 if (adapter != null){
-                    adapter.setAchievements(achievements);
+                    adapter.setQuests(quests);
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -94,5 +88,12 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
                 setFetching(false);
             }
         });
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        QuestEntryFragment fragment = new QuestEntryFragment();
+        fragment.setQuest(quests.get(position));
+        fragmentNavigation.pushFragment(fragment);
     }
 }

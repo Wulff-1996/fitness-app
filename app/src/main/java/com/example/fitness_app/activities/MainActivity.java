@@ -13,10 +13,9 @@ import com.example.fitness_app.fragments.achievements.AchievementsFragment;
 import com.example.fitness_app.fragments.achievements.AchievementsManagementViewPager;
 import com.example.fitness_app.fragments.measurements.MeasurementSelectionFragment;
 import com.example.fitness_app.fragments.profile.ProfileFragment;
-import com.example.fitness_app.fragments.quests.QuestFragment;
-import com.example.fitness_app.fragments.quests.QuestManagementFragment;
+import com.example.fitness_app.fragments.quests.QuestsFragment;
+import com.example.fitness_app.fragments.quests.QuestsManagementViewPager;
 import com.example.fitness_app.fragments.tasks.TasksFragment;
-import com.example.fitness_app.models.Account;
 import com.google.firebase.FirebaseApp;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
@@ -37,7 +36,6 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
     public static FragNavController mNavController;
     private BottomBar bottomBar;
     private ApplicationMode applicationMode;
-    private Account account;
     private FragNavController.Builder builder;
 
     @Override
@@ -63,7 +61,7 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new TasksFragment());
         fragments.add(new MeasurementSelectionFragment());
-        fragments.add(new QuestFragment());
+        fragments.add(new QuestsFragment());
         fragments.add(new AchievementsFragment());
         fragments.add(new ProfileFragment());
 
@@ -96,7 +94,7 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
     private void handleSuperUserApp(){
         bottomBar.setItems(R.xml.app_super_user_bottom_bar_menu);
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new QuestManagementFragment());
+        fragments.add(new QuestsManagementViewPager());
         fragments.add(new AchievementsManagementViewPager());
         fragments.add(new ProfileFragment());
 
@@ -129,7 +127,7 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
                 case MEASURE_INDEX:
                     return new MeasurementSelectionFragment();
                 case QUEST_INDEX:
-                    return new QuestFragment();
+                    return new QuestsFragment();
                 case ACHIEVEMENT_INDEX:
                     return new AchievementsFragment();
                 case PROFILE_INDEX:
@@ -138,7 +136,7 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
         } else {
             switch (index){
                 case SUPER_USER_QUESTS_INDEX:
-                    return new QuestManagementFragment();
+                    return new QuestsManagementViewPager();
                 case SUPER_USER_ACHIEVEMENT_REQUESTS_INDEX:
                     return new AchievementsManagementViewPager();
                 case SUPER_USER_PROFILE_INDEX:

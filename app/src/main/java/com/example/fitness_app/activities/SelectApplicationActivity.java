@@ -29,12 +29,14 @@ public class SelectApplicationActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(INTENT_KEY_APPLICATION_MODE, ApplicationMode.APPLICATION_USERS);
             startActivity(intent);
+            finish();
         });
 
         superUserView.setOnClickListener(view -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(INTENT_KEY_APPLICATION_MODE, ApplicationMode.APPLICATION_SUPER_USER);
             startActivity(intent);
+            finish();
         });
     }
 }

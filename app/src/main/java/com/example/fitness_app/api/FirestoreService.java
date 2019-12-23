@@ -7,6 +7,7 @@ import com.example.fitness_app.constrants.AchievementStatusTypes;
 import com.example.fitness_app.constrants.AchievementTypes;
 import com.example.fitness_app.constrants.Api;
 import com.example.fitness_app.constrants.Globals;
+import com.example.fitness_app.constrants.QuestStatusTypes;
 import com.example.fitness_app.interfaces.AchievementsCombinedResponseInterface;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
@@ -15,9 +16,12 @@ import com.example.fitness_app.models.AchievementAccountEntity;
 import com.example.fitness_app.models.AchievementAccountManualEntity;
 import com.example.fitness_app.models.AchievementApprovalRequest;
 import com.example.fitness_app.models.AchievementEntryEntity;
+import com.example.fitness_app.models.QuestAccountEntity;
+import com.example.fitness_app.models.QuestApprovalRequestEntity;
+import com.example.fitness_app.models.QuestEntity;
 import com.example.fitness_app.models.UserTask;
 import com.example.fitness_app.util.AchievementUtil;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.fitness_app.util.QuestFormatter;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +41,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.example.fitness_app.constrants.Api.ACHIEVEMENT_APPROVAL_REQUESTS_COLLECTION;
+import static com.example.fitness_app.constrants.Api.QUEST_APPROVAL_REQUESTS_COLLECTION;
 
 public class FirestoreService {
 
@@ -312,22 +317,17 @@ public class FirestoreService {
 
                 return null;
             }
-        }).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                callback.onFinish();
-                if (task.isSuccessful()){
-                    callback.onSuccess(null);
-                } else {
-                    callback.onFailure(task.getException());
-                }
+        }).addOnCompleteListener(task -> {
+            callback.onFinish();
+            if (task.isSuccessful()){
+                callback.onSuccess(null);
+            } else {
+                callback.onFailure(task.getException());
             }
         });
     }
 
     public static void approveAchievementRequest(AchievementApprovalRequest request, FirebaseCallback callback){
-        System.out.println("ACHIEVEMENT APPROVAL PROCESS " + request.getUserEmail());
-
         final DocumentReference requestRef = FirestoreRepository
                 .getInstance()
                 .collection(ACHIEVEMENT_APPROVAL_REQUESTS_COLLECTION)
@@ -359,31 +359,23 @@ public class FirestoreService {
             // check if already approved
             if (requestDoc.get("status").equals(AchievementStatusTypes.ACCEPTED)) return null;
             if (achievementDoc.get("status").equals(AchievementStatusTypes.ACCEPTED)) return null;
-            System.out.println(362);
             Long newTotalPlayersCompleted = achievementOverViewDoc.getLong("totalPlayersCompleted") + 1;
-            System.out.println(364);
             System.out.println("ACHIE POINTS: " + accountDoc.getLong("achievementPoints"));
             Long newAchievementPoints = accountDoc.getLong("achievementPoints") + request.getAchievementPoints();
-            System.out.println(366);
+
             // update achievement
             transaction.update(achieveRef, "status", AchievementStatusTypes.ACCEPTED);
-            System.out.println(369);
             transaction.update(achieveRef, "completionDate", System.currentTimeMillis());
-            System.out.println(371);
             transaction.update(achieveRef, "isCompleted", true);
-            System.out.println(373);
 
             // update achievement overview of total players completed
             transaction.update(achievementsOverViewRef, "totalPlayersCompleted", newTotalPlayersCompleted);
-            System.out.println(377);
 
             // update account achievement points
             transaction.update(accountRef, "achievementPoints", newAchievementPoints);
-            System.out.println(381);
 
             // delete request
             transaction.delete(requestRef);
-            System.out.println(385);
 
             return null;
         }).addOnSuccessListener(aVoid -> {
@@ -409,33 +401,6 @@ public class FirestoreService {
                 .document(request.getUserEmail())
                 .collection(Api.ACCOUNT_ACHIEVEMENT_COLLECTION)
                 .document(request.getAchievementId());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         FirestoreRepository.getInstance().runTransaction((Transaction.Function<Void>) transaction -> {
             DocumentSnapshot requestDoc = transaction.get(requestRef);
@@ -469,6 +434,307 @@ public class FirestoreService {
                 callback.onFailure(task.getException());
             }
         });
+    }
+
+    public static void getAllAccountQuests(FirebaseCallback callback){
+        FirestoreRepository
+                .getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(FirestoreRepository.getCurrentUser().getEmail())
+                .collection(Api.ACCOUNT_QUESTS_COLLECTION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+                    if (task.isSuccessful()){
+
+                        List<QuestAccountEntity> quests = new ArrayList<>();
+                        for(DocumentSnapshot doc: task.getResult()){
+                            quests.add(doc.toObject(QuestAccountEntity.class));
+                        }
+                        callback.onSuccess(quests);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
+    public static void getAllQuests(FirebaseCallback callback){
+        FirestoreRepository
+                .getInstance()
+                .collection(Api.QUESTS_COLLECTION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+                    if (task.isSuccessful()){
+
+                        List<QuestEntity> quests = new ArrayList<>();
+                        for(DocumentSnapshot doc: task.getResult()){
+                            quests.add(doc.toObject(QuestEntity.class));
+                        }
+                        callback.onSuccess(quests);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
+    public static void addQuest(QuestEntity quest, FirebaseCallback callback){
+        QuestAccountEntity questAccount = QuestFormatter.formatToQuestAccountEntity(quest);
+        FirestoreRepository.getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+
+                WriteBatch batch = FirestoreRepository.getInstance().batch();
+
+                DocumentReference documentReference =
+                        FirestoreRepository.getInstance()
+                                .collection(Api.QUESTS_COLLECTION)
+                                .document(quest.getId());
+                batch.set(documentReference, quest);
+
+                for (DocumentSnapshot doc: task.getResult()){
+                    DocumentReference docRef = doc.getReference()
+                            .collection(Api.ACCOUNT_QUESTS_COLLECTION)
+                            .document(quest.getId());
+                    batch.set(docRef, questAccount);
+                }
+
+                batch.commit().addOnCompleteListener(task1 -> {
+                    if (task.isSuccessful()){
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    public static void deleteQuest(QuestEntity quest, FirebaseCallback callback){
+        FirestoreRepository.getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+
+                WriteBatch batch = FirestoreRepository.getInstance().batch();
+
+                DocumentReference documentReference =
+                        FirestoreRepository.getInstance()
+                                .collection(Api.QUESTS_COLLECTION)
+                                .document(quest.getId());
+                batch.delete(documentReference);
+
+                for (DocumentSnapshot doc: task.getResult()){
+                    DocumentReference docRef = doc.getReference()
+                            .collection(Api.ACCOUNT_QUESTS_COLLECTION)
+                            .document(quest.getId());
+                    batch.delete(docRef);
+                }
+
+                batch.commit().addOnCompleteListener(task1 -> {
+                    if (task.isSuccessful()){
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    public static void getAccount(FirebaseCallback callback){
+        FirestoreRepository
+                .getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(FirestoreRepository.getCurrentUser().getEmail())
+                .get()
+                .addOnCompleteListener(task -> {
+                   callback.onFinish();
+                    if (task.isSuccessful()){
+                       callback.onSuccess(task.getResult().toObject(Account.class));
+                   } else {
+                       callback.onFailure(task.getException());
+                   }
+                });
+    }
+
+    public static void addQuestApprovalRequest(QuestApprovalRequestEntity request, FirebaseCallback callback){
+        final DocumentReference questRef = FirestoreRepository
+                .getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(FirestoreRepository.getCurrentUser().getEmail())
+                .collection(Api.ACCOUNT_QUESTS_COLLECTION)
+                .document(request.getQuestId());
+
+        final DocumentReference requestRef = FirestoreRepository
+                .getInstance()
+                .collection(QUEST_APPROVAL_REQUESTS_COLLECTION)
+                .document(request.getId());
+
+        FirestoreRepository.getInstance().runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot questDoc = transaction.get(questRef);
+            DocumentSnapshot requestDoc = transaction.get(requestRef);
+
+            // check if there are an existing request
+            if (requestDoc.exists()){
+                // abort if request is already approved
+                if (requestDoc.getString("status").equals(AchievementStatusTypes.ACCEPTED)){
+                    return null;
+                }
+            }
+
+            // abort if quest is already accepted
+            if (questDoc.getString("status").equals(AchievementStatusTypes.ACCEPTED)){
+                return null;
+            }
+
+            transaction.set(requestRef, request, SetOptions.merge());
+            transaction.update(questRef, "hasRequested", true);
+            transaction.update(questRef, "requestedDate", request.getRequestDate());
+            transaction.update(questRef, "status", request.getStatus());
+            if (request.getUserDescription() != null){
+                transaction.update(questRef, "userDescription", request.getUserDescription());
+            }
+
+            return null;
+        }).addOnCompleteListener(task -> {
+            callback.onFinish();
+            if (task.isSuccessful()){
+                callback.onSuccess(null);
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    public static void declineQuestRequest(QuestApprovalRequestEntity request, FirebaseCallback callback){
+        final DocumentReference requestRef = FirestoreRepository
+                .getInstance()
+                .collection(QUEST_APPROVAL_REQUESTS_COLLECTION)
+                .document(request.getId());
+
+        final DocumentReference questRef = FirestoreRepository
+                .getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(request.getUserEmail())
+                .collection(Api.ACCOUNT_QUESTS_COLLECTION)
+                .document(request.getQuestId());
+
+        FirestoreRepository.getInstance().runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot requestDoc = transaction.get(requestRef);
+            DocumentSnapshot questDoc = transaction.get(questRef);
+
+            // check if already approved or declined
+            String requestStatus = requestDoc.getString("status");
+            String achieveStatus = questDoc.getString("status");
+
+            if (requestStatus.equals(QuestStatusTypes.ACCEPTED) ||
+                    requestStatus.equals(QuestStatusTypes.DECLINED) ||
+                    achieveStatus.equals(QuestStatusTypes.DECLINED) ||
+                    achieveStatus.equals(QuestStatusTypes.ACCEPTED)){
+                return null;
+            }
+
+            // update achievement
+            transaction.update(questRef, "status", QuestStatusTypes.DECLINED);
+            transaction.update(questRef, "completionDate", null);
+            transaction.update(questRef, "isCompleted", false);
+
+            // delete request
+            transaction.delete(requestRef);
+
+            return null;
+        }).addOnCompleteListener(task -> {
+            callback.onFinish();
+            if (task.isSuccessful()){
+                callback.onSuccess(null);
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    public static void approveQuestRequest(QuestApprovalRequestEntity request, FirebaseCallback callback){
+        final DocumentReference requestRef = FirestoreRepository
+                .getInstance()
+                .collection(QUEST_APPROVAL_REQUESTS_COLLECTION)
+                .document(request.getId());
+
+        final DocumentReference questRef = FirestoreRepository
+                .getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(request.getUserEmail())
+                .collection(Api.ACCOUNT_QUESTS_COLLECTION)
+                .document(request.getQuestId());
+
+        final DocumentReference accountRef = FirestoreRepository
+                .getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(request.getUserEmail());
+
+        final DocumentReference questsOverViewRef = FirestoreRepository
+                .getInstance()
+                .collection(Api.QUESTS_COLLECTION)
+                .document(request.getQuestId());
+
+        FirestoreRepository.getInstance().runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot requestDoc = transaction.get(requestRef);
+            DocumentSnapshot questDoc = transaction.get(questRef);
+            DocumentSnapshot accountDoc = transaction.get(accountRef);
+
+            // check if already approved
+            if (requestDoc.get("status").equals(AchievementStatusTypes.ACCEPTED)) return null;
+            if (questDoc.get("status").equals(AchievementStatusTypes.ACCEPTED)) return null;
+
+            Long newExperiencePoints = accountDoc.getLong("experiencePoints") + request.getExperiencePoints();
+
+            // update quest
+            transaction.update(questRef, "status", QuestStatusTypes.ACCEPTED);
+            transaction.update(questRef, "completionDate", System.currentTimeMillis());
+            transaction.update(questRef, "isCompleted", true);
+
+            // update account experience points
+            transaction.update(accountRef, "experiencePoints", newExperiencePoints);
+            // TODO calculate new level from experience points and update it
+
+            // delete request
+            transaction.delete(requestRef);
+
+            return null;
+        }).addOnSuccessListener(aVoid -> {
+            callback.onFinish();
+            callback.onSuccess(request);
+        }).addOnFailureListener(e -> {
+            callback.onFinish();
+            callback.onFailure(e);
+        });
+    }
+
+    public static void getAllQuestApprovalRequests(FirebaseCallback callback){
+        FirestoreRepository
+                .getInstance()
+                .collection(QUEST_APPROVAL_REQUESTS_COLLECTION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    callback.onFinish();
+
+                    if (task.isSuccessful()){
+                        List<QuestApprovalRequestEntity> requests = new ArrayList<>();
+                        for(DocumentSnapshot doc: task.getResult()){
+                            requests.add(doc.toObject(QuestApprovalRequestEntity.class));
+                        }
+                        callback.onSuccess(requests);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
     }
 }
 

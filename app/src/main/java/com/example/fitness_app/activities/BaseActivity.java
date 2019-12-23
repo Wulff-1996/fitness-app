@@ -1,22 +1,39 @@
 package com.example.fitness_app.activities;
 
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fitness_app.fragments.LoadingFragment;
-
 public abstract class BaseActivity extends AppCompatActivity {
-    private LoadingFragment loadingFragment;
     private Toast toast;
+    private ProgressBar progressBar;
+    private boolean hasShownInitialLoading = false;
+    private boolean isFetching = false;
 
-    public void showProgressBar(boolean isShowing) {
-        if (isShowing) {
-            loadingFragment = LoadingFragment.newInstance();
-            assert getFragmentManager() != null;
-            loadingFragment.show(this.getSupportFragmentManager(), "progress dialog");
-        } else {
-            loadingFragment.dismiss();
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    public void showProgress(boolean show) {
+        if (progressBar != null){
+            if (show){
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void setFetching(boolean fetching) {
+        isFetching = fetching;
+        if (progressBar != null){
+            if (fetching){
+                showProgress(true);
+            } else {
+                showProgress(false);
+            }
         }
     }
 
@@ -30,5 +47,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (toast != null){
             toast.cancel();
         }
+    }
+    public boolean hasShownInitialLoading() {
+        return hasShownInitialLoading;
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        hasShownInitialLoading = true;
     }
 }

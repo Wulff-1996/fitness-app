@@ -36,11 +36,6 @@ public class AchievementEntryFragment extends BaseFragment implements View.OnCli
     private ProgressBar progressBar;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_achievement_entry, container, false);
@@ -55,9 +50,7 @@ public class AchievementEntryFragment extends BaseFragment implements View.OnCli
     private void setupToolbar(View view){
         ConstraintLayout toolbar = view.findViewById(R.id.fragment_achievement_entry_toolbar);
         IconButton backArrow = toolbar.findViewById(R.id.application_toolbar_back_arrow);
-        backArrow.setOnClickListener(view1 -> {
-            fragmentNavigation.popFragment();
-        });
+        backArrow.setOnClickListener(view1 -> fragmentNavigation.popFragment());
     }
 
     private void setupProgressBar(View view){

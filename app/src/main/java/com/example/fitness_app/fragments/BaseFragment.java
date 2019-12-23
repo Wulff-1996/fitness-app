@@ -93,7 +93,7 @@ public abstract class BaseFragment extends Fragment {
         void popFragment();
     }
 
-    public boolean isHasShownInitialLoading() {
+    public boolean hasShownInitialLoading() {
         return hasShownInitialLoading;
     }
 }

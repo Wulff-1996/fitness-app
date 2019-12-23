@@ -25,5 +25,6 @@
     <color name="success">#00FF8C</color>
     <color name="success_half_alpha">#5000FF8C</color>
     <color name="warning">#FF9849</color>
-    <color name="facebook">#3B5998</color>
+    <color name="mutedText_darkened">#313742</color>
+    <color name="facebook">#1a87FF</color>
 </resources>

@@ -30,6 +30,41 @@
     <string name="achievement_status_pending">Pending Approval</string>
     <string name="achievement_status_declined">Declined</string>
     <string name="achievement_status_not_requested">Not Requested</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="quest_status_accepted">Accepted</string>
+    <string name="quest_status_pending">Pending Approval</string>
+    <string name="quest_status_declined">Declined</string>
+    <string name="quest_status_not_requested">Not Requested</string>
+    <string name="login_activity_email">Email</string>
+    <string name="login_activity_password">Password</string>
+    <string name="login_activity_login">Login</string>
+    <string name="login_activity_sign_up">Sign Up</string>
+    <string name="fragment_quest_approval_requests_user">User</string>
+    <string name="fragment_quest_approval_requests_date_requested">Date Requested</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="achievement_points_title">Achievement Points</string>
+    <string name="created_date_title">Date Created</string>
+    <string name="total_players_completed_title">Total Players Completed</string>
+    <string name="achievement_type_title">Achievement Type</string>
+    <string name="required_level">Required Level</string>
+    <string name="experience_points_title">Experience Points</string>
+    <string name="quest_expire_date">Quest Expire Date</string>
+    <string name="completed_title">Completed</string>
+    <string name="players_completed_title">Players Completed</string>
+    <string name="progress_title">Progress</string>
+    <string name="date_requested_title">Date Requested</string>
+    <string name="user_note_title">User\'s Note</string>
+    <string name="no_description">No Description</string>
+    <string name="level_to_high">Level to High</string>
+    <string name="expired">Expired</string>
+    <string name="request_approval_title">Request Approval</string>
+    <string name="username_title">Username</string>
+    <string name="decline_title">Decline</string>
+    <string name="approve_title">Approve</string>
+    <string name="your_mail">Your Email</string>
+    <string name="website_title">Website</string>
+    <string name="facebook_title">Facebook</string>
+    <string name="change_app">Change App</string>
+    <string name="sign_out">Sign Out</string>
+
 </resources>
