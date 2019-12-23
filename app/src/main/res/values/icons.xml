@@ -31,4 +31,5 @@
     <string name="icon_exchange">&#xf362;</string>
     <string name="icon_sign_out">&#xf2f5;</string>
     <string name="icon_quest">&#xf059;</string>
+    <string name="icon_email">&#xf0e0;</string>
 </resources>

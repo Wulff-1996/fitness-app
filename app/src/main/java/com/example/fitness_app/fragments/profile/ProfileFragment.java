@@ -31,6 +31,7 @@ public class ProfileFragment extends BaseFragment {
     private TextView levelView;
     private TextView experiencePointsView;
     private ProgressBar levelProgressBar;
+    private TextView achievementPointsView;
     private TextView emailValueView;
     private ConstraintLayout changeAppView;
     private ConstraintLayout websiteView;
@@ -74,7 +75,8 @@ public class ProfileFragment extends BaseFragment {
         levelView = view.findViewById(R.id.fragment_profile_level_value);
         experiencePointsView = view.findViewById(R.id.fragment_profile_exp);
         levelProgressBar = view.findViewById(R.id.fragment_profile_progressBar);
-        emailValueView = view.findViewById(R.id.fragment_profile_email_textview);
+        achievementPointsView = view.findViewById(R.id.fragment_profile_achievement_points_value);
+        emailValueView = view.findViewById(R.id.fragment_profile_email_value);
     }
 
     private void setupWebsiteButton(View view){
@@ -153,6 +155,7 @@ public class ProfileFragment extends BaseFragment {
         levelProgressBar.setProgress(50);
         levelView.setText(String.valueOf(account.getLevel()));
         experiencePointsView.setText(String.valueOf(account.getExperiencePoints()));
+        achievementPointsView.setText(String.valueOf(account.getAchievementPoints()));
         emailValueView.setText(account.getEmail());
 
         updateChangeAppVisibility(account.getUserType().equals(SUPER_USER), view);
