@@ -86,7 +86,6 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
             }
         });
 
-        category = getArguments().getString("CATEGORY");
         titleText = view.findViewById(R.id.titleTextView);
         titleText.setText(category);
         createBenchmark = view.findViewById(R.id.activity_measurements_addBtn);
@@ -167,7 +166,7 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         // Hides the graph if no data is available
         if (measurements.size() == 0)
         {
-            graph.setVisibility(view.GONE);
+            graph.setVisibility(View.GONE);
         }
 
         // remove grid
@@ -219,13 +218,7 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
     public void onMessageEvent(EventBustEvent<Object> event){
         switch (event.getEvent()){
             case EVENT_BUS_EVENT_MEASUREMENT_ADDED:
-                init();
-                initGraphView();
-                break;
             case EVENT_BUS_EVENT_MEASUREMENT_UPDATED:
-                init();
-                initGraphView();
-                break;
             case EVENT_BUS_EVENT_MEASUREMENT_DELETED:
                 init();
                 initGraphView();
@@ -233,5 +226,13 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
             default:
                 break;
         }
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

@@ -11,6 +11,7 @@ public class Api {
     public static final String QUEST_APPROVAL_REQUESTS_COLLECTION = "quest_approval_requests";
     public static final String ACCOUNT_QUESTS_COLLECTION = "quests";
     public static final String QUESTS_COLLECTION = "quests";
+    public static final String BENCHMARK_CATEGORIES_COLLECTION = "benchmark_categories";
 
     // documents
     public static final String ACHIEVEMENTS_COLLECTION = "achievements";
