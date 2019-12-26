@@ -22,6 +22,7 @@ public class Globals
             public void onSuccess(Object object)
             {
                 userAccount = (Account) object;
+                System.out.println("ACCOUNT: " + userAccount);
             }
 
             @Override

@@ -161,8 +161,9 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
 
 
     private void initGraphView(){
-
         graph = view.findViewById(R.id.fragment_measurements_graphview);
+        graph.removeAllSeries();
+
         // Hides the graph if no data is available
         if (measurements.size() == 0)
         {
@@ -183,7 +184,6 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         PointsGraphSeries<DataPoint> points = new PointsGraphSeries<>(dpArray);
 
         points.setOnDataPointTapListener((series, dataPoint) -> Toast.makeText(getActivity(), "Value: " + dataPoint.getY(), Toast.LENGTH_SHORT).show());
-
         graph.addSeries(points);
         graph.addSeries(lines);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);

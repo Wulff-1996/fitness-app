@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,29 +158,25 @@ public class ProfileFragment extends BaseFragment {
         experiencePointsView.setText(String.valueOf(account.getExperiencePoints()));
         achievementPointsView.setText(String.valueOf(account.getAchievementPoints()));
         emailValueView.setText(account.getEmail());
+        ArrayList<Integer> levelProgressionArray = Globals.userAccount.retrieveLevelInformation();
+        levelView.setText(String.valueOf(levelProgressionArray.get(0)));
 
-        updateChangeAppVisibility(account.getUserType().equals(SUPER_USER), view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            levelProgressBar.setProgress(levelProgressionArray.get(1), true);
+        }
+        else
+        {
+            levelProgressBar.setProgress(levelProgressionArray.get(1));
+        }
+
+        String experienceText = levelProgressionArray.get(2) + "/" + levelProgressionArray.get(3);
+        experiencePointsView.setText(experienceText);
+        emailValueView.setText(Globals.userAccount.getEmail());
+
+        updateChangeAppVisibility(Globals.userAccount.getUserType().equals(SUPER_USER), view);
     }
 
-    private void fetchAccount(){
-        FirestoreService.getAccount(new FirebaseCallback() {
-            @Override
-            public void onSuccess(Object object) {
-                account = (Account) object;
-                populateView(getView());
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
 
     private void disableButtons(boolean isDisabled){
         if (getView() == null) return;

@@ -9,10 +9,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.constrants.ApplicationMode;
 import com.example.fitness_app.constrants.Globals;
+import com.example.fitness_app.fragments.buttom_sheet_dialogs.SignupDialog;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
 import com.example.fitness_app.storage.StorageManager;
@@ -148,8 +153,8 @@ public class LoginActivity extends BaseActivity
                             // Sign in successful, log it and sign in user
                             Log.i(TAG, "Sign in with email/password:Success");
                             FirebaseUser user = FirestoreRepository.getCurrentUser();
-                            Globals.fetchAccount();
                             Globals.fetchEmail();
+                            Globals.fetchAccount();
                             updateUI(user);
                         }
                         else
@@ -162,103 +167,19 @@ public class LoginActivity extends BaseActivity
         }
     }
 
-    //TODO crate signup page and logic for creating a new user in the db
     public void signUp(View v)
     {
-        /*
-        // Implement sign up functionality
-        final String email = this.email.getText().toString();
-        String password = this.password.getText().toString();
-
-        if (email.isEmpty() || password.isEmpty())
+        // Create popup with input fields for date/value
+        SignupDialog signupDialog = new SignupDialog();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment prev =  fm.findFragmentByTag("dialog");
+        if(prev != null)
         {
-            Toast.makeText(this, "Email or password is missing.", Toast.LENGTH_SHORT).show();
+            ft.remove(prev);
         }
-        else
-        {
-            showProgress(true);
-            FirestoreRepository.getFirebaseAuth().createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, task -> {
-                        showProgress(false);
-                        if (task.isSuccessful())
-                        {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = FirestoreRepository.getCurrentUser();
-                            Account userAccount = new Account(0, "User");
-                            FirestoreRepository.postObject("accounts", user.getEmail(), userAccount, new FirebaseCallback()
-                            {
-                                @Override
-                                public void onSuccess(Object object)
-                                {
-                                    // Add all existing achievements to the new account
-                                    FirestoreService.getAllAchievements(new FirebaseCallback()
-                                    {
-                                        @Override
-                                        public void onSuccess(Object object)
-                                        {
-                                            for (AchievementEntryEntity AEE: (List<AchievementEntryEntity>) object)
-                                            {
-                                                FirestoreService.addAchievement(AEE, new FirebaseCallback()
-                                                {
-                                                    @Override
-                                                    public void onSuccess(Object object)
-                                                    {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Exception e)
-                                                    {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onFinish()
-                                                    {
-
-                                                    }
-                                                });
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Exception e)
-                                        {
-
-                                        }
-
-                                        @Override
-                                        public void onFinish()
-                                        {
-
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onFailure(Exception e)
-                                {
-                                    // Failures are already handled
-                                }
-
-                                @Override
-                                public void onFinish()
-                                {}
-                            });
-                            updateUI(user);
-                        }
-                        else
-                        {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(),task.getException().getLocalizedMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    });
-        }
-         */
+        ft.addToBackStack(null);
+        signupDialog.show(ft, "dialog");
     }
 
     @Override

@@ -201,6 +201,44 @@ public class FirestoreService {
                 });
     }
 
+    public static void addAchievementToUser(String email, AchievementEntryEntity achievement, FirebaseCallback callback){
+        AchievementAccountEntity accountAchievement = achievement.toAchievementAccountEntity();
+        FirestoreRepository.getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(email)
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+
+                WriteBatch batch = FirestoreRepository.getInstance().batch();
+
+                DocumentReference documentReference =
+                        FirestoreRepository.getInstance()
+                                .collection(Api.ACHIEVEMENTS_COLLECTION)
+                                .document(achievement.getId());
+                batch.set(documentReference, achievement);
+
+
+                DocumentReference docRef = task.getResult().getReference()
+                        .collection(Api.ACCOUNT_ACHIEVEMENT_COLLECTION)
+                        .document(accountAchievement.getId());
+                batch.set(docRef, accountAchievement);
+
+
+                batch.commit().addOnCompleteListener(task1 -> {
+                    if (task.isSuccessful()){
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
+            } else {
+                callback.onFailure(task.getException());
+            }
+
+        });
+    }
+
     public static void deleteAchievement(AchievementEntryEntity achievement, FirebaseCallback callback){
         FirestoreRepository.getInstance()
                 .collection(Api.ACCOUNTS_COLLECTION)
@@ -536,6 +574,43 @@ public class FirestoreService {
                             .document(quest.getId());
                     batch.delete(docRef);
                 }
+
+                batch.commit().addOnCompleteListener(task1 -> {
+                    if (task.isSuccessful()){
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
+
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    public static void addQuestToUser(String userEmail, QuestEntity quest, FirebaseCallback callback){
+        QuestAccountEntity questAccount = QuestFormatter.formatToQuestAccountEntity(quest);
+        FirestoreRepository.getInstance()
+                .collection(Api.ACCOUNTS_COLLECTION)
+                .document(userEmail)
+                .get()
+                .addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+
+                WriteBatch batch = FirestoreRepository.getInstance().batch();
+
+                DocumentReference documentReference =
+                        FirestoreRepository.getInstance()
+                                .collection(Api.QUESTS_COLLECTION)
+                                .document(quest.getId());
+                batch.set(documentReference, quest);
+
+                DocumentReference docRef = task.getResult().getReference()
+                        .collection(Api.ACCOUNT_QUESTS_COLLECTION)
+                        .document(quest.getId());
+                batch.set(docRef, questAccount);
+
 
                 batch.commit().addOnCompleteListener(task1 -> {
                     if (task.isSuccessful()){

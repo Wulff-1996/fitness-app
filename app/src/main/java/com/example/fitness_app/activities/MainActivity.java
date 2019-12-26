@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.constrants.ApplicationMode;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.constrants.IntentKeys;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.fragments.achievements.AchievementsFragment;
@@ -79,12 +80,15 @@ public class MainActivity extends BaseActivity implements FragNavController.Root
                     break;
                 case R.id.nav_quests:
                     mNavController.switchTab(QUEST_INDEX);
+                    Globals.fetchAccount();
                     break;
                 case R.id.nav_achievements:
                     mNavController.switchTab(ACHIEVEMENT_INDEX);
+                    Globals.fetchAccount();
                     break;
                 case R.id.nav_profile:
                     mNavController.switchTab(PROFILE_INDEX);
+                    Globals.fetchAccount();
                     break;
             }
         });
