@@ -1,4 +1,4 @@
-package com.example.fitness_app.services;
+package com.example.fitness_app.future_features;
 
 import com.example.fitness_app.interfaces.AchievementCompletedListener;
 

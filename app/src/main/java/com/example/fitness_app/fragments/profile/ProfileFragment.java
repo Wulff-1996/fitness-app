@@ -19,9 +19,13 @@ import com.example.fitness_app.R;
 import com.example.fitness_app.activities.LoginActivity;
 import com.example.fitness_app.activities.SelectApplicationActivity;
 import com.example.fitness_app.api.FirestoreService;
+import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
+import com.example.fitness_app.models.LevelInformationEntity;
+import com.example.fitness_app.util.Levels;
+import com.example.fitness_app.util.storageUtil.StorageManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import static com.example.fitness_app.constrants.UserTypes.SUPER_USER;
@@ -153,28 +157,40 @@ public class ProfileFragment extends BaseFragment {
 
     private void populateView(View view){
         if (view == null) return;
-        levelProgressBar.setProgress(50);
-        levelView.setText(String.valueOf(account.getLevel()));
-        experiencePointsView.setText(String.valueOf(account.getExperiencePoints()));
-        achievementPointsView.setText(String.valueOf(account.getAchievementPoints()));
-        emailValueView.setText(account.getEmail());
-        ArrayList<Integer> levelProgressionArray = Globals.userAccount.retrieveLevelInformation();
-        levelView.setText(String.valueOf(levelProgressionArray.get(0)));
-
+        LevelInformationEntity levelEntity = Levels.getLevelInformation(account.getExperiencePoints());
+        levelView.setText(String.valueOf(levelEntity.getLevel()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
-            levelProgressBar.setProgress(levelProgressionArray.get(1), true);
+            levelProgressBar.setProgress(levelEntity.getPercentDone(), true);
+        } else {
+            levelProgressBar.setProgress(levelEntity.getPercentDone());
         }
-        else
-        {
-            levelProgressBar.setProgress(levelProgressionArray.get(1));
-        }
-
-        String experienceText = levelProgressionArray.get(2) + "/" + levelProgressionArray.get(3);
-        experiencePointsView.setText(experienceText);
-        emailValueView.setText(Globals.userAccount.getEmail());
+        experiencePointsView.setText(getContext().getString(R.string.completedOutOfTotal, levelEntity.getCurrentExperiencePoints(), levelEntity.getExperiencePointsToLevelUp()));
+        achievementPointsView.setText(String.valueOf(account.getAchievementPoints()));
+        emailValueView.setText(account.getEmail());
 
         updateChangeAppVisibility(Globals.userAccount.getUserType().equals(SUPER_USER), view);
+    }
+
+    private void fetchAccount(){
+        FirestoreService.getAccount(new FirebaseCallback() {
+            @Override
+            public void onSuccess(Object object) {
+                account = (Account) object;
+                StorageManager.getInstance(getContext()).setAccount(account);
+                populateView(getView());
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.fitness_app.services;
+package com.example.fitness_app.future_features;
 
 import java.util.ArrayList;
 import java.util.List;

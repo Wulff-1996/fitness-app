@@ -1,4 +1,4 @@
-package com.example.fitness_app.storage;
+package com.example.fitness_app.util.storageUtil;
 
 import android.content.Context;
 

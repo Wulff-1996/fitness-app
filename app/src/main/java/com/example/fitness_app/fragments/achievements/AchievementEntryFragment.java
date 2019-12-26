@@ -25,6 +25,7 @@ import com.example.fitness_app.models.AchievementAccountEntity;
 import com.example.fitness_app.models.AchievementAccountManualEntity;
 import com.example.fitness_app.models.AchievementApprovalRequest;
 import com.example.fitness_app.util.Dates;
+import com.example.fitness_app.util.storageUtil.StorageManager;
 import com.example.fitness_app.views.IconButton;
 import com.example.fitness_app.views.IconView;
 
@@ -177,7 +178,7 @@ public class AchievementEntryFragment extends BaseFragment implements View.OnCli
         approvalRequest.setAchievementDescription(achievement.getDescription());
         approvalRequest.setAchievementPoints(achievement.getAchievementPoints());
         approvalRequest.setUserEmail(FirestoreRepository.getCurrentUser().getEmail());
-        approvalRequest.setUsername("unknown username");
+        approvalRequest.setUsername(StorageManager.getInstance(getContext()).getAccount().getUsername());
         approvalRequest.setStatus(AchievementStatusTypes.PENDING_APPROVAL);
         approvalRequest.setUserDescription(userDescription);
         approvalRequest.setRequestDate(System.currentTimeMillis());

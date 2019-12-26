@@ -20,7 +20,7 @@ import com.example.fitness_app.constrants.Globals;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.SignupDialog;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.Account;
-import com.example.fitness_app.storage.StorageManager;
+import com.example.fitness_app.util.storageUtil.StorageManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseUser;
 

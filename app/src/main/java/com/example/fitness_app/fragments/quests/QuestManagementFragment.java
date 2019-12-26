@@ -18,9 +18,9 @@ import com.example.fitness_app.adapters.AdapterOnItemClickListener;
 import com.example.fitness_app.adapters.QuestManagementAdapter;
 import com.example.fitness_app.api.FirestoreService;
 import com.example.fitness_app.constrants.QuestManagementEntryModes;
-import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
+import com.example.fitness_app.models.EventBustEvent;
 import com.example.fitness_app.models.QuestEntity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

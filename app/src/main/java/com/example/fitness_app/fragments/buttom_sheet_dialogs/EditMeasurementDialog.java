@@ -16,8 +16,8 @@ import androidx.fragment.app.DialogFragment;
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.constrants.Globals;
-import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.models.Benchmark;
+import com.example.fitness_app.models.EventBustEvent;
 import com.example.fitness_app.models.TaskEntry;
 
 import org.greenrobot.eventbus.EventBus;
@@ -93,7 +93,7 @@ public class EditMeasurementDialog extends DialogFragment
         // Set the displayed values equals to the old values as a default point
         value.setText(oldBenchmark.getValue().toString());
 
-        String parts[] = oldBenchmark.getDate().split("/");
+        String[] parts = oldBenchmark.getDate().split("/");
         int year = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
         int day = Integer.parseInt(parts[2]);

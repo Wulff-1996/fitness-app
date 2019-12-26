@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,7 @@ public class QuestsFragment extends BaseFragment implements AdapterOnItemClickLi
         setupProgressBar(view);
         setupSwipeToRefresh(view);
         setupAdapter(view);
+        showMessage(quests.size() == 0, view);
 
         return view;
     }
@@ -78,6 +80,7 @@ public class QuestsFragment extends BaseFragment implements AdapterOnItemClickLi
                     adapter.setQuests(quests);
                     adapter.notifyDataSetChanged();
                 }
+                showMessage(quests.size() == 0, getView());
             }
             @Override
             public void onFailure(Exception e) {
@@ -88,6 +91,16 @@ public class QuestsFragment extends BaseFragment implements AdapterOnItemClickLi
                 setFetching(false);
             }
         });
+    }
+
+    private void showMessage(boolean isVisible, View view){
+        if (view == null) return;
+        TextView message = view.findViewById(R.id.fragment_quest_message);
+        if (isVisible){
+            message.setVisibility(View.VISIBLE);
+        } else {
+            message.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.fitness_app.entities;
+package com.example.fitness_app.models;
 
 /**
  * Class for sending message event via EventBus

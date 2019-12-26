@@ -14,10 +14,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreService;
-import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.AchievementApprovalRequest;
+import com.example.fitness_app.models.EventBustEvent;
 import com.example.fitness_app.util.Dates;
 import com.example.fitness_app.views.IconButton;
 

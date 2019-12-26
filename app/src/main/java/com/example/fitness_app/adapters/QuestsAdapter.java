@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fitness_app.R;
 import com.example.fitness_app.constrants.QuestStatusTypes;
 import com.example.fitness_app.models.QuestAccountEntity;
-import com.example.fitness_app.storage.StorageManager;
 import com.example.fitness_app.util.Dates;
+import com.example.fitness_app.util.storageUtil.StorageManager;
 import com.example.fitness_app.views.IconView;
 
 import java.util.List;

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,7 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
         setupProgressBar(view);
         setupSwipeToRefresh(view);
         setupAdapter(view);
+        showMessage(achievements.size() == 0, view);
 
         return view;
     }
@@ -84,6 +86,7 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
                     adapter.setAchievements(achievements);
                     adapter.notifyDataSetChanged();
                 }
+                showMessage(achievements.size() == 0, getView());
             }
             @Override
             public void onFailure(Exception e) {
@@ -94,5 +97,15 @@ public class AchievementsFragment extends BaseFragment implements AdapterOnItemC
                 setFetching(false);
             }
         });
+    }
+
+    private void showMessage(boolean isVisible, View view){
+        if (view == null) return;
+        TextView message = view.findViewById(R.id.fragment_achievement_message);
+        if (isVisible){
+            message.setVisibility(View.VISIBLE);
+        } else {
+            message.setVisibility(View.GONE);
+        }
     }
 }

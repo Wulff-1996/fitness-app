@@ -19,8 +19,8 @@ import com.example.fitness_app.fragments.BaseFragment;
 import com.example.fitness_app.interfaces.FirebaseCallback;
 import com.example.fitness_app.models.QuestAccountEntity;
 import com.example.fitness_app.models.QuestApprovalRequestEntity;
-import com.example.fitness_app.storage.StorageManager;
 import com.example.fitness_app.util.Dates;
+import com.example.fitness_app.util.storageUtil.StorageManager;
 import com.example.fitness_app.views.IconButton;
 import com.example.fitness_app.views.IconView;
 
@@ -88,7 +88,7 @@ public class QuestEntryFragment extends BaseFragment implements View.OnClickList
         approvalRequest.setQuestDescription(quest.getDescription());
         approvalRequest.setExperiencePoints(quest.getExperiencePoints());
         approvalRequest.setUserEmail(FirestoreRepository.getCurrentUser().getEmail());
-        approvalRequest.setUsername("unknown username");
+        approvalRequest.setUsername(StorageManager.getInstance(getContext()).getAccount().getUsername());
         approvalRequest.setStatus(QuestStatusTypes.PENDING_APPROVAL);
         approvalRequest.setUserDescription(userDescription);
         approvalRequest.setRequestDate(System.currentTimeMillis());

@@ -18,11 +18,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitness_app.R;
 import com.example.fitness_app.constrants.Globals;
-import com.example.fitness_app.entities.EventBustEvent;
-import com.example.fitness_app.fragments.buttom_sheet_dialogs.BottomSheetDialog;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.CreateMeasurementDialog;
 import com.example.fitness_app.fragments.buttom_sheet_dialogs.EditMeasurementDialog;
 import com.example.fitness_app.models.Benchmark;
+import com.example.fitness_app.models.EventBustEvent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -43,7 +42,7 @@ import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_
 import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_MEASUREMENT_DELETED;
 import static com.example.fitness_app.constrants.EventBusEvents.EVENT_BUS_EVENT_MEASUREMENT_UPDATED;
 
-public class MeasurementsFragment extends Fragment implements BottomSheetDialog.BottomSheetDialogDelegate
+public class MeasurementsFragment extends Fragment
 {
     private TextView titleText;
     private ListView listView;
@@ -187,19 +186,6 @@ public class MeasurementsFragment extends Fragment implements BottomSheetDialog.
         graph.addSeries(points);
         graph.addSeries(lines);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
-    }
-
-
-    @Override
-    public void onBottomSheetItemClicked(BottomSheetDialog dialogInstance, String option, int position)
-    {
-
-    }
-
-    @Override
-    public void onBottomSheetDialogDismissed(BottomSheetDialog dialogInstance)
-    {
-
     }
 
     @Override

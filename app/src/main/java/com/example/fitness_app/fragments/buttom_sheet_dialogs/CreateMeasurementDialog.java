@@ -15,8 +15,8 @@ import androidx.fragment.app.DialogFragment;
 import com.example.fitness_app.R;
 import com.example.fitness_app.api.FirestoreRepository;
 import com.example.fitness_app.constrants.Globals;
-import com.example.fitness_app.entities.EventBustEvent;
 import com.example.fitness_app.models.Benchmark;
+import com.example.fitness_app.models.EventBustEvent;
 import com.example.fitness_app.models.TaskEntry;
 
 import org.greenrobot.eventbus.EventBus;
