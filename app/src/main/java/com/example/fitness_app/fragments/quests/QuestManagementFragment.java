@@ -106,9 +106,7 @@ public class QuestManagementFragment extends BaseFragment implements AdapterOnIt
             }
 
             @Override
-            public void onFailure(Exception e) {
-
-            }
+            public void onFailure(Exception e) {}
 
             @Override
             public void onFinish() {

@@ -59,8 +59,12 @@ public class QuestManagementEntryFragment extends BaseFragment implements View.O
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_quest_management_entry, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(
+                R.layout.fragment_quest_management_entry,
+                container, false);
 
         setupToolbar(view);
         setupActionButton(view);
@@ -146,7 +150,9 @@ public class QuestManagementEntryFragment extends BaseFragment implements View.O
             descriptionValue.setText(quest.getDescription());
             levelValue.setText(String.valueOf(quest.getLevelRequirement()));
             experiencePointsValue.setText(String.valueOf(quest.getExperiencePoints()));
-            expireDateValue.setText(Dates.formatDate(quest.getExpireDate()));
+            if (quest.getExpireDate() != null){
+                expireDateValue.setText(Dates.formatDate(quest.getExpireDate()));
+            }
             dateCreatedValue.setText(Dates.formatDate(quest.getDateCreated()));
         }
     }
@@ -192,9 +198,7 @@ public class QuestManagementEntryFragment extends BaseFragment implements View.O
             }
 
             @Override
-            public void onFailure(Exception e) {
-
-            }
+            public void onFailure(Exception e) {}
 
             @Override
             public void onFinish() {

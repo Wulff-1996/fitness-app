@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fitness_app.activities.BaseActivity;
 
-import icepick.Icepick;
-
 public abstract class BaseFragment extends Fragment {
     public FragmentNavigation fragmentNavigation;
     private ProgressBar progressBar;
@@ -30,23 +28,9 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // to register bundle for saving state
-        Icepick.restoreInstanceState(this, savedInstanceState);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         hasShownInitialLoading = true;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // register for saving state
-        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
